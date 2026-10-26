@@ -1,0 +1,387 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GameGola - Free Online Games</title>
+  <meta name="description" content="Play free browser games on GameGola! Challenge your friends and beat your high scores.">
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #090d1b;
+      color: #fff;
+    }
+
+    header {
+      padding: 22px 8%;
+      background: #11182c;
+      border-bottom: 1px solid #273452;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .logo {
+      color: #00f5d4;
+      font-size: 30px;
+      font-weight: 900;
+    }
+
+    header a {
+      color: white;
+      text-decoration: none;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 65px 20px;
+      background: radial-gradient(ellipse at top, #19305a, #090d1b 70%);
+    }
+
+    .hero h1 {
+      font-size: clamp(34px, 6vw, 58px);
+      margin: 0 0 15px;
+    }
+
+    .hero h1 span { color: #00f5d4; }
+
+    .hero p {
+      color: #b9c5df;
+      line-height: 1.7;
+    }
+
+    .search {
+      margin-top: 20px;
+      padding: 14px 18px;
+      width: min(100%, 420px);
+      border: 1px solid #344363;
+      border-radius: 12px;
+      background: #11182c;
+      color: white;
+      font-size: 16px;
+    }
+
+    main {
+      max-width: 1100px;
+      margin: auto;
+      padding: 30px 20px 60px;
+    }
+
+    .section-title {
+      font-size: 27px;
+      margin: 15px 0 22px;
+    }
+
+    .games {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: #121a30;
+      border: 1px solid #293655;
+      border-radius: 18px;
+      padding: 22px;
+      transition: transform .2s, border-color .2s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      border-color: #00f5d4;
+    }
+
+    .emoji { font-size: 48px; }
+
+    .card p {
+      color: #b9c5df;
+      line-height: 1.6;
+      min-height: 48px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 10px;
+      padding: 12px 18px;
+      background: #00f5d4;
+      color: #06121b;
+      font-weight: bold;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    button:hover { background: #6fffea; }
+
+    .game-area {
+      margin-top: 30px;
+      padding: 25px;
+      text-align: center;
+      background: #121a30;
+      border: 1px solid #293655;
+      border-radius: 18px;
+    }
+
+    #gameMessage {
+      color: #00f5d4;
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    #tapButton { min-width: 160px; min-height: 55px; }
+    #tapButton:disabled { opacity: .5; cursor: not-allowed; }
+
+    footer {
+      text-align: center;
+      padding: 25px;
+      color: #9baaca;
+      border-top: 1px solid #273452;
+    }
+
+    [hidden] { display: none !important; }
+  </style>
+</head>
+<body>
+  <header>
+    <a class="logo" href="#">🎮 GameGola</a>
+    <a href="#games">Play Games ↓</a>
+  </header>
+
+  <section class="hero">
+    <h1>Ready, Set, <span>Game!</span></h1>
+    <p>Free games. Big fun. No downloads needed.<br>
+       Pick a game and beat your high score!</p>
+    <input id="search" class="search" type="search"
+      placeholder="🔎 Search games..." aria-label="Search games">
+  </section>
+
+  <main id="games">
+    <h2 class="section-title">🔥 Popular Games</h2>
+
+    <div class="games" id="gameCards">
+      <article class="card" data-name="tap challenge">
+        <div class="emoji">⚡</div>
+        <h3>Tap Challenge</h3>
+        <p>Tap as fast as possible in 10 seconds. How high can you score?</p>
+        <button onclick="openGame('tap')">Play Now ▶</button>
+      </article>
+
+      <article class="card" data-name="number guess">
+        <div class="emoji">🎯</div>
+        <h3>Number Guess</h3>
+        <p>Guess the secret number between 1 and 100. Can you find it?</p>
+        <button onclick="openGame('guess')">Play Now ▶</button>
+      </article>
+
+      <article class="card" data-name="reaction test">
+        <div class="emoji">🚀</div>
+        <h3>Reaction Test</h3>
+        <p>Test your reflexes and see how quickly you can react.</p>
+        <button onclick="openGame('reaction')">Play Now ▶</button>
+      </article>
+    </div>
+
+    <section class="game-area" id="playArea" hidden>
+      <h2 id="gameTitle">Game</h2>
+      <p id="gameInstructions"></p>
+      <div id="gameMessage" aria-live="polite">Let's play!</div>
+      <p id="gameInfo"></p>
+      <div id="gameControls"></div>
+      <p><button onclick="closeGame()" style="margin-top:18px;background:#293655;color:white">← Back to games</button></p>
+    </section>
+  </main>
+
+  <footer>© 2026 GameGola · Made for gamers ❤️</footer>
+
+  <script>
+    const area = document.getElementById("playArea");
+    const title = document.getElementById("gameTitle");
+    const instructions = document.getElementById("gameInstructions");
+    const message = document.getElementById("gameMessage");
+    const info = document.getElementById("gameInfo");
+    const controls = document.getElementById("gameControls");
+
+    let interval = null;
+    let timeout = null;
+    let taps = 0;
+    let seconds = 10;
+    let secret = 0;
+    let attempts = 0;
+    let reactionStart = 0;
+    let reactionState = "idle";
+
+    function clearTimers() {
+      clearInterval(interval);
+      clearTimeout(timeout);
+      interval = null;
+      timeout = null;
+    }
+
+    function openGame(name) {
+      clearTimers();
+      area.hidden = false;
+      controls.innerHTML = "";
+      info.textContent = "";
+      area.scrollIntoView({ behavior: "smooth" });
+
+      if (name === "tap") startTapSetup();
+      if (name === "guess") startGuessSetup();
+      if (name === "reaction") startReactionSetup();
+    }
+
+    function closeGame() {
+      clearTimers();
+      area.hidden = true;
+      controls.innerHTML = "";
+    }
+
+    function startTapSetup() {
+      title.textContent = "⚡ Tap Challenge";
+      instructions.textContent = "10 seconds mein button jitni baar ho sake dabao!";
+      message.textContent = "Ready?";
+      info.textContent = "Score: 0";
+      const btn = document.createElement("button");
+      btn.textContent = "Start!";
+      btn.onclick = startTap;
+      controls.appendChild(btn);
+    }
+
+    function startTap() {
+      clearTimers();
+      taps = 0;
+      seconds = 10;
+      controls.innerHTML = "";
+      const btn = document.createElement("button");
+      btn.id = "tapButton";
+      btn.textContent = "TAP! ⚡";
+      btn.onclick = () => {
+        if (seconds > 0) {
+          taps++;
+          info.textContent = "Score: " + taps + " | Time: " + seconds + "s";
+        }
+      };
+      controls.appendChild(btn);
+      message.textContent = "GO! GO! GO!";
+      info.textContent = "Score: 0 | Time: 10s";
+
+      interval = setInterval(() => {
+        seconds--;
+        info.textContent = "Score: " + taps + " | Time: " + seconds + "s";
+        if (seconds <= 0) {
+          clearTimers();
+          btn.disabled = true;
+          message.textContent = "Time's up! 🎉";
+          info.textContent = "Final score: " + taps;
+          const again = document.createElement("button");
+          again.textContent = "Play Again";
+          again.onclick = startTapSetup;
+          controls.appendChild(again);
+        }
+      }, 1000);
+    }
+
+    function startGuessSetup() {
+      title.textContent = "🎯 Number Guess";
+      instructions.textContent = "1 se 100 ke darmiyan secret number guess karo.";
+      message.textContent = "I'm thinking of a number!";
+      secret = Math.floor(Math.random() * 100) + 1;
+      attempts = 0;
+      info.textContent = "Attempts: 0";
+
+      const input = document.createElement("input");
+      input.type = "number";
+      input.min = "1";
+      input.max = "100";
+      input.placeholder = "Enter 1–100";
+      input.setAttribute("aria-label", "Your guess");
+      input.style.cssText = "padding:12px;width:150px;border-radius:8px;margin:8px;background:#090d1b;color:white;border:1px solid #344363";
+
+      const btn = document.createElement("button");
+      btn.textContent = "Guess!";
+      btn.onclick = () => {
+        const n = Number(input.value);
+        if (!input.value || n < 1 || n > 100 || !Number.isInteger(n)) {
+          message.textContent = "1 se 100 tak poora number likho.";
+          return;
+        }
+        attempts++;
+        info.textContent = "Attempts: " + attempts;
+        if (n === secret) {
+          message.textContent = "Correct! You won! 🏆";
+          btn.disabled = true;
+        } else {
+          message.textContent = n < secret ? "Thora bara number try karo ↑" : "Thora chhota number try karo ↓";
+        }
+      };
+      input.addEventListener("keydown", e => {
+        if (e.key === "Enter") btn.click();
+      });
+      controls.append(input, btn);
+    }
+
+    function startReactionSetup() {
+      title.textContent = "🚀 Reaction Test";
+      instructions.textContent = "Start dabao. Screen green ho to jitni jaldi ho sake click karo!";
+      message.textContent = "Ready?";
+      reactionState = "idle";
+
+      const btn = document.createElement("button");
+      btn.textContent = "Start Test";
+      btn.onclick = () => {
+        clearTimers();
+        reactionState = "waiting";
+        btn.disabled = true;
+        btn.textContent = "Wait for green...";
+        message.textContent = "Wait... don't click yet!";
+        area.style.background = "#121a30";
+
+        timeout = setTimeout(() => {
+          reactionState = "go";
+          reactionStart = performance.now();
+          area.style.background = "#075b42";
+          btn.disabled = false;
+          btn.textContent = "CLICK NOW!";
+          message.textContent = "NOW! 🟢";
+        }, 1500 + Math.random() * 3500);
+      };
+
+      btn.addEventListener("click", () => {
+        if (reactionState === "waiting") {
+          clearTimers();
+          reactionState = "idle";
+          btn.disabled = false;
+          btn.textContent = "Try Again";
+          message.textContent = "Too early! Wait for green.";
+          area.style.background = "#121a30";
+        } else if (reactionState === "go") {
+          const ms = Math.round(performance.now() - reactionStart);
+          clearTimers();
+          reactionState = "done";
+          btn.disabled = false;
+          btn.textContent = "Play Again";
+          message.textContent = ms + " ms! 🎉";
+          info.textContent = ms < 250 ? "Amazing reflexes!" : "Try to beat your time!";
+          area.style.background = "#121a30";
+        } else if (reactionState === "done" || reactionState === "idle") {
+          startReactionSetup();
+        }
+      });
+
+      controls.appendChild(btn);
+      info.textContent = "";
+    }
+
+    document.getElementById("search").addEventListener("input", event => {
+      const query = event.target.value.toLowerCase().trim();
+      document.querySelectorAll(".card").forEach(card => {
+        card.hidden = !card.dataset.name.includes(query);
+      });
+    });
+  </script>
+</body>
+</html>
