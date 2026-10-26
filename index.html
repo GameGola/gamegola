@@ -2,636 +2,198 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GameGola - Bhabhi Thulla</title>
 <style>
-:root {
-  --gold:#ffd978;
-  --green:#0a8755;
-  --dark:#06130d;
+*{box-sizing:border-box}
+body{
+ margin:0;font-family:Arial,sans-serif;text-align:center;
+ background:linear-gradient(135deg,#092e20,#126447);
+ color:white;min-height:100vh;padding:18px
 }
-* { box-sizing:border-box; }
-body {
-  margin:0;
-  background:radial-gradient(ellipse at top,#286646,#102b1c 45%,#050d08);
-  color:white;
-  font:16px Arial,sans-serif;
+h1{color:#ffd54a;margin-bottom:5px}
+.subtitle{color:#d8f5df}
+.panel{
+ max-width:600px;margin:15px auto;background:#ffffff14;
+ border:1px solid #ffffff30;border-radius:18px;padding:18px
 }
-header {
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:15px;
-  background:#06130df0;
-  border-bottom:1px solid #8b713b;
-  position:sticky;
-  top:0;
+button{
+ border:0;border-radius:10px;padding:12px 18px;
+ font-weight:bold;cursor:pointer;margin:5px
 }
-.brand { color:var(--gold);font-size:23px;font-weight:bold; }
-.coins { color:var(--gold); }
-main { max-width:1000px;margin:auto;padding:15px; }
-.screen { display:none; }
-.screen.active { display:block; }
-.hero { text-align:center;padding:25px 5px; }
-h1 { color:var(--gold);font-size:clamp(35px,8vw,65px); }
-h2 { color:var(--gold); }
-.panel {
-  background:#10271a;
-  border:1px solid #385642;
-  border-radius:15px;
-  padding:18px;
-  margin:15px 0;
+.start{background:#ffd54a;color:#173d2a}
+.card{
+ background:#fff;color:#171717;font-size:25px;
+ width:62px;height:88px;border-radius:9px;
+ margin:5px;padding:8px 0;box-shadow:0 3px 7px #0005
 }
-.center { text-align:center; }
-.muted { color:#bfd0c1;line-height:1.6; }
-.grid {
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:10px;
-  max-width:650px;
-  margin:20px auto;
-}
-button,select,input { font:inherit; }
-button { cursor:pointer; }
-.menu {
-  padding:18px 10px;
-  min-height:100px;
-  border-radius:12px;
-  border:1px solid #496449;
-  background:#183624;
-  color:white;
-  text-align:left;
-}
-.menu.primary {
-  background:linear-gradient(135deg,#ffe69c,#d69b30);
-  color:#241a07;
-}
-.menu b,.menu small { display:block;margin-top:8px; }
-.btn {
-  padding:11px 15px;
-  border:0;
-  border-radius:8px;
-  background:var(--gold);
-  color:#241a07;
-  font-weight:bold;
-  margin:4px;
-}
-.green { background:#64eab1; }
-.dark { background:#263e2d;color:white; }
-select,input {
-  padding:10px;
-  background:#08150c;
-  color:white;
-  border:1px solid #506b54;
-  border-radius:8px;
-  margin:5px;
-}
-.table {
-  position:relative;
-  min-height:370px;
-  border:8px solid #75451f;
-  border-radius:45%;
-  background:radial-gradient(ellipse,#15915e,#087044 65%,#06442c);
-  box-shadow:inset 0 0 30px #00321c;
-  overflow:hidden;
-  margin:15px auto;
-}
-.seat {
-  position:absolute;
-  transform:translate(-50%,-50%);
-  background:#0b2018;
-  border:1px solid #63816a;
-  border-radius:10px;
-  padding:6px;
-  min-width:55px;
-  text-align:center;
-  font-size:11px;
-}
-.seat.active { border:2px solid var(--gold); }
-.bottom { left:50%;top:89%; }
-.top { left:50%;top:10%; }
-.left { left:9%;top:50%; }
-.right { left:91%;top:50%; }
-.br { left:78%;top:76%; }
-.bl { left:22%;top:76%; }
-.tr { left:78%;top:24%; }
-.tl { left:22%;top:24%; }
-.avatar { font-size:22px;display:block; }
-.meta { font-size:10px;color:#d2dfd3; }
-.middle {
-  position:absolute;
-  left:50%;top:50%;
-  transform:translate(-50%,-50%);
-  width:65%;
-  text-align:center;
-}
-.pile,.hand {
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  flex-wrap:wrap;
-  gap:5px;
-}
-.pile { min-height:80px; }
-.card {
-  width:43px;height:64px;
-  background:#fffdf6;color:#111;
-  border:1px solid #ccc;
-  border-radius:6px;
-  display:inline-flex;
-  flex-direction:column;
-  justify-content:space-between;
-  align-items:center;
-  padding:4px 2px;
-  font-size:13px;
-  font-weight:bold;
-  flex-shrink:0;
-}
-.card .suit { font-size:20px; }
-.red { color:#d92743; }
-.hand { margin:15px 0; }
-.hand button:hover { transform:translateY(-5px); }
-.hand button:disabled { opacity:.45;cursor:not-allowed; }
-.status { min-height:25px;color:var(--gold);font-weight:bold; }
-.note { color:#a9bcae;font-size:13px;line-height:1.5; }
-.overlay {
-  display:none;
-  position:fixed;inset:0;
-  background:#000c;
-  z-index:20;
-  align-items:center;justify-content:center;
-  padding:15px;
-}
-.overlay.show { display:flex; }
-.modal {
-  width:100%;max-width:500px;
-  background:#10251a;
-  border:2px solid var(--gold);
-  border-radius:18px;
-  padding:22px;
-  text-align:center;
-}
-.thulla {
-  font-size:clamp(38px,10vw,65px);
-  font-weight:1000;color:#ffdc60;
-  text-shadow:0 0 16px #f80;
-}
-#thullaFlash {
-  display:none;
-  position:absolute;inset:0;
-  z-index:6;
-  align-items:center;justify-content:center;
-  pointer-events:none;
-  color:#fff18a;
-  font-size:clamp(30px,8vw,60px);
-  font-weight:1000;
-  text-align:center;
-  text-shadow:0 0 15px red;
-}
-#thullaFlash.show { display:flex;animation:flash 1.5s ease forwards; }
-@keyframes flash {
-  0% { opacity:0;transform:scale(.5); }
-  20%,70% { opacity:1;transform:scale(1); }
-  100% { opacity:0;transform:scale(1.1); }
-}
-@media(max-width:500px) {
-  main { padding:8px; }
-  .table { min-height:340px;border-width:6px; }
-  .seat { padding:4px;min-width:48px;font-size:10px; }
-  .middle { width:67%; }
-  .card { width:38px;height:58px; }
-}
+.red{color:#dc2222}
+#hand{display:flex;justify-content:center;flex-wrap:wrap}
+#message{font-size:18px;min-height:45px;color:#ffe477}
+.small{font-size:13px;color:#c9e6d6}
 </style>
 </head>
 <body>
 
-<header>
-  <div class="brand">🎮 GameGola</div>
-  <div class="coins">🪙 <span id="coins">100</span> coins</div>
-</header>
+<h1>🎴 GameGola</h1>
+<div class="subtitle">Bhabhi Thulla Card Game</div>
 
-<main>
-<section id="lobby" class="screen active">
-  <div class="hero">
-    <div style="color:#64eab1">PLAY • COMPETE • HAVE FUN</div>
-    <h1>BHABHI THULLA</h1>
-    <p class="muted">Play your cards. Avoid the Thulla!</p>
-  </div>
-
-  <div class="panel center">
-    <h2>Choose Your Table</h2>
-    <p class="muted">Total players, including you</p>
-    <select id="count">
-      <option>4</option><option>5</option>
-      <option>6</option><option>7</option><option>8</option>
-    </select>
-  </div>
-
-  <div class="grid">
-    <button class="menu primary" onclick="quickPlay()">
-      <span style="font-size:28px">🃏</span>
-      <b>QUICK PLAY</b><small>Play against AI bots</small>
-    </button>
-    <button class="menu" onclick="showScreen('rules')">
-      <span style="font-size:28px">📜</span>
-      <b>RULES</b><small>How to play</small>
-    </button>
-  </div>
-
-  <div class="panel center">
-    <h2>🪙 Free Coins</h2>
-    <button class="btn" onclick="coins+=5;updateCoins();alert('5 coins added!')">
-      Claim +5 Coins
-    </button>
-  </div>
-</section>
-
-<section id="rules" class="screen">
-  <button class="btn dark" onclick="showScreen('lobby')">← Back</button>
-  <div class="panel">
-    <h2>How to Play</h2>
-    <ol class="muted">
-      <li>The player holding A♠ starts.</li>
-      <li>You must follow the suit played first if you have it.</li>
-      <li>If you cannot follow suit, playing another suit causes a Thulla.</li>
-      <li>The highest card of the starting suit wins the trick.</li>
-      <li>Card order: 2, 3, 4, 5, 6, 7, 8, 9, 10, J, Q, K, A.</li>
-    </ol>
-    <p class="note">Practice version. Local rules can differ.</p>
-  </div>
-</section>
-
-<section id="game" class="screen">
-  <div style="display:flex;justify-content:space-between;flex-wrap:wrap">
-    <button class="btn dark" onclick="showScreen('lobby')">← Lobby</button>
-    <button class="btn" onclick="quickPlay()">New Game</button>
-  </div>
-
-  <div class="panel center">
-    <h2>BHABHI THULLA TABLE</h2>
-    <p id="roundInfo" class="muted"></p>
-  </div>
-
-  <div class="table" id="table">
-    <div id="seats"></div>
-    <div id="thullaFlash">THULLA!<br>AA GAYA!</div>
-    <div class="middle">
-      <h3 id="trickTitle">CURRENT TRICK</h3>
-      <div id="pile" class="pile"></div>
-      <p id="tableInfo" class="note">Cards played in this trick</p>
-    </div>
-  </div>
-
-  <div class="panel center">
-    <b style="color:#f6d98e">YOUR CARDS</b>
-    <p id="status" class="status">Starting game...</p>
-    <div id="hand" class="hand"></div>
-    <p class="note">Funny audio plays when a Thulla happens.</p>
-  </div>
-</section>
-</main>
-
-<div id="overlay" class="overlay">
-  <div class="modal">
-    <div class="thulla">ROUND OVER!</div>
-    <h2 id="resultTitle"></h2>
-    <p id="resultText" class="muted"></p>
-    <div id="scores" class="muted"></div>
-    <button class="btn green" onclick="quickPlay()">New Game</button>
-    <button class="btn dark" onclick="closeResult();showScreen('lobby')">Lobby</button>
-  </div>
+<div class="panel">
+ <h2 id="status">Game shuru karein!</h2>
+ <p id="message">Cards khelein aur Thulla se bachein 😂</p>
+ <div>🪙 Coins: <b id="coins">100</b></div>
+ <button class="start" onclick="startGame()">New Game</button>
+ <hr>
+ <h3>🤖 Computer Players</h3>
+ <p id="bots">4 players tayyar hain</p>
+ <h3>🃏 Aapke Cards</h3>
+ <div id="hand"></div>
+ <p class="small">Apna card select karein. Rules ke mutabiq same suit ka card khelein.</p>
+ <button onclick="drawCard()">Card Uthao</button>
 </div>
 
-<!-- Funny sound file must be in the same folder as index.html -->
+<!-- Thulla ki funny voice file isi folder mein upload karein -->
 <audio id="thullaSound" src="thulla-funny-voice.mp3" preload="auto"></audio>
 
 <script>
-"use strict";
+const suits=["♠","♥","♦","♣"];
+const ranks=["2","3","4","5","6","7","8","9","10","J","Q","K","A"];
 
-const suits = [
-  {symbol:"♠",red:false},{symbol:"♥",red:true},
-  {symbol:"♦",red:true},{symbol:"♣",red:false}
-];
-const ranks = [
-  ["2",2],["3",3],["4",4],["5",5],["6",6],["7",7],
-  ["8",8],["9",9],["10",10],["J",11],["Q",12],["K",13],["A",14]
-];
-const avatars = ["🙂","🤖","🦊","🐼","🐯","🐸","🐵","🐨"];
+let deck=[],hand=[],players=[],currentSuit="";
+let coins=100,playing=false,turn=0;
 
-let players = [];
-let turn = 0;
-let trick = [];
-let lead = null;
-let cardId = 0;
-let trickNo = 1;
-let timer = null;
-let coins = 100;
-let gameOver = false;
-let soundEnabled = false;
-
-function showScreen(id) {
-  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
-  if (timer) clearTimeout(timer);
-  timer = null;
+function makeDeck(){
+ let d=[];
+ for(let s of suits)
+  for(let r of ranks)d.push({suit:s,rank:r});
+ return d.sort(()=>Math.random()-0.5);
 }
 
-function updateCoins() {
-  document.getElementById("coins").textContent = coins;
+function cardText(c){return c.rank+c.suit}
+function isRed(c){return c.suit==="♥"||c.suit==="♦"}
+
+function startGame(){
+ deck=makeDeck();
+ hand=deck.splice(0,13);
+ players=[
+  {name:"Aap",cards:hand},
+  {name:"Bot 1",cards:deck.splice(0,13)},
+  {name:"Bot 2",cards:deck.splice(0,13)},
+  {name:"Bot 3",cards:deck.splice(0,13)}
+ ];
+ currentSuit="";
+ playing=true;
+ turn=0;
+ document.getElementById("status").textContent="Aapki baari!";
+ document.getElementById("message").textContent="Koi bhi card khel kar shuru karein.";
+ render();
 }
 
-function enableSound() {
-  soundEnabled = true;
+function render(){
+ const area=document.getElementById("hand");
+ area.innerHTML="";
+ hand.forEach((c,i)=>{
+  const b=document.createElement("button");
+  b.className="card"+(isRed(c)?" red":"");
+  b.textContent=cardText(c);
+  b.onclick=()=>playCard(i);
+  area.appendChild(b);
+ });
+ document.getElementById("coins").textContent=coins;
+ document.getElementById("bots").textContent=
+ players.slice(1).map(p=>p.name+": "+p.cards.length+" cards").join(" | ");
 }
 
-function playThullaSound() {
-  if (!soundEnabled) return;
-  const sound = document.getElementById("thullaSound");
-  if (!sound) return;
+function playCard(i){
+ if(!playing||turn!==0)return;
+ const c=hand[i];
 
-  sound.pause();
-  sound.currentTime = 0;
-  const promise = sound.play();
-  if (promise) {
-    promise.catch(error => console.log("Sound playback blocked:", error));
-  }
-}
+ if(currentSuit && c.suit!==currentSuit &&
+    hand.some(x=>x.suit===currentSuit)){
+  document.getElementById("message").textContent=
+   "Pehle isi suit ka card khelein!";
+  return;
+ }
 
-function makeDeck() {
-  const deck = [];
-  suits.forEach(s => {
-    ranks.forEach(r => {
-      deck.push({
-        id:++cardId,
-        suit:s.symbol,
-        red:s.red,
-        rank:r[0],
-        value:r[1]
-      });
-    });
-  });
+ hand.splice(i,1);
+ currentSuit=c.suit;
+ players[0].cards=hand;
 
-  for (let i=deck.length-1;i>0;i--) {
-    const j=Math.floor(Math.random()*(i+1));
-    [deck[i],deck[j]]=[deck[j],deck[i]];
-  }
-  return deck;
-}
+ document.getElementById("message").textContent=
+  "Aap ne "+cardText(c)+" khela.";
 
-function quickPlay() {
-  enableSound();
-  if (timer) clearTimeout(timer);
-  timer = null;
-
-  document.getElementById("overlay").classList.remove("show");
-  document.getElementById("thullaFlash").classList.remove("show");
-
-  cardId=0;
-  trick=[];
-  lead=null;
-  trickNo=1;
-  gameOver=false;
-
-  const n=Number(document.getElementById("count").value);
-  players=Array.from({length:n},(_,i)=>({
-    id:i,
-    name:i===0?"You":"Bot "+i,
-    avatar:avatars[i],
-    hand:[],
-    thullas:0,
-    tricks:0
-  }));
-
-  const deck=makeDeck();
-  const each=Math.floor(deck.length/n);
-  const dealt=deck.slice(0,each*n);
-
-  dealt.forEach((card,i)=>players[i%n].hand.push(card));
-  players.forEach(p=>p.hand.sort((a,b)=>a.value-b.value));
-
-  const starter=players.find(p =>
-    p.hand.some(c=>c.suit==="♠" && c.value===14)
-  );
-  turn=starter ? starter.id : 0;
-
-  document.getElementById("roundInfo").textContent =
-    n+" players • "+each+" cards each • Offline AI";
-
-  showScreen("game");
+ if(hand.length===0){
+  playing=false;
+  coins+=20;
+  document.getElementById("status").textContent="🎉 Aap jeet gaye!";
+  document.getElementById("message").textContent="Mubarak ho! +20 coins";
   render();
+  return;
+ }
 
-  if (turn===0) {
-    document.getElementById("status").textContent="You have A♠. Play it to start!";
-  } else {
-    document.getElementById("status").textContent=players[turn].name+" starts with A♠.";
-    scheduleBot();
-  }
+ turn=1;
+ render();
+ setTimeout(botTurn,800);
 }
 
-function allowed(card,player) {
-  if (!trick.length) {
-    if (trickNo===1) {
-      const aceHolder=players.find(p =>
-        p.hand.some(c=>c.suit==="♠" && c.value===14)
-      );
-      if (aceHolder && player.id===aceHolder.id) {
-        return card.suit==="♠" && card.value===14;
-      }
-    }
-    return true;
-  }
+function botTurn(){
+ if(!playing)return;
+ const p=players[turn];
+ if(!p || p.cards.length===0){
+  turn=(turn+1)%4;
+  setTimeout(botTurn,500);
+  return;
+ }
 
-  const hasSuit=player.hand.some(c=>c.suit===lead);
-  return !hasSuit || card.suit===lead;
-}
+ let idx=p.cards.findIndex(c=>c.suit===currentSuit);
+ if(idx<0)idx=Math.floor(Math.random()*p.cards.length);
 
-function legalCards(player) {
-  return player.hand.filter(c=>allowed(c,player));
-}
+ const c=p.cards.splice(idx,1)[0];
 
-function cardHTML(card,owner) {
-  return '<div class="card '+(card.red?'red':'')+'">'+
-    '<span>'+card.rank+'</span>'+
-    '<span class="suit">'+card.suit+'</span>'+
-    '<span>'+card.rank+'</span>'+
-    (owner?'<span style="font-size:9px">'+owner+'</span>':'')+
-    '</div>';
-}
+ if(p.cards.length===0){
+  document.getElementById("message").textContent=
+   p.name+" ke saare cards khatam!";
+ }
 
-function positions() {
-  return {
-    4:["bottom","top","right","left"],
-    5:["bottom","br","tr","tl","left"],
-    6:["bottom","br","right","top","left","bl"],
-    7:["bottom","br","right","tr","tl","left","bl"],
-    8:["bottom","br","right","tr","top","tl","left","bl"]
-  }[players.length];
-}
+ currentSuit=c.suit;
 
-function render() {
-  const pos=positions();
+ if(p.cards.length===0 && p.name!=="Aap"){
+  thullaPara(p.name+" se bach gaye!");
+ }
 
-  document.getElementById("seats").innerHTML=players.map((p,i)=>
-    '<div class="seat '+pos[i]+(i===turn&&!gameOver?' active':'')+'">'+
-    '<span class="avatar">'+p.avatar+'</span>'+
-    '<b>'+p.name+'</b>'+
-    '<span class="meta">'+p.hand.length+' cards</span>'+
-    '</div>'
-  ).join("");
-
-  document.getElementById("pile").innerHTML=trick.map(x=>
-    cardHTML(x.card,x.name)
-  ).join("");
-
-  document.getElementById("trickTitle").textContent="TRICK "+trickNo;
-  document.getElementById("tableInfo").textContent=
-    trick.length ? trick.length+" cards • Lead suit "+lead : "No cards played yet";
-
-  const me=players[0];
-  document.getElementById("hand").innerHTML=me ? me.hand.map(c=>
-    '<button class="card '+(c.red?'red':'')+'" '+
-    ((!gameOver && turn===0 && allowed(c,me))?'':'disabled')+
-    ' onclick="playCard(0,'+c.id+')">'+
-    '<span>'+c.rank+'</span><span class="suit">'+c.suit+'</span>'+
-    '<span>'+c.rank+'</span></button>'
-  ).join("") : "";
-}
-
-function playCard(playerIndex,id) {
-  enableSound();
-  if (gameOver || playerIndex!==turn) return;
-
-  const player=players[playerIndex];
-  const index=player.hand.findIndex(c=>c.id===id);
-  if (index<0) return;
-
-  const card=player.hand[index];
-  if (!allowed(card,player)) {
-    document.getElementById("status").textContent=
-      "You must follow "+lead+" if you have that suit.";
-    return;
-  }
-
-  player.hand.splice(index,1);
-  if (!trick.length) lead=card.suit;
-
-  trick.push({id:player.id,name:player.name,card});
+ turn=(turn+1)%4;
+ if(turn===0){
+  document.getElementById("status").textContent="Aapki baari!";
+  document.getElementById("message").textContent=
+   "Computer ne "+cardText(c)+" khela. Ab aap card khelein.";
   render();
-
-  const isThulla=trick.length>1 && card.suit!==lead;
-
-  if (isThulla) {
-    player.thullas++;
-    document.getElementById("status").textContent=
-      "🚨 THULLA AA GAYA! "+player.name+" could not follow "+lead+"!";
-
-    const flash=document.getElementById("thullaFlash");
-    flash.classList.remove("show");
-    void flash.offsetWidth;
-    flash.classList.add("show");
-
-    playThullaSound();
-
-    timer=setTimeout(()=>resolveTrick(),1500);
-    return;
-  }
-
-  if (trick.length===players.length) {
-    timer=setTimeout(()=>resolveTrick(),800);
-    return;
-  }
-
-  turn=(turn+1)%players.length;
+ }else{
   render();
-
-  if (turn===0) {
-    document.getElementById("status").textContent="Your turn! Follow "+lead+" if possible.";
-  } else {
-    scheduleBot();
-  }
+  setTimeout(botTurn,700);
+ }
 }
 
-function scheduleBot() {
-  if (timer) clearTimeout(timer);
-
-  timer=setTimeout(()=>{
-    timer=null;
-    if (gameOver || turn===0) return;
-
-    const player=players[turn];
-    if (!player || !player.hand.length) {
-      resolveTrick();
-      return;
-    }
-
-    let options=legalCards(player);
-
-    if (!trick.length && trickNo===1) {
-      const ace=player.hand.find(c=>c.suit==="♠" && c.value===14);
-      if (ace) options=[ace];
-    }
-
-    if (!options.length) options=player.hand;
-    const chosen=options[Math.floor(Math.random()*options.length)];
-    playCard(turn,chosen.id);
-  },700+Math.random()*400);
+function drawCard(){
+ if(!playing||turn!==0)return;
+ if(deck.length===0){
+  document.getElementById("message").textContent="Deck mein cards nahi hain.";
+  return;
+ }
+ hand.push(deck.pop());
+ players[0].cards=hand;
+ document.getElementById("message").textContent="Aap ne naya card uthaya.";
+ render();
 }
 
-function resolveTrick() {
-  timer=null;
-  if (!trick.length) return;
-
-  const leadCards=trick.filter(x=>x.card.suit===lead);
-  const winner=leadCards.reduce((best,x)=>
-    x.card.value>best.card.value ? x : best
-  ,leadCards[0]);
-
-  players[winner.id].tricks++;
-
-  const hadThulla=trick.some(x=>x.card.suit!==lead);
-  document.getElementById("status").textContent=
-    (hadThulla?"Thulla! ":"")+winner.name+" wins the trick.";
-
-  trick=[];
-  lead=null;
-  trickNo++;
-  turn=winner.id;
-
-  if (players.every(p=>p.hand.length===0)) {
-    finishGame();
-    return;
-  }
-
-  render();
-
-  if (turn!==0) scheduleBot();
-  else document.getElementById("status").textContent="Your turn! Lead a card.";
+function thullaPara(message){
+ document.getElementById("message").textContent="😂 THULLA! "+message;
+ const sound=document.getElementById("thullaSound");
+ sound.currentTime=0;
+ sound.play().catch(()=> {
+  document.getElementById("message").textContent=
+   "😂 THULLA! Audio file check karein.";
+ });
 }
-
-function finishGame() {
-  gameOver=true;
-  render();
-
-  const ranking=[...players].sort((a,b)=>a.thullas-b.thullas);
-  document.getElementById("resultTitle").textContent=
-    ranking[0].name+" wins!";
-  document.getElementById("resultText").textContent=
-    "Lowest number of Thullas wins this practice round.";
-
-  document.getElementById("scores").innerHTML=ranking.map((p,i)=>
-    "<p>"+(i+1)+". "+p.name+" — "+p.thullas+" Thulla(s)</p>"
-  ).join("");
-
-  document.getElementById("overlay").classList.add("show");
-  coins+=ranking[0].id===0?10:2;
-  updateCoins();
-}
-
-function closeResult() {
-  document.getElementById("overlay").classList.remove("show");
-}
-
-updateCoins();
 </script>
 </body>
 </html>
