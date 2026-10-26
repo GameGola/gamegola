@@ -4,266 +4,207 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>GameGola - Free Online Games</title>
-<meta name="description" content="Play free online games at GameGola. Enjoy arcade, puzzle and reaction games on any device.">
+<title>GameGola - Thulla</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#090d1b;color:#fff;font-family:Arial,sans-serif}
-header{padding:20px 6%;background:#11182c;border-bottom:1px solid #293655;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-.logo{font-size:29px;font-weight:900;color:#00f5d4;text-decoration:none}
-header a:last-child{color:white;text-decoration:none}
-.hero{text-align:center;padding:55px 16px;background:radial-gradient(ellipse at top,#203765,#090d1b 72%)}
-.hero h1{font-size:clamp(34px,6vw,56px);margin:0 0 12px}
-.hero h1 span{color:#00f5d4}
-.hero p{color:#bac7e1;line-height:1.6}
-input{font-size:16px}
-#search{width:min(100%,420px);padding:14px;border:1px solid #354568;border-radius:12px;background:#11182c;color:white;margin-top:12px}
-main{max-width:1100px;margin:auto;padding:25px 18px 55px}
-h2{margin-top:20px}
-.games{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
-.card,.panel{background:#121a30;border:1px solid #293655;border-radius:17px;padding:22px}
-.card{transition:.2s}
-.card:hover{transform:translateY(-4px);border-color:#00f5d4}
-.emoji{font-size:43px}
-.card p{color:#bac7e1;line-height:1.5;min-height:42px}
-button{border:0;border-radius:9px;padding:12px 16px;background:#00f5d4;color:#07121b;font-weight:bold;font-size:15px;cursor:pointer;margin:4px}
-button:hover{background:#7bffeb}
-button:disabled{opacity:.5;cursor:default}
-.panel{margin-top:28px;text-align:center}
-#message{font-size:21px;color:#00f5d4;font-weight:bold;margin:20px 0}
-#controls{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:8px}
-#controls input{width:160px;padding:12px;border:1px solid #354568;border-radius:9px;background:#090d1b;color:white}
-#controls button{min-width:45px}
-.board{display:grid;grid-template-columns:repeat(3,80px);gap:7px;justify-content:center}
-.board button{height:75px;font-size:28px;margin:0;background:#24314e;color:white}
-.memory{display:grid;grid-template-columns:repeat(4, minmax(48px,65px));gap:7px;justify-content:center}
-.memory button{height:60px;font-size:25px;padding:5px;margin:0;background:#263451;color:white}
-.status{color:#bac7e1;min-height:24px}
-footer{text-align:center;padding:25px;color:#98a8c8;border-top:1px solid #293655}
-[hidden]{display:none!important}
+body{margin:0;background:#09101f;color:#f5f7ff;font-family:Arial,sans-serif}
+header{padding:18px;display:flex;justify-content:space-between;align-items:center;background:#111e36;border-bottom:1px solid #344568}
+h1{margin:0;color:#62f2c1}h2{color:#62f2c1}
+main{max-width:900px;margin:auto;padding:18px}
+.panel{background:#121e35;border:1px solid #344568;border-radius:16px;padding:20px;margin:15px 0}
+button,input,select{font:inherit;padding:12px;border-radius:9px}
+button{border:0;background:#62f2c1;color:#07131c;font-weight:bold;cursor:pointer;margin:4px}
+input,select{background:#091426;color:white;border:1px solid #405477;max-width:100%}
+.secondary{background:#293a5a;color:white}
+.hidden{display:none}
+.center{text-align:center}
+.cards{display:flex;gap:7px;flex-wrap:wrap;justify-content:center;margin:20px 0}
+.card{width:54px;height:78px;background:white;color:#111;border-radius:8px;font-size:21px;font-weight:bold}
+.red{color:#d92348}
+.table{background:#11543f;padding:20px;border:5px solid #785332;border-radius:20px;text-align:center}
+.players{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.player{padding:12px;background:#202f4c;border-radius:10px;text-align:center}
+small,.muted{color:#b1bfd8;line-height:1.5}
+#message{color:#ffd166;font-weight:bold;min-height:24px}
+@media(max-width:550px){main{padding:10px}.panel{padding:14px}.card{width:45px;height:68px}}
 </style>
 </head>
 <body>
 <header>
-<a class="logo" href="#">🎮 GameGola</a>
-<a href="#games">Explore Games ↓</a>
+  <div><h1>🎮 GameGola</h1><small>Play • Compete • Have Fun</small></div>
+  <strong>🪙 <span id="coins">100</span></strong>
 </header>
 
-<section class="hero">
-<h1>Play More. <span>Have Fun!</span></h1>
-<p>Free browser games, no downloads needed.<br>Choose your game and beat your best score!</p>
-<input id="search" type="search" placeholder="🔎 Search games..." aria-label="Search games">
+<main>
+<section id="home">
+  <div class="panel center">
+    <h2>🃏 THULLA</h2>
+    <p>Play cards against the computer!</p>
+    <button onclick="startGame()">🤖 Play vs Computer</button>
+    <button class="secondary" onclick="showRooms()">🌐 Online Rooms</button>
+  </div>
+  <div class="panel">
+    <h2>How to play this demo</h2>
+    <p class="muted">Play a card with the same suit or rank as the table card. If you cannot play, draw a card. The first player to finish their cards wins.</p>
+    <p class="muted">Note: These are simplified practice rules and may not match the exact rules in your Thulla video.</p>
+  </div>
+  <div class="panel center">
+    <h2>🪙 Practice Coins</h2>
+    <p>Win a round to earn 10 demo coins.</p>
+    <button onclick="bonus()">Claim +5 Coins</button>
+  </div>
 </section>
 
-<main id="games">
-<h2>🔥 All Games</h2>
-<div class="games" id="cards">
-<article class="card" data-name="tap challenge arcade">
-<div class="emoji">⚡</div><h3>Tap Challenge</h3>
-<p>Tap as fast as possible in 10 seconds.</p>
-<button onclick="openGame('tap')">Play Now ▶</button>
-</article>
-<article class="card" data-name="number guess puzzle">
-<div class="emoji">🎯</div><h3>Number Guess</h3>
-<p>Find the secret number from 1 to 100.</p>
-<button onclick="openGame('guess')">Play Now ▶</button>
-</article>
-<article class="card" data-name="rock paper scissors">
-<div class="emoji">✊</div><h3>Rock Paper Scissors</h3>
-<p>Choose your move and beat the computer.</p>
-<button onclick="openGame('rps')">Play Now ▶</button>
-</article>
-<article class="card" data-name="tic tac toe strategy">
-<div class="emoji">❌</div><h3>Tic-Tac-Toe</h3>
-<p>Get three marks in a row to win.</p>
-<button onclick="openGame('tic')">Play Now ▶</button>
-</article>
-<article class="card" data-name="memory match cards">
-<div class="emoji">🧠</div><h3>Memory Match</h3>
-<p>Flip cards and find all matching pairs.</p>
-<button onclick="openGame('memory')">Play Now ▶</button>
-</article>
-<article class="card" data-name="reaction test speed">
-<div class="emoji">🚀</div><h3>Reaction Test</h3>
-<p>Test how fast you react to a signal.</p>
-<button onclick="openGame('reaction')">Play Now ▶</button>
-</article>
-</div>
+<section id="rooms" class="panel hidden">
+  <button class="secondary" onclick="home()">← Home</button>
+  <h2>🌐 Online Rooms</h2>
+  <p class="muted">Room interface preview. Firebase multiplayer is not connected yet.</p>
+  <p><input id="playerName" placeholder="Your name" value="Player"></p>
+  <p>
+    <select id="playerCount">
+      <option>2</option><option>3</option><option selected>4</option>
+      <option>5</option><option>6</option><option>7</option><option>8</option>
+    </select>
+    <button onclick="createRoom()">Create Room</button>
+  </p>
+  <p><input id="roomCode" placeholder="Room code">
+  <button class="secondary" onclick="joinRoom()">Join Room</button></p>
+  <p id="roomMessage" class="muted">Create a demo room to see a code.</p>
+</section>
 
-<section class="panel" id="panel" hidden>
-<h2 id="title">Game</h2>
-<p id="instructions" class="status"></p>
-<div id="message" aria-live="polite">Let's play!</div>
-<div id="info" class="status"></div>
-<div id="controls"></div>
-<button onclick="closeGame()" style="margin-top:22px;background:#293655;color:white">← All Games</button>
+<section id="game" class="panel hidden">
+  <button class="secondary" onclick="home()">← Home</button>
+  <h2 class="center">Thulla vs Computer</h2>
+  <div class="players">
+    <div class="player">🙂 You: <span id="yourCount">7</span> cards</div>
+    <div class="player">🤖 Computer: <span id="cpuCount">7</span> cards</div>
+  </div>
+  <div class="table">
+    <h3>🃏 Table Card</h3>
+    <div id="topCard"></div>
+    <small id="deckCount"></small>
+  </div>
+  <p id="status" class="center">Your turn!</p>
+  <h3 class="center">Your cards — tap one to select</h3>
+  <div id="hand" class="cards"></div>
+  <div class="center">
+    <button onclick="playCard()">Play Selected</button>
+    <button class="secondary" onclick="drawCard()">Draw Card</button>
+    <button onclick="startGame()">New Round</button>
+  </div>
+  <p id="message" class="center"></p>
 </section>
 </main>
 
-<footer>© 2026 GameGola · Play fair, have fun ❤️</footer>
-
 <script>
-const panel=document.getElementById('panel');
-const title=document.getElementById('title');
-const instructions=document.getElementById('instructions');
-const message=document.getElementById('message');
-const info=document.getElementById('info');
-const controls=document.getElementById('controls');
-let timer=null,timeout=null,active=false;
+const suits=["♠","♥","♦","♣"];
+const ranks=["A","2","3","4","5","6","7","8","9","10","J","Q","K"];
+let deck=[],hand=[],cpu=[],top=null,selected=-1,coins=100,finished=false,turn="you";
 
-function clearTimers(){clearInterval(timer);clearTimeout(timeout);timer=null;timeout=null;}
-function setup(name,desc){
-clearTimers();panel.hidden=false;controls.innerHTML='';
-title.textContent=name;instructions.textContent=desc;
-message.textContent='Ready?';info.textContent='';
-panel.scrollIntoView({behavior:'smooth',block:'start'});
+function show(id){
+  ["home","rooms","game"].forEach(x=>document.getElementById(x).classList.add("hidden"));
+  document.getElementById(id).classList.remove("hidden");
 }
-function btn(text,fn){const b=document.createElement('button');b.textContent=text;b.onclick=fn;controls.appendChild(b);return b;}
-function openGame(g){
-if(g==='tap')tapSetup();
-if(g==='guess')guessSetup();
-if(g==='rps')rpsSetup();
-if(g==='tic')ticSetup();
-if(g==='memory')memorySetup();
-if(g==='reaction')reactionSetup();
+function home(){show("home")}
+function showRooms(){show("rooms")}
+function bonus(){coins+=5;updateCoins();alert("You received 5 demo coins!")}
+function updateCoins(){document.getElementById("coins").textContent=coins}
+function makeDeck(){
+  let d=[];
+  suits.forEach(s=>ranks.forEach(r=>d.push({s,r})));
+  for(let i=d.length-1;i>0;i--){
+    let j=Math.floor(Math.random()*(i+1));
+    [d[i],d[j]]=[d[j],d[i]];
+  }
+  return d;
 }
-function closeGame(){clearTimers();active=false;panel.hidden=true;controls.innerHTML='';}
-
-// 1. TAP CHALLENGE
-function tapSetup(){
-setup('⚡ Tap Challenge','Tap the button as many times as possible in 10 seconds.');
-message.textContent='Ready to tap?';btn('Start Game',tapStart);
+function startGame(){
+  show("game");
+  deck=makeDeck();
+  hand=deck.splice(0,7);
+  cpu=deck.splice(0,7);
+  top=deck.pop();
+  selected=-1;finished=false;turn="you";
+  document.getElementById("message").textContent="";
+  document.getElementById("status").textContent="Your turn! Match the suit or rank, or draw.";
+  render();
 }
-function tapStart(){
-clearTimers();let score=0,left=10;active=true;controls.innerHTML='';
-const b=btn('TAP! ⚡',()=>{if(active){score++;info.textContent='Score: '+score+' | Time: '+left+'s';}});
-message.textContent='GO!';info.textContent='Score: 0 | Time: 10s';
-timer=setInterval(()=>{left--;info.textContent='Score: '+score+' | Time: '+left+'s';
-if(left<=0){clearTimers();active=false;b.disabled=true;message.textContent='Time is up! 🎉';info.textContent='Final score: '+score;btn('Play Again',tapSetup);}},1000);
+function playable(c){return c.s===top.s||c.r===top.r}
+function cardHTML(c){
+  let red=(c.s==="♥"||c.s==="♦")?"red":"";
+  return '<span class="card '+red+'">'+c.r+c.s+'</span>';
 }
-
-// 2. NUMBER GUESS
-function guessSetup(){
-setup('🎯 Number Guess','Guess a whole number from 1 to 100.');
-const input=document.createElement('input');input.type='number';input.min=1;input.max=100;input.placeholder='1 to 100';
-input.setAttribute('aria-label','Your number guess');
-const secret=Math.floor(Math.random()*100)+1;let tries=0;
-const b=btn('Guess!',check);
-controls.prepend(input);
-input.addEventListener('keydown',e=>{if(e.key==='Enter')check();});
-function check(){
-const n=Number(input.value);
-if(!input.value||n<1||n>100||!Number.isInteger(n)){message.textContent='Enter a number from 1 to 100.';return;}
-tries++;info.textContent='Attempts: '+tries;
-if(n===secret){message.textContent='Correct! You win! 🏆';b.disabled=true;input.disabled=true;btn('Play Again',guessSetup);}
-else message.textContent=n<secret?'Try a higher number ↑':'Try a lower number ↓';
+function render(){
+  document.getElementById("topCard").innerHTML=cardHTML(top);
+  document.getElementById("yourCount").textContent=hand.length;
+  document.getElementById("cpuCount").textContent=cpu.length;
+  document.getElementById("deckCount").textContent="Cards left in deck: "+deck.length;
+  document.getElementById("hand").innerHTML=hand.map((c,i)=>
+    '<button class="card '+((c.s==="♥"||c.s==="♦")?"red":"")+'" '+
+    (finished||turn!=="you"?"disabled ":"")+
+    'style="'+(selected===i?"outline:4px solid #ffd166;":"")+'" onclick="selectCard('+i+')">'+c.r+c.s+'</button>'
+  ).join("");
 }
+function selectCard(i){if(finished||turn!=="you")return;selected=i;render()}
+function playCard(){
+  if(finished||turn!=="you"||selected<0)return;
+  let c=hand[selected];
+  if(!playable(c)){
+    document.getElementById("status").textContent="Not a match! Pick another card or draw.";
+    return;
+  }
+  hand.splice(selected,1);top=c;selected=-1;
+  if(hand.length===0){endGame(true);return}
+  turn="cpu";render();
+  document.getElementById("status").textContent="Computer's turn...";
+  setTimeout(cpuTurn,650);
 }
-
-// 3. ROCK PAPER SCISSORS
-function rpsSetup(){
-setup('✊ Rock Paper Scissors','Choose rock, paper, or scissors.');
-let player=0,computer=0;
-info.textContent='You: 0 | Computer: 0';
-function play(move){
-const choices=['Rock','Paper','Scissors'];
-const cpu=choices[Math.floor(Math.random()*3)];
-let result=move===cpu?'It is a draw!':(
-(move==='Rock'&&cpu==='Scissors')||
-(move==='Paper'&&cpu==='Rock')||
-(move==='Scissors'&&cpu==='Paper')?'You win this round! 🎉':'Computer wins this round!');
-if(result.startsWith('You win'))player++;
-if(result.startsWith('Computer wins'))computer++;
-message.textContent=move+' vs '+cpu+' — '+result;
-info.textContent='You: '+player+' | Computer: '+computer;
+function drawCard(){
+  if(finished||turn!=="you")return;
+  if(!deck.length){
+    document.getElementById("status").textContent="Deck is empty. Start a new round.";
+    return;
+  }
+  hand.push(deck.pop());selected=-1;turn="cpu";render();
+  document.getElementById("status").textContent="You drew a card. Computer's turn...";
+  setTimeout(cpuTurn,650);
 }
-btn('✊ Rock',()=>play('Rock'));btn('✋ Paper',()=>play('Paper'));btn('✌️ Scissors',()=>play('Scissors'));
-btn('Reset',rpsSetup);
+function cpuTurn(){
+  if(finished)return;
+  let i=cpu.findIndex(playable);
+  if(i>=0){
+    top=cpu.splice(i,1)[0];
+    if(cpu.length===0){endGame(false);return}
+  }else if(deck.length){cpu.push(deck.pop())}
+  turn="you";selected=-1;render();
+  document.getElementById("status").textContent="Your turn! Play a matching card or draw.";
 }
-
-// 4. TIC TAC TOE (two local players)
-function ticSetup(){
-setup('❌ Tic-Tac-Toe','Two players on the same device. X goes first.');
-let cells=Array(9).fill(''),turn='X',done=false;
-const board=document.createElement('div');board.className='board';controls.appendChild(board);
-const wins=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
-cells.forEach((_,i)=>{
-const b=document.createElement('button');b.textContent='';b.setAttribute('aria-label','Cell '+(i+1));
-b.onclick=()=>{
-if(done||cells[i])return;
-cells[i]=turn;b.textContent=turn;
-const win=wins.some(line=>line.every(n=>cells[n]===turn));
-if(win){message.textContent=turn+' wins! 🏆';done=true;}
-else if(cells.every(Boolean)){message.textContent="It's a draw!";done=true;}
-else{turn=turn==='X'?'O':'X';message.textContent=turn+"'s turn";}
-};
-board.appendChild(b);
-});
-btn('Restart',ticSetup);
+function endGame(won){
+  finished=true;turn="none";
+  if(won){
+    coins+=10;updateCoins();
+    document.getElementById("message").textContent="🎉 You won! +10 demo coins.";
+    document.getElementById("status").textContent="You finished your cards first!";
+  }else{
+    document.getElementById("message").textContent="Try again!";
+    document.getElementById("status").textContent="Computer finished its cards first.";
+  }
+  render();
 }
-
-// 5. MEMORY MATCH
-function memorySetup(){
-setup('🧠 Memory Match','Find all matching pairs with as few moves as possible.');
-const icons=['🐸','🚀','🍕','🐼','⚽','🎲','🍉','👾'];
-const deck=[...icons,...icons].sort(()=>Math.random()-.5);
-let first=null,lock=false,moves=0,matches=0;
-const board=document.createElement('div');board.className='memory';controls.appendChild(board);
-const buttons=[];
-deck.forEach((emoji,i)=>{
-const b=document.createElement('button');b.textContent='?';
-b.setAttribute('aria-label','Hidden card');
-b.onclick=()=>{
-if(lock||b===first||b.dataset.matched==='yes'||b.textContent!=='?')return;
-b.textContent=emoji;
-if(!first){first=b;return;}
-moves++;info.textContent='Moves: '+moves;lock=true;
-if(first.textContent===b.textContent){
-first.dataset.matched='yes';b.dataset.matched='yes';first=null;lock=false;matches++;
-if(matches===icons.length)message.textContent='You matched every pair! 🏆';
-}else{
-const previous=first;first=null;
-timeout=setTimeout(()=>{previous.textContent='?';b.textContent='?';lock=false;timeout=null;},700);
+function createRoom(){
+  let code=Math.random().toString(36).slice(2,8).toUpperCase();
+  document.getElementById("roomCode").value=code;
+  document.getElementById("roomMessage").textContent=
+    "Demo room "+code+" created for "+document.getElementById("playerCount").value+
+    " players. This code is not online yet; Firebase syncing must be added.";
 }
-};
-buttons.push(b);board.appendChild(b);
-});
-message.textContent='Find the pairs!';
-btn('Restart',memorySetup);
+function joinRoom(){
+  let code=document.getElementById("roomCode").value.trim().toUpperCase();
+  document.getElementById("roomMessage").textContent=code?
+    "Room "+code+" entered. Online room lookup is not connected yet.":
+    "Please enter a room code.";
 }
-
-// 6. REACTION TEST
-function reactionSetup(){
-setup('🚀 Reaction Test','Press Start, wait for green, then click as fast as you can.');
-let state='idle',start=0;
-const b=btn('Start Test',startTest);
-function startTest(){
-clearTimers();state='waiting';b.disabled=true;b.textContent='Wait for green...';
-message.textContent='Wait... do not click yet!';panel.style.background='#121a30';
-timeout=setTimeout(()=>{
-state='go';start=performance.now();panel.style.background='#075b42';
-message.textContent='CLICK NOW! 🟢';b.disabled=false;b.textContent='CLICK!';
-},1200+Math.random()*3000);
-}
-b.onclick=()=>{
-if(state==='waiting'){
-clearTimers();state='idle';b.disabled=false;b.textContent='Try Again';
-message.textContent='Too early! Wait for green.';panel.style.background='#121a30';
-}else if(state==='go'){
-const ms=Math.round(performance.now()-start);state='done';
-clearTimers();b.disabled=false;b.textContent='Play Again';
-message.textContent=ms+' ms! 🎉';info.textContent=ms<250?'Excellent reflexes!':'Try to beat your time!';
-panel.style.background='#121a30';
-}else if(state==='done'||state==='idle'){startTest();}
-};
-}
-
-document.getElementById('search').addEventListener('input',e=>{
-const q=e.target.value.toLowerCase().trim();
-document.querySelectorAll('.card').forEach(card=>{
-card.hidden=!card.dataset.name.includes(q);
-});
-});
+updateCoins();
 </script>
 </body>
 </html>
