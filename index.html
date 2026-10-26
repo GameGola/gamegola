@@ -9,29 +9,39 @@
 *{box-sizing:border-box}
 body{margin:0;background:#09101f;color:#f5f7ff;font-family:Arial,sans-serif}
 header{padding:18px;display:flex;justify-content:space-between;align-items:center;background:#111e36;border-bottom:1px solid #344568}
-h1{margin:0;color:#62f2c1}h2{color:#62f2c1}
+h1{margin:0;color:#62f2c1}
+h2{color:#62f2c1}
 main{max-width:900px;margin:auto;padding:18px}
 .panel{background:#121e35;border:1px solid #344568;border-radius:16px;padding:20px;margin:15px 0}
 button,input,select{font:inherit;padding:12px;border-radius:9px}
 button{border:0;background:#62f2c1;color:#07131c;font-weight:bold;cursor:pointer;margin:4px}
+button:disabled{opacity:.5;cursor:not-allowed}
 input,select{background:#091426;color:white;border:1px solid #405477;max-width:100%}
 .secondary{background:#293a5a;color:white}
-.hidden{display:none}
+.hidden{display:none!important}
 .center{text-align:center}
 .cards{display:flex;gap:7px;flex-wrap:wrap;justify-content:center;margin:20px 0}
-.card{width:54px;height:78px;background:white;color:#111;border-radius:8px;font-size:21px;font-weight:bold}
+.card{width:54px;height:78px;background:white;color:#111;border-radius:8px;font-size:21px;font-weight:bold;display:inline-flex;align-items:center;justify-content:center}
 .red{color:#d92348}
 .table{background:#11543f;padding:20px;border:5px solid #785332;border-radius:20px;text-align:center}
 .players{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
 .player{padding:12px;background:#202f4c;border-radius:10px;text-align:center}
 small,.muted{color:#b1bfd8;line-height:1.5}
 #message{color:#ffd166;font-weight:bold;min-height:24px}
-@media(max-width:550px){main{padding:10px}.panel{padding:14px}.card{width:45px;height:68px}}
+@media(max-width:550px){
+ main{padding:10px}
+ .panel{padding:14px}
+ .card{width:45px;height:68px;font-size:18px}
+}
 </style>
 </head>
 <body>
+
 <header>
-  <div><h1>🎮 GameGola</h1><small>Play • Compete • Have Fun</small></div>
+  <div>
+    <h1>🎮 GameGola</h1>
+    <small>Play • Compete • Have Fun</small>
+  </div>
   <strong>🪙 <span id="coins">100</span></strong>
 </header>
 
@@ -43,11 +53,20 @@ small,.muted{color:#b1bfd8;line-height:1.5}
     <button onclick="startGame()">🤖 Play vs Computer</button>
     <button class="secondary" onclick="showRooms()">🌐 Online Rooms</button>
   </div>
+
   <div class="panel">
-    <h2>How to play this demo</h2>
-    <p class="muted">Play a card with the same suit or rank as the table card. If you cannot play, draw a card. The first player to finish their cards wins.</p>
-    <p class="muted">Note: These are simplified practice rules and may not match the exact rules in your Thulla video.</p>
+    <h2>How to Play</h2>
+    <p class="muted">
+      Play a card with the same suit or rank as the table card.
+      If you cannot play, draw a card.
+      The first player to finish their cards wins.
+    </p>
+    <p class="muted">
+      Note: These are simplified practice rules and may not match
+      the exact rules of your Thulla game.
+    </p>
   </div>
+
   <div class="panel center">
     <h2>🪙 Practice Coins</h2>
     <p>Win a round to earn 10 demo coins.</p>
@@ -58,152 +77,307 @@ small,.muted{color:#b1bfd8;line-height:1.5}
 <section id="rooms" class="panel hidden">
   <button class="secondary" onclick="home()">← Home</button>
   <h2>🌐 Online Rooms</h2>
-  <p class="muted">Room interface preview. Firebase multiplayer is not connected yet.</p>
+  <p class="muted">
+    Demo only. Online multiplayer is not connected yet.
+  </p>
   <p><input id="playerName" placeholder="Your name" value="Player"></p>
   <p>
     <select id="playerCount">
-      <option>2</option><option>3</option><option selected>4</option>
-      <option>5</option><option>6</option><option>7</option><option>8</option>
+      <option>2</option>
+      <option>3</option>
+      <option selected>4</option>
+      <option>5</option>
+      <option>6</option>
+      <option>7</option>
+      <option>8</option>
     </select>
     <button onclick="createRoom()">Create Room</button>
   </p>
-  <p><input id="roomCode" placeholder="Room code">
-  <button class="secondary" onclick="joinRoom()">Join Room</button></p>
+  <p>
+    <input id="roomCode" placeholder="Room code">
+    <button class="secondary" onclick="joinRoom()">Join Room</button>
+  </p>
   <p id="roomMessage" class="muted">Create a demo room to see a code.</p>
 </section>
 
 <section id="game" class="panel hidden">
   <button class="secondary" onclick="home()">← Home</button>
   <h2 class="center">Thulla vs Computer</h2>
+
   <div class="players">
     <div class="player">🙂 You: <span id="yourCount">7</span> cards</div>
     <div class="player">🤖 Computer: <span id="cpuCount">7</span> cards</div>
   </div>
+
   <div class="table">
     <h3>🃏 Table Card</h3>
     <div id="topCard"></div>
     <small id="deckCount"></small>
   </div>
+
   <p id="status" class="center">Your turn!</p>
   <h3 class="center">Your cards — tap one to select</h3>
   <div id="hand" class="cards"></div>
+
   <div class="center">
     <button onclick="playCard()">Play Selected</button>
     <button class="secondary" onclick="drawCard()">Draw Card</button>
     <button onclick="startGame()">New Round</button>
   </div>
+
   <p id="message" class="center"></p>
 </section>
 </main>
 
 <script>
-const suits=["♠","♥","♦","♣"];
-const ranks=["A","2","3","4","5","6","7","8","9","10","J","Q","K"];
-let deck=[],hand=[],cpu=[],top=null,selected=-1,coins=100,finished=false,turn="you";
+"use strict";
 
-function show(id){
-  ["home","rooms","game"].forEach(x=>document.getElementById(x).classList.add("hidden"));
+const suits = ["♠", "♥", "♦", "♣"];
+const ranks = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
+
+let deck = [];
+let hand = [];
+let cpu = [];
+let tableCard = null;
+let selected = -1;
+let coins = 100;
+let finished = false;
+let turn = "you";
+let cpuTimer = null;
+
+function show(id) {
+  ["home", "rooms", "game"].forEach(function(sectionId) {
+    document.getElementById(sectionId).classList.add("hidden");
+  });
   document.getElementById(id).classList.remove("hidden");
 }
-function home(){show("home")}
-function showRooms(){show("rooms")}
-function bonus(){coins+=5;updateCoins();alert("You received 5 demo coins!")}
-function updateCoins(){document.getElementById("coins").textContent=coins}
-function makeDeck(){
-  let d=[];
-  suits.forEach(s=>ranks.forEach(r=>d.push({s,r})));
-  for(let i=d.length-1;i>0;i--){
-    let j=Math.floor(Math.random()*(i+1));
-    [d[i],d[j]]=[d[j],d[i]];
-  }
-  return d;
+
+function home() {
+  show("home");
 }
-function startGame(){
+
+function showRooms() {
+  show("rooms");
+}
+
+function bonus() {
+  coins += 5;
+  updateCoins();
+  alert("You received 5 demo coins!");
+}
+
+function updateCoins() {
+  document.getElementById("coins").textContent = coins;
+}
+
+function makeDeck() {
+  const cards = [];
+
+  suits.forEach(function(suit) {
+    ranks.forEach(function(rank) {
+      cards.push({s: suit, r: rank});
+    });
+  });
+
+  for (let i = cards.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [cards[i], cards[j]] = [cards[j], cards[i]];
+  }
+
+  return cards;
+}
+
+function startGame() {
+  if (cpuTimer !== null) {
+    clearTimeout(cpuTimer);
+    cpuTimer = null;
+  }
+
   show("game");
-  deck=makeDeck();
-  hand=deck.splice(0,7);
-  cpu=deck.splice(0,7);
-  top=deck.pop();
-  selected=-1;finished=false;turn="you";
-  document.getElementById("message").textContent="";
-  document.getElementById("status").textContent="Your turn! Match the suit or rank, or draw.";
+
+  deck = makeDeck();
+  hand = deck.splice(0, 7);
+  cpu = deck.splice(0, 7);
+  tableCard = deck.pop();
+
+  selected = -1;
+  finished = false;
+  turn = "you";
+
+  document.getElementById("message").textContent = "";
+  document.getElementById("status").textContent =
+    "Your turn! Match the suit or rank, or draw a card.";
+
   render();
 }
-function playable(c){return c.s===top.s||c.r===top.r}
-function cardHTML(c){
-  let red=(c.s==="♥"||c.s==="♦")?"red":"";
-  return '<span class="card '+red+'">'+c.r+c.s+'</span>';
+
+function playable(card) {
+  return card.s === tableCard.s || card.r === tableCard.r;
 }
-function render(){
-  document.getElementById("topCard").innerHTML=cardHTML(top);
-  document.getElementById("yourCount").textContent=hand.length;
-  document.getElementById("cpuCount").textContent=cpu.length;
-  document.getElementById("deckCount").textContent="Cards left in deck: "+deck.length;
-  document.getElementById("hand").innerHTML=hand.map((c,i)=>
-    '<button class="card '+((c.s==="♥"||c.s==="♦")?"red":"")+'" '+
-    (finished||turn!=="you"?"disabled ":"")+
-    'style="'+(selected===i?"outline:4px solid #ffd166;":"")+'" onclick="selectCard('+i+')">'+c.r+c.s+'</button>'
-  ).join("");
+
+function cardHTML(card) {
+  const colorClass =
+    (card.s === "♥" || card.s === "♦") ? "red" : "";
+
+  return '<span class="card ' + colorClass + '">' +
+    card.r + card.s + '</span>';
 }
-function selectCard(i){if(finished||turn!=="you")return;selected=i;render()}
-function playCard(){
-  if(finished||turn!=="you"||selected<0)return;
-  let c=hand[selected];
-  if(!playable(c)){
-    document.getElementById("status").textContent="Not a match! Pick another card or draw.";
-    return;
-  }
-  hand.splice(selected,1);top=c;selected=-1;
-  if(hand.length===0){endGame(true);return}
-  turn="cpu";render();
-  document.getElementById("status").textContent="Computer's turn...";
-  setTimeout(cpuTurn,650);
+
+function render() {
+  document.getElementById("topCard").innerHTML = cardHTML(tableCard);
+  document.getElementById("yourCount").textContent = hand.length;
+  document.getElementById("cpuCount").textContent = cpu.length;
+  document.getElementById("deckCount").textContent =
+    "Cards left in deck: " + deck.length;
+
+  document.getElementById("hand").innerHTML = hand.map(function(card, i) {
+    const colorClass =
+      (card.s === "♥" || card.s === "♦") ? "red" : "";
+
+    const disabled = finished || turn !== "you" ? "disabled" : "";
+    const outline = selected === i ? "outline:4px solid #ffd166;" : "";
+
+    return '<button class="card ' + colorClass + '" ' +
+      disabled + ' style="' + outline + '" ' +
+      'onclick="selectCard(' + i + ')">' +
+      card.r + card.s + '</button>';
+  }).join("");
 }
-function drawCard(){
-  if(finished||turn!=="you")return;
-  if(!deck.length){
-    document.getElementById("status").textContent="Deck is empty. Start a new round.";
-    return;
-  }
-  hand.push(deck.pop());selected=-1;turn="cpu";render();
-  document.getElementById("status").textContent="You drew a card. Computer's turn...";
-  setTimeout(cpuTurn,650);
-}
-function cpuTurn(){
-  if(finished)return;
-  let i=cpu.findIndex(playable);
-  if(i>=0){
-    top=cpu.splice(i,1)[0];
-    if(cpu.length===0){endGame(false);return}
-  }else if(deck.length){cpu.push(deck.pop())}
-  turn="you";selected=-1;render();
-  document.getElementById("status").textContent="Your turn! Play a matching card or draw.";
-}
-function endGame(won){
-  finished=true;turn="none";
-  if(won){
-    coins+=10;updateCoins();
-    document.getElementById("message").textContent="🎉 You won! +10 demo coins.";
-    document.getElementById("status").textContent="You finished your cards first!";
-  }else{
-    document.getElementById("message").textContent="Try again!";
-    document.getElementById("status").textContent="Computer finished its cards first.";
-  }
+
+function selectCard(i) {
+  if (finished || turn !== "you") return;
+
+  selected = i;
   render();
 }
-function createRoom(){
-  let code=Math.random().toString(36).slice(2,8).toUpperCase();
-  document.getElementById("roomCode").value=code;
-  document.getElementById("roomMessage").textContent=
-    "Demo room "+code+" created for "+document.getElementById("playerCount").value+
-    " players. This code is not online yet; Firebase syncing must be added.";
+
+function playCard() {
+  if (finished || turn !== "you" || selected < 0) {
+    if (selected < 0 && !finished && turn === "you") {
+      document.getElementById("status").textContent =
+        "Please select one of your cards first.";
+    }
+    return;
+  }
+
+  const card = hand[selected];
+
+  if (!playable(card)) {
+    document.getElementById("status").textContent =
+      "Not a match! Select a matching card or draw.";
+    return;
+  }
+
+  hand.splice(selected, 1);
+  tableCard = card;
+  selected = -1;
+
+  if (hand.length === 0) {
+    endGame(true);
+    return;
+  }
+
+  turn = "cpu";
+  render();
+
+  document.getElementById("status").textContent =
+    "Computer's turn...";
+
+  cpuTimer = setTimeout(cpuTurn, 650);
 }
-function joinRoom(){
-  let code=document.getElementById("roomCode").value.trim().toUpperCase();
-  document.getElementById("roomMessage").textContent=code?
-    "Room "+code+" entered. Online room lookup is not connected yet.":
-    "Please enter a room code.";
+
+function drawCard() {
+  if (finished || turn !== "you") return;
+
+  if (deck.length === 0) {
+    document.getElementById("status").textContent =
+      "Deck is empty. Start a new round.";
+    return;
+  }
+
+  hand.push(deck.pop());
+  selected = -1;
+  turn = "cpu";
+  render();
+
+  document.getElementById("status").textContent =
+    "You drew a card. Computer's turn...";
+
+  cpuTimer = setTimeout(cpuTurn, 650);
 }
+
+function cpuTurn() {
+  cpuTimer = null;
+
+  if (finished) return;
+
+  const matchingIndex = cpu.findIndex(playable);
+
+  if (matchingIndex >= 0) {
+    tableCard = cpu.splice(matchingIndex, 1)[0];
+
+    if (cpu.length === 0) {
+      endGame(false);
+      return;
+    }
+  } else if (deck.length > 0) {
+    cpu.push(deck.pop());
+  } else {
+    document.getElementById("status").textContent =
+      "Computer cannot play. Your turn!";
+  }
+
+  turn = "you";
+  selected = -1;
+  render();
+
+  document.getElementById("status").textContent =
+    "Your turn! Play a matching card or draw.";
+}
+
+function endGame(won) {
+  finished = true;
+  turn = "none";
+  selected = -1;
+
+  if (won) {
+    coins += 10;
+    updateCoins();
+
+    document.getElementById("message").textContent =
+      "🎉 You won! +10 demo coins.";
+
+    document.getElementById("status").textContent =
+      "You finished your cards first!";
+  } else {
+    document.getElementById("message").textContent =
+      "Try again! Start a new round.";
+
+    document.getElementById("status").textContent =
+      "Computer finished its cards first.";
+  }
+
+  render();
+}
+
+function createRoom() {
+  const code = Math.random().toString(36).slice(2, 8).toUpperCase();
+
+  document.getElementById("roomCode").value = code;
+  document.getElementById("roomMessage").textContent =
+    "Demo room " + code + " created for " +
+    document.getElementById("playerCount").value +
+    " players. Online multiplayer is not connected yet.";
+}
+
+function joinRoom() {
+  const code = document.getElementById("roomCode").value.trim().toUpperCase();
+
+  document.getElementById("roomMessage").textContent = code
+    ? "Room " + code + " entered. Online room lookup is not connected yet."
+    : "Please enter a room code.";
+}
+
 updateCoins();
 </script>
 </body>
