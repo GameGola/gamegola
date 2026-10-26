@@ -7,183 +7,288 @@
 <title>GameGola - Thulla</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#09101f;color:#f5f7ff;font-family:Arial,sans-serif}
-header{padding:18px;display:flex;justify-content:space-between;align-items:center;background:#111e36;border-bottom:1px solid #344568}
-h1{margin:0;color:#62f2c1}
-h2{color:#62f2c1}
-main{max-width:900px;margin:auto;padding:18px}
-.panel{background:#121e35;border:1px solid #344568;border-radius:16px;padding:20px;margin:15px 0}
-button,input,select{font:inherit;padding:12px;border-radius:9px}
-button{border:0;background:#62f2c1;color:#07131c;font-weight:bold;cursor:pointer;margin:4px}
-button:disabled{opacity:.5;cursor:not-allowed}
-input,select{background:#091426;color:white;border:1px solid #405477;max-width:100%}
-.secondary{background:#293a5a;color:white}
-.hidden{display:none!important}
+:root{--gold:#f6c75e;--green:#20d6a0;--dark:#07110e}
+body{margin:0;background:radial-gradient(ellipse at top,#193b2d,#07110e 70%);color:#fff;font-family:Arial,sans-serif;min-height:100vh}
+header{display:flex;justify-content:space-between;align-items:center;padding:15px 5%;border-bottom:1px solid #395443;background:#07110ecc}
+.logo{font-size:26px;font-weight:900;color:var(--gold)}
+.coins{border:1px solid #a8873d;border-radius:30px;padding:10px 15px;background:#282312;color:var(--gold);font-weight:bold}
+main{max-width:1000px;margin:auto;padding:20px}
+.screen{display:none}.screen.active{display:block}
+.hero{text-align:center;padding:24px 10px 15px}
+.eyebrow{color:var(--green);letter-spacing:4px;font-size:12px;font-weight:bold}
+h1{font-size:clamp(35px,8vw,62px);margin:10px 0;color:var(--gold);text-shadow:0 4px 20px #000}
+h2{color:var(--gold);margin-top:0}
+.subtitle{color:#c0d1c5}
+.menu-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;max-width:650px;margin:25px auto}
+.menu-btn{min-height:115px;border:1px solid #5d6b40;border-radius:18px;background:linear-gradient(145deg,#233c2b,#111e16);color:white;padding:18px 10px;cursor:pointer;transition:.2s}
+.menu-btn:hover{transform:translateY(-3px);border-color:var(--gold)}
+.menu-btn .emoji{display:block;font-size:34px;margin-bottom:10px}
+.menu-btn strong{font-size:16px}
+.menu-btn small{display:block;color:#b6c6b7;margin-top:7px}
+.menu-btn.primary{background:linear-gradient(135deg,#ffe28b,#c38a22);color:#201705;border:0}
+.menu-btn.primary small{color:#59431a}
+.panel{background:#101e16;border:1px solid #354d3a;border-radius:18px;padding:20px;margin:18px 0}
+button,input,select{font:inherit}
+.action{background:var(--gold);color:#1b1608;border:0;border-radius:10px;padding:12px 17px;font-weight:bold;cursor:pointer;margin:4px}
+.action.green{background:var(--green)}
+.action.dark{background:#263c2d;color:#fff;border:1px solid #526a54}
+input,select{padding:12px;border:1px solid #49624c;border-radius:9px;background:#09140d;color:white;max-width:100%;margin:5px}
+.muted{color:#b2c3b4;line-height:1.6}
 .center{text-align:center}
-.cards{display:flex;gap:7px;flex-wrap:wrap;justify-content:center;margin:20px 0}
-.card{width:54px;height:78px;background:white;color:#111;border-radius:8px;font-size:21px;font-weight:bold;display:inline-flex;align-items:center;justify-content:center}
-.red{color:#d92348}
-.table{background:#11543f;padding:20px;border:5px solid #785332;border-radius:20px;text-align:center}
-.players{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.player{padding:12px;background:#202f4c;border-radius:10px;text-align:center}
-small,.muted{color:#b1bfd8;line-height:1.5}
-#message{color:#ffd166;font-weight:bold;min-height:24px}
-@media(max-width:550px){
- main{padding:10px}
- .panel{padding:14px}
- .card{width:45px;height:68px;font-size:18px}
+.back{margin-bottom:15px}
+.table-wrap{padding:15px 0}
+.table{position:relative;min-height:390px;border:8px solid #75502a;border-radius:48%/38%;background:radial-gradient(ellipse,#16845a,#075238 75%);box-shadow:inset 0 0 0 3px #c6a060,inset 0 0 40px #032b1c,0 15px 30px #0008;display:flex;align-items:center;justify-content:center}
+.table-center{text-align:center;padding:20px}
+.table-center h3{color:#f5df9b;margin:8px}
+.pile{display:flex;align-items:center;justify-content:center;gap:22px;flex-wrap:wrap}
+.playing-card{width:56px;height:79px;border-radius:8px;background:#fff;color:#171717;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:bold;box-shadow:0 4px 8px #0005;border:1px solid #ddd}
+.red{color:#d62945!important}
+.deck-card{background:repeating-linear-gradient(45deg,#b52637,#b52637 5px,#f3d7aa 5px,#f3d7aa 7px);border:3px solid #fff}
+.seat{position:absolute;background:#11271c;border:1px solid #8caa72;border-radius:12px;padding:8px 12px;min-width:95px;text-align:center;box-shadow:0 4px 12px #0006;font-size:13px}
+.seat .avatar{font-size:24px;display:block}
+.seat .count{color:#f6d47b;font-size:12px}
+.seat.top{top:-12px;left:50%;transform:translateX(-50%)}
+.seat.left{left:-12px;top:42%;transform:translateY(-50%)}
+.seat.right{right:-12px;top:42%;transform:translateY(-50%)}
+.seat.bottom{bottom:-12px;left:50%;transform:translateX(-50%);border-color:var(--gold)}
+.hand{display:flex;justify-content:center;gap:5px;flex-wrap:wrap;margin:20px 0}
+.hand .playing-card{width:48px;height:69px;font-size:19px;cursor:pointer;transition:transform .15s}
+.hand .playing-card.selected{transform:translateY(-12px);outline:3px solid var(--gold)}
+.hand .playing-card:disabled{cursor:not-allowed;opacity:.6}
+#status{color:#f5d87f;min-height:24px;font-weight:bold}
+.hidden{display:none!important}
+@media(max-width:520px){
+ main{padding:12px}
+ header{padding:13px}
+ .logo{font-size:22px}
+ .menu-grid{gap:9px}
+ .menu-btn{min-height:105px;padding:12px 5px}
+ .menu-btn .emoji{font-size:29px}
+ .table{min-height:340px;border-width:6px}
+ .seat{min-width:75px;padding:6px;font-size:11px}
+ .seat.left{left:-7px}.seat.right{right:-7px}
+ .playing-card{width:49px;height:70px}
+ .hand .playing-card{width:39px;height:60px;font-size:16px}
 }
 </style>
 </head>
 <body>
 
 <header>
-  <div>
-    <h1>🎮 GameGola</h1>
-    <small>Play • Compete • Have Fun</small>
-  </div>
-  <strong>🪙 <span id="coins">100</span></strong>
+  <div class="logo">🎮 GameGola</div>
+  <div class="coins">🪙 <span id="coins">100</span></div>
 </header>
 
 <main>
-<section id="home">
-  <div class="panel center">
-    <h2>🃏 THULLA</h2>
-    <p>Play cards against the computer!</p>
-    <button onclick="startGame()">🤖 Play vs Computer</button>
-    <button class="secondary" onclick="showRooms()">🌐 Online Rooms</button>
+<section id="home" class="screen active">
+  <div class="hero">
+    <div class="eyebrow">PLAY • COMPETE • WIN</div>
+    <h1>THULLA</h1>
+    <p class="subtitle">Your table. Your cards. Your game.</p>
   </div>
 
-  <div class="panel">
-    <h2>How to Play</h2>
-    <p class="muted">
-      Play a card with the same suit or rank as the table card.
-      If you cannot play, draw a card.
-      The first player to finish their cards wins.
-    </p>
-    <p class="muted">
-      Note: These are simplified practice rules and may not match
-      the exact rules of your Thulla game.
-    </p>
+  <div class="menu-grid">
+    <button class="menu-btn primary" onclick="startGame()">
+      <span class="emoji">🃏</span>
+      <strong>PLAY NOW</strong>
+      <small>Play against computer</small>
+    </button>
+    <button class="menu-btn" onclick="openRooms()">
+      <span class="emoji">🌐</span>
+      <strong>MULTIPLAYER</strong>
+      <small>Explore game rooms</small>
+    </button>
+    <button class="menu-btn" onclick="openPrivate()">
+      <span class="emoji">🔐</span>
+      <strong>PRIVATE TABLE</strong>
+      <small>Create a room code</small>
+    </button>
+    <button class="menu-btn" onclick="claimCoins()">
+      <span class="emoji">🪙</span>
+      <strong>FREE COINS</strong>
+      <small>Claim 5 demo coins</small>
+    </button>
   </div>
 
   <div class="panel center">
-    <h2>🪙 Practice Coins</h2>
-    <p>Win a round to earn 10 demo coins.</p>
-    <button onclick="bonus()">Claim +5 Coins</button>
+    <h2>♠ Welcome to the Table ♥</h2>
+    <p class="muted">Play cards that match the suit or rank of the center card. Get rid of all your cards before the computer to win.</p>
+    <small class="muted">Practice version • Demo coins only</small>
   </div>
 </section>
 
-<section id="rooms" class="panel hidden">
-  <button class="secondary" onclick="home()">← Home</button>
-  <h2>🌐 Online Rooms</h2>
-  <p class="muted">
-    Demo only. Online multiplayer is not connected yet.
-  </p>
-  <p><input id="playerName" placeholder="Your name" value="Player"></p>
-  <p>
-    <select id="playerCount">
-      <option>2</option>
-      <option>3</option>
-      <option selected>4</option>
-      <option>5</option>
-      <option>6</option>
-      <option>7</option>
-      <option>8</option>
+<section id="rooms" class="screen">
+  <button class="action dark back" onclick="goHome()">← Back</button>
+  <div class="panel center">
+    <h2>🌐 Multiplayer Rooms</h2>
+    <p class="muted">Choose the table size for your game.</p>
+    <select id="roomPlayers">
+      <option value="2">2 Players</option>
+      <option value="3">3 Players</option>
+      <option value="4" selected>4 Players</option>
+      <option value="5">5 Players</option>
+      <option value="6">6 Players</option>
+      <option value="7">7 Players</option>
+      <option value="8">8 Players</option>
     </select>
-    <button onclick="createRoom()">Create Room</button>
-  </p>
-  <p>
-    <input id="roomCode" placeholder="Room code">
-    <button class="secondary" onclick="joinRoom()">Join Room</button>
-  </p>
-  <p id="roomMessage" class="muted">Create a demo room to see a code.</p>
+    <p><button class="action green" onclick="createRoom()">Create Table</button></p>
+    <p id="roomResult" class="muted"></p>
+    <p class="muted">Online multiplayer needs a server connection and is not active yet.</p>
+  </div>
 </section>
 
-<section id="game" class="panel hidden">
-  <button class="secondary" onclick="home()">← Home</button>
-  <h2 class="center">Thulla vs Computer</h2>
+<section id="private" class="screen">
+  <button class="action dark back" onclick="goHome()">← Back</button>
+  <div class="panel center">
+    <h2>🔐 Private Table</h2>
+    <p class="muted">Create a demo invitation code or enter a code.</p>
+    <p><input id="privateName" placeholder="Your player name" maxlength="20"></p>
+    <p><button class="action green" onclick="createPrivate()">Create Private Table</button></p>
+    <h3 id="privateCode" style="color:var(--gold)"></h3>
+    <hr style="border-color:#354d3a">
+    <p><input id="joinCode" placeholder="Enter room code"></p>
+    <button class="action dark" onclick="joinPrivate()">Join Table</button>
+    <p id="privateMessage" class="muted"></p>
+    <p class="muted">Codes are demo-only; other players cannot join until online multiplayer is connected.</p>
+  </div>
+</section>
 
-  <div class="players">
-    <div class="player">🙂 You: <span id="yourCount">7</span> cards</div>
-    <div class="player">🤖 Computer: <span id="cpuCount">7</span> cards</div>
+<section id="game" class="screen">
+  <button class="action dark back" onclick="goHome()">← Exit Table</button>
+  <div class="panel center" style="padding:12px">
+    <h2 style="margin:6px">🃏 THULLA TABLE</h2>
+    <div class="muted">Practice match vs computer</div>
   </div>
 
-  <div class="table">
-    <h3>🃏 Table Card</h3>
-    <div id="topCard"></div>
-    <small id="deckCount"></small>
+  <div class="table-wrap">
+    <div class="table">
+      <div class="seat top">
+        <span class="avatar">🤖</span>Computer
+        <span class="count"><span id="cpuCount">7</span> cards</span>
+      </div>
+      <div class="seat left">
+        <span class="avatar">🧑</span>Guest
+        <span class="count">Waiting</span>
+      </div>
+      <div class="seat right">
+        <span class="avatar">🧑</span>Guest
+        <span class="count">Waiting</span>
+      </div>
+      <div class="seat bottom">
+        <span class="avatar">🙂</span>You
+        <span class="count"><span id="yourCount">7</span> cards</span>
+      </div>
+
+      <div class="table-center">
+        <h3>TABLE CARDS</h3>
+        <div class="pile">
+          <div>
+            <div class="playing-card deck-card">🂠</div>
+            <small id="deckCount">Deck</small>
+          </div>
+          <div>
+            <div id="tableCard" class="playing-card">🂡</div>
+            <small>Top Card</small>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <p id="status" class="center">Your turn!</p>
-  <h3 class="center">Your cards — tap one to select</h3>
-  <div id="hand" class="cards"></div>
-
-  <div class="center">
-    <button onclick="playCard()">Play Selected</button>
-    <button class="secondary" onclick="drawCard()">Draw Card</button>
-    <button onclick="startGame()">New Round</button>
+  <div class="panel center">
+    <p id="status">Your turn!</p>
+    <div class="muted">Tap a card to select it, then press Play Card.</div>
+    <div id="hand" class="hand"></div>
+    <button class="action green" onclick="playCard()">Play Card</button>
+    <button class="action dark" onclick="drawCard()">Draw Card</button>
+    <button class="action" onclick="startGame()">New Game</button>
+    <p id="message" style="color:var(--gold);font-weight:bold"></p>
   </div>
-
-  <p id="message" class="center"></p>
 </section>
 </main>
 
 <script>
 "use strict";
 
-const suits = ["♠", "♥", "♦", "♣"];
-const ranks = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
+const suits = ["♠","♥","♦","♣"];
+const ranks = ["A","2","3","4","5","6","7","8","9","10","J","Q","K"];
 
 let deck = [];
 let hand = [];
 let cpu = [];
-let tableCard = null;
+let currentCard = null;
 let selected = -1;
 let coins = 100;
 let finished = false;
 let turn = "you";
 let cpuTimer = null;
 
-function show(id) {
-  ["home", "rooms", "game"].forEach(function(sectionId) {
-    document.getElementById(sectionId).classList.add("hidden");
+function screen(id) {
+  document.querySelectorAll(".screen").forEach(function(el) {
+    el.classList.remove("active");
   });
-  document.getElementById(id).classList.remove("hidden");
+  document.getElementById(id).classList.add("active");
 }
 
-function home() {
-  show("home");
+function goHome() {
+  if (cpuTimer !== null) {
+    clearTimeout(cpuTimer);
+    cpuTimer = null;
+  }
+  screen("home");
 }
 
-function showRooms() {
-  show("rooms");
+function openRooms() {
+  screen("rooms");
 }
 
-function bonus() {
-  coins += 5;
-  updateCoins();
-  alert("You received 5 demo coins!");
+function openPrivate() {
+  screen("private");
 }
 
 function updateCoins() {
   document.getElementById("coins").textContent = coins;
 }
 
+function claimCoins() {
+  coins += 5;
+  updateCoins();
+  alert("5 demo coins added!");
+}
+
+function createRoom() {
+  const code = Math.random().toString(36).slice(2,8).toUpperCase();
+  document.getElementById("roomResult").textContent =
+    "Demo table code: " + code + " • " +
+    document.getElementById("roomPlayers").value +
+    " player seats selected.";
+}
+
+function createPrivate() {
+  const code = Math.random().toString(36).slice(2,8).toUpperCase();
+  document.getElementById("privateCode").textContent = "CODE: " + code;
+  document.getElementById("privateMessage").textContent =
+    "Share this demo code with your friends. Online joining is not active yet.";
+}
+
+function joinPrivate() {
+  const code = document.getElementById("joinCode").value.trim().toUpperCase();
+  document.getElementById("privateMessage").textContent = code
+    ? "Code " + code + " entered. Online room connection is not active yet."
+    : "Please enter a room code.";
+}
+
 function makeDeck() {
   const cards = [];
-
-  suits.forEach(function(suit) {
-    ranks.forEach(function(rank) {
-      cards.push({s: suit, r: rank});
+  suits.forEach(function(s) {
+    ranks.forEach(function(r) {
+      cards.push({s:s,r:r});
     });
   });
-
-  for (let i = cards.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [cards[i], cards[j]] = [cards[j], cards[i]];
+  for (let i=cards.length-1;i>0;i--) {
+    const j=Math.floor(Math.random()*(i+1));
+    [cards[i],cards[j]]=[cards[j],cards[i]];
   }
-
   return cards;
 }
 
@@ -193,105 +298,89 @@ function startGame() {
     cpuTimer = null;
   }
 
-  show("game");
-
+  screen("game");
   deck = makeDeck();
-  hand = deck.splice(0, 7);
-  cpu = deck.splice(0, 7);
-  tableCard = deck.pop();
-
+  hand = deck.splice(0,7);
+  cpu = deck.splice(0,7);
+  currentCard = deck.pop();
   selected = -1;
   finished = false;
   turn = "you";
 
   document.getElementById("message").textContent = "";
   document.getElementById("status").textContent =
-    "Your turn! Match the suit or rank, or draw a card.";
-
+    "Your turn! Match the suit or rank.";
   render();
 }
 
-function playable(card) {
-  return card.s === tableCard.s || card.r === tableCard.r;
+function canPlay(card) {
+  return card.s === currentCard.s || card.r === currentCard.r;
 }
 
-function cardHTML(card) {
-  const colorClass =
-    (card.s === "♥" || card.s === "♦") ? "red" : "";
-
-  return '<span class="card ' + colorClass + '">' +
-    card.r + card.s + '</span>';
+function cardMarkup(card) {
+  const red = (card.s === "♥" || card.s === "♦") ? "red" : "";
+  return '<span class="playing-card '+red+'">'+card.r+card.s+'</span>';
 }
 
 function render() {
-  document.getElementById("topCard").innerHTML = cardHTML(tableCard);
+  document.getElementById("tableCard").outerHTML =
+    cardMarkup(currentCard).replace(
+      '<span class="playing-card',
+      '<span id="tableCard" class="playing-card'
+    );
+
   document.getElementById("yourCount").textContent = hand.length;
   document.getElementById("cpuCount").textContent = cpu.length;
-  document.getElementById("deckCount").textContent =
-    "Cards left in deck: " + deck.length;
+  document.getElementById("deckCount").textContent = deck.length + " left";
 
-  document.getElementById("hand").innerHTML = hand.map(function(card, i) {
-    const colorClass =
-      (card.s === "♥" || card.s === "♦") ? "red" : "";
-
+  document.getElementById("hand").innerHTML = hand.map(function(card,i) {
+    const red = (card.s === "♥" || card.s === "♦") ? "red" : "";
+    const chosen = selected === i ? " selected" : "";
     const disabled = finished || turn !== "you" ? "disabled" : "";
-    const outline = selected === i ? "outline:4px solid #ffd166;" : "";
-
-    return '<button class="card ' + colorClass + '" ' +
-      disabled + ' style="' + outline + '" ' +
-      'onclick="selectCard(' + i + ')">' +
-      card.r + card.s + '</button>';
+    return '<button class="playing-card '+red+chosen+'" '+disabled+
+      ' onclick="selectCard('+i+')">'+card.r+card.s+'</button>';
   }).join("");
 }
 
 function selectCard(i) {
   if (finished || turn !== "you") return;
-
   selected = i;
   render();
 }
 
 function playCard() {
-  if (finished || turn !== "you" || selected < 0) {
-    if (selected < 0 && !finished && turn === "you") {
-      document.getElementById("status").textContent =
-        "Please select one of your cards first.";
-    }
+  if (finished || turn !== "you") return;
+  if (selected < 0) {
+    document.getElementById("status").textContent = "Please select a card first.";
     return;
   }
 
   const card = hand[selected];
-
-  if (!playable(card)) {
+  if (!canPlay(card)) {
     document.getElementById("status").textContent =
-      "Not a match! Select a matching card or draw.";
+      "Wrong card! Match the suit or rank, or draw.";
     return;
   }
 
-  hand.splice(selected, 1);
-  tableCard = card;
+  hand.splice(selected,1);
+  currentCard = card;
   selected = -1;
 
   if (hand.length === 0) {
-    endGame(true);
+    finishGame(true);
     return;
   }
 
   turn = "cpu";
   render();
-
-  document.getElementById("status").textContent =
-    "Computer's turn...";
-
-  cpuTimer = setTimeout(cpuTurn, 650);
+  document.getElementById("status").textContent = "Computer is playing...";
+  cpuTimer = setTimeout(cpuTurn,700);
 }
 
 function drawCard() {
   if (finished || turn !== "you") return;
-
   if (deck.length === 0) {
-    document.getElementById("status").textContent =
-      "Deck is empty. Start a new round.";
+    document.getElementById("status").textContent = "Deck is empty. Start a new game.";
     return;
   }
 
@@ -299,43 +388,32 @@ function drawCard() {
   selected = -1;
   turn = "cpu";
   render();
-
-  document.getElementById("status").textContent =
-    "You drew a card. Computer's turn...";
-
-  cpuTimer = setTimeout(cpuTurn, 650);
+  document.getElementById("status").textContent = "You drew a card. Computer's turn...";
+  cpuTimer = setTimeout(cpuTurn,700);
 }
 
 function cpuTurn() {
   cpuTimer = null;
-
   if (finished) return;
 
-  const matchingIndex = cpu.findIndex(playable);
-
-  if (matchingIndex >= 0) {
-    tableCard = cpu.splice(matchingIndex, 1)[0];
-
+  const index = cpu.findIndex(canPlay);
+  if (index >= 0) {
+    currentCard = cpu.splice(index,1)[0];
     if (cpu.length === 0) {
-      endGame(false);
+      finishGame(false);
       return;
     }
   } else if (deck.length > 0) {
     cpu.push(deck.pop());
-  } else {
-    document.getElementById("status").textContent =
-      "Computer cannot play. Your turn!";
   }
 
   turn = "you";
   selected = -1;
   render();
-
-  document.getElementById("status").textContent =
-    "Your turn! Play a matching card or draw.";
+  document.getElementById("status").textContent = "Your turn! Choose a matching card.";
 }
 
-function endGame(won) {
+function finishGame(won) {
   finished = true;
   turn = "none";
   selected = -1;
@@ -343,42 +421,17 @@ function endGame(won) {
   if (won) {
     coins += 10;
     updateCoins();
-
-    document.getElementById("message").textContent =
-      "🎉 You won! +10 demo coins.";
-
-    document.getElementById("status").textContent =
-      "You finished your cards first!";
+    document.getElementById("message").textContent = "🎉 You won! +10 demo coins.";
+    document.getElementById("status").textContent = "You finished your cards first!";
   } else {
-    document.getElementById("message").textContent =
-      "Try again! Start a new round.";
-
-    document.getElementById("status").textContent =
-      "Computer finished its cards first.";
+    document.getElementById("message").textContent = "Try again! Start a new game.";
+    document.getElementById("status").textContent = "Computer won this round.";
   }
-
   render();
-}
-
-function createRoom() {
-  const code = Math.random().toString(36).slice(2, 8).toUpperCase();
-
-  document.getElementById("roomCode").value = code;
-  document.getElementById("roomMessage").textContent =
-    "Demo room " + code + " created for " +
-    document.getElementById("playerCount").value +
-    " players. Online multiplayer is not connected yet.";
-}
-
-function joinRoom() {
-  const code = document.getElementById("roomCode").value.trim().toUpperCase();
-
-  document.getElementById("roomMessage").textContent = code
-    ? "Room " + code + " entered. Online room lookup is not connected yet."
-    : "Please enter a room code.";
 }
 
 updateCoins();
 </script>
 </body>
 </html>
+
