@@ -1,437 +1,637 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>GameGola - Thulla</title>
+<title>GameGola - Bhabhi Thulla</title>
 <style>
-*{box-sizing:border-box}
-:root{--gold:#f6c75e;--green:#20d6a0;--dark:#07110e}
-body{margin:0;background:radial-gradient(ellipse at top,#193b2d,#07110e 70%);color:#fff;font-family:Arial,sans-serif;min-height:100vh}
-header{display:flex;justify-content:space-between;align-items:center;padding:15px 5%;border-bottom:1px solid #395443;background:#07110ecc}
-.logo{font-size:26px;font-weight:900;color:var(--gold)}
-.coins{border:1px solid #a8873d;border-radius:30px;padding:10px 15px;background:#282312;color:var(--gold);font-weight:bold}
-main{max-width:1000px;margin:auto;padding:20px}
-.screen{display:none}.screen.active{display:block}
-.hero{text-align:center;padding:24px 10px 15px}
-.eyebrow{color:var(--green);letter-spacing:4px;font-size:12px;font-weight:bold}
-h1{font-size:clamp(35px,8vw,62px);margin:10px 0;color:var(--gold);text-shadow:0 4px 20px #000}
-h2{color:var(--gold);margin-top:0}
-.subtitle{color:#c0d1c5}
-.menu-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;max-width:650px;margin:25px auto}
-.menu-btn{min-height:115px;border:1px solid #5d6b40;border-radius:18px;background:linear-gradient(145deg,#233c2b,#111e16);color:white;padding:18px 10px;cursor:pointer;transition:.2s}
-.menu-btn:hover{transform:translateY(-3px);border-color:var(--gold)}
-.menu-btn .emoji{display:block;font-size:34px;margin-bottom:10px}
-.menu-btn strong{font-size:16px}
-.menu-btn small{display:block;color:#b6c6b7;margin-top:7px}
-.menu-btn.primary{background:linear-gradient(135deg,#ffe28b,#c38a22);color:#201705;border:0}
-.menu-btn.primary small{color:#59431a}
-.panel{background:#101e16;border:1px solid #354d3a;border-radius:18px;padding:20px;margin:18px 0}
-button,input,select{font:inherit}
-.action{background:var(--gold);color:#1b1608;border:0;border-radius:10px;padding:12px 17px;font-weight:bold;cursor:pointer;margin:4px}
-.action.green{background:var(--green)}
-.action.dark{background:#263c2d;color:#fff;border:1px solid #526a54}
-input,select{padding:12px;border:1px solid #49624c;border-radius:9px;background:#09140d;color:white;max-width:100%;margin:5px}
-.muted{color:#b2c3b4;line-height:1.6}
-.center{text-align:center}
-.back{margin-bottom:15px}
-.table-wrap{padding:15px 0}
-.table{position:relative;min-height:390px;border:8px solid #75502a;border-radius:48%/38%;background:radial-gradient(ellipse,#16845a,#075238 75%);box-shadow:inset 0 0 0 3px #c6a060,inset 0 0 40px #032b1c,0 15px 30px #0008;display:flex;align-items:center;justify-content:center}
-.table-center{text-align:center;padding:20px}
-.table-center h3{color:#f5df9b;margin:8px}
-.pile{display:flex;align-items:center;justify-content:center;gap:22px;flex-wrap:wrap}
-.playing-card{width:56px;height:79px;border-radius:8px;background:#fff;color:#171717;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:bold;box-shadow:0 4px 8px #0005;border:1px solid #ddd}
-.red{color:#d62945!important}
-.deck-card{background:repeating-linear-gradient(45deg,#b52637,#b52637 5px,#f3d7aa 5px,#f3d7aa 7px);border:3px solid #fff}
-.seat{position:absolute;background:#11271c;border:1px solid #8caa72;border-radius:12px;padding:8px 12px;min-width:95px;text-align:center;box-shadow:0 4px 12px #0006;font-size:13px}
-.seat .avatar{font-size:24px;display:block}
-.seat .count{color:#f6d47b;font-size:12px}
-.seat.top{top:-12px;left:50%;transform:translateX(-50%)}
-.seat.left{left:-12px;top:42%;transform:translateY(-50%)}
-.seat.right{right:-12px;top:42%;transform:translateY(-50%)}
-.seat.bottom{bottom:-12px;left:50%;transform:translateX(-50%);border-color:var(--gold)}
-.hand{display:flex;justify-content:center;gap:5px;flex-wrap:wrap;margin:20px 0}
-.hand .playing-card{width:48px;height:69px;font-size:19px;cursor:pointer;transition:transform .15s}
-.hand .playing-card.selected{transform:translateY(-12px);outline:3px solid var(--gold)}
-.hand .playing-card:disabled{cursor:not-allowed;opacity:.6}
-#status{color:#f5d87f;min-height:24px;font-weight:bold}
-.hidden{display:none!important}
-@media(max-width:520px){
- main{padding:12px}
- header{padding:13px}
- .logo{font-size:22px}
- .menu-grid{gap:9px}
- .menu-btn{min-height:105px;padding:12px 5px}
- .menu-btn .emoji{font-size:29px}
- .table{min-height:340px;border-width:6px}
- .seat{min-width:75px;padding:6px;font-size:11px}
- .seat.left{left:-7px}.seat.right{right:-7px}
- .playing-card{width:49px;height:70px}
- .hand .playing-card{width:39px;height:60px;font-size:16px}
+:root {
+  --gold:#ffd978;
+  --green:#0a8755;
+  --dark:#06130d;
+}
+* { box-sizing:border-box; }
+body {
+  margin:0;
+  background:radial-gradient(ellipse at top,#286646,#102b1c 45%,#050d08);
+  color:white;
+  font:16px Arial,sans-serif;
+}
+header {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:15px;
+  background:#06130df0;
+  border-bottom:1px solid #8b713b;
+  position:sticky;
+  top:0;
+}
+.brand { color:var(--gold);font-size:23px;font-weight:bold; }
+.coins { color:var(--gold); }
+main { max-width:1000px;margin:auto;padding:15px; }
+.screen { display:none; }
+.screen.active { display:block; }
+.hero { text-align:center;padding:25px 5px; }
+h1 { color:var(--gold);font-size:clamp(35px,8vw,65px); }
+h2 { color:var(--gold); }
+.panel {
+  background:#10271a;
+  border:1px solid #385642;
+  border-radius:15px;
+  padding:18px;
+  margin:15px 0;
+}
+.center { text-align:center; }
+.muted { color:#bfd0c1;line-height:1.6; }
+.grid {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+  max-width:650px;
+  margin:20px auto;
+}
+button,select,input { font:inherit; }
+button { cursor:pointer; }
+.menu {
+  padding:18px 10px;
+  min-height:100px;
+  border-radius:12px;
+  border:1px solid #496449;
+  background:#183624;
+  color:white;
+  text-align:left;
+}
+.menu.primary {
+  background:linear-gradient(135deg,#ffe69c,#d69b30);
+  color:#241a07;
+}
+.menu b,.menu small { display:block;margin-top:8px; }
+.btn {
+  padding:11px 15px;
+  border:0;
+  border-radius:8px;
+  background:var(--gold);
+  color:#241a07;
+  font-weight:bold;
+  margin:4px;
+}
+.green { background:#64eab1; }
+.dark { background:#263e2d;color:white; }
+select,input {
+  padding:10px;
+  background:#08150c;
+  color:white;
+  border:1px solid #506b54;
+  border-radius:8px;
+  margin:5px;
+}
+.table {
+  position:relative;
+  min-height:370px;
+  border:8px solid #75451f;
+  border-radius:45%;
+  background:radial-gradient(ellipse,#15915e,#087044 65%,#06442c);
+  box-shadow:inset 0 0 30px #00321c;
+  overflow:hidden;
+  margin:15px auto;
+}
+.seat {
+  position:absolute;
+  transform:translate(-50%,-50%);
+  background:#0b2018;
+  border:1px solid #63816a;
+  border-radius:10px;
+  padding:6px;
+  min-width:55px;
+  text-align:center;
+  font-size:11px;
+}
+.seat.active { border:2px solid var(--gold); }
+.bottom { left:50%;top:89%; }
+.top { left:50%;top:10%; }
+.left { left:9%;top:50%; }
+.right { left:91%;top:50%; }
+.br { left:78%;top:76%; }
+.bl { left:22%;top:76%; }
+.tr { left:78%;top:24%; }
+.tl { left:22%;top:24%; }
+.avatar { font-size:22px;display:block; }
+.meta { font-size:10px;color:#d2dfd3; }
+.middle {
+  position:absolute;
+  left:50%;top:50%;
+  transform:translate(-50%,-50%);
+  width:65%;
+  text-align:center;
+}
+.pile,.hand {
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:5px;
+}
+.pile { min-height:80px; }
+.card {
+  width:43px;height:64px;
+  background:#fffdf6;color:#111;
+  border:1px solid #ccc;
+  border-radius:6px;
+  display:inline-flex;
+  flex-direction:column;
+  justify-content:space-between;
+  align-items:center;
+  padding:4px 2px;
+  font-size:13px;
+  font-weight:bold;
+  flex-shrink:0;
+}
+.card .suit { font-size:20px; }
+.red { color:#d92743; }
+.hand { margin:15px 0; }
+.hand button:hover { transform:translateY(-5px); }
+.hand button:disabled { opacity:.45;cursor:not-allowed; }
+.status { min-height:25px;color:var(--gold);font-weight:bold; }
+.note { color:#a9bcae;font-size:13px;line-height:1.5; }
+.overlay {
+  display:none;
+  position:fixed;inset:0;
+  background:#000c;
+  z-index:20;
+  align-items:center;justify-content:center;
+  padding:15px;
+}
+.overlay.show { display:flex; }
+.modal {
+  width:100%;max-width:500px;
+  background:#10251a;
+  border:2px solid var(--gold);
+  border-radius:18px;
+  padding:22px;
+  text-align:center;
+}
+.thulla {
+  font-size:clamp(38px,10vw,65px);
+  font-weight:1000;color:#ffdc60;
+  text-shadow:0 0 16px #f80;
+}
+#thullaFlash {
+  display:none;
+  position:absolute;inset:0;
+  z-index:6;
+  align-items:center;justify-content:center;
+  pointer-events:none;
+  color:#fff18a;
+  font-size:clamp(30px,8vw,60px);
+  font-weight:1000;
+  text-align:center;
+  text-shadow:0 0 15px red;
+}
+#thullaFlash.show { display:flex;animation:flash 1.5s ease forwards; }
+@keyframes flash {
+  0% { opacity:0;transform:scale(.5); }
+  20%,70% { opacity:1;transform:scale(1); }
+  100% { opacity:0;transform:scale(1.1); }
+}
+@media(max-width:500px) {
+  main { padding:8px; }
+  .table { min-height:340px;border-width:6px; }
+  .seat { padding:4px;min-width:48px;font-size:10px; }
+  .middle { width:67%; }
+  .card { width:38px;height:58px; }
 }
 </style>
 </head>
 <body>
 
 <header>
-  <div class="logo">🎮 GameGola</div>
-  <div class="coins">🪙 <span id="coins">100</span></div>
+  <div class="brand">🎮 GameGola</div>
+  <div class="coins">🪙 <span id="coins">100</span> coins</div>
 </header>
 
 <main>
-<section id="home" class="screen active">
+<section id="lobby" class="screen active">
   <div class="hero">
-    <div class="eyebrow">PLAY • COMPETE • WIN</div>
-    <h1>THULLA</h1>
-    <p class="subtitle">Your table. Your cards. Your game.</p>
-  </div>
-
-  <div class="menu-grid">
-    <button class="menu-btn primary" onclick="startGame()">
-      <span class="emoji">🃏</span>
-      <strong>PLAY NOW</strong>
-      <small>Play against computer</small>
-    </button>
-    <button class="menu-btn" onclick="openRooms()">
-      <span class="emoji">🌐</span>
-      <strong>MULTIPLAYER</strong>
-      <small>Explore game rooms</small>
-    </button>
-    <button class="menu-btn" onclick="openPrivate()">
-      <span class="emoji">🔐</span>
-      <strong>PRIVATE TABLE</strong>
-      <small>Create a room code</small>
-    </button>
-    <button class="menu-btn" onclick="claimCoins()">
-      <span class="emoji">🪙</span>
-      <strong>FREE COINS</strong>
-      <small>Claim 5 demo coins</small>
-    </button>
+    <div style="color:#64eab1">PLAY • COMPETE • HAVE FUN</div>
+    <h1>BHABHI THULLA</h1>
+    <p class="muted">Play your cards. Avoid the Thulla!</p>
   </div>
 
   <div class="panel center">
-    <h2>♠ Welcome to the Table ♥</h2>
-    <p class="muted">Play cards that match the suit or rank of the center card. Get rid of all your cards before the computer to win.</p>
-    <small class="muted">Practice version • Demo coins only</small>
-  </div>
-</section>
-
-<section id="rooms" class="screen">
-  <button class="action dark back" onclick="goHome()">← Back</button>
-  <div class="panel center">
-    <h2>🌐 Multiplayer Rooms</h2>
-    <p class="muted">Choose the table size for your game.</p>
-    <select id="roomPlayers">
-      <option value="2">2 Players</option>
-      <option value="3">3 Players</option>
-      <option value="4" selected>4 Players</option>
-      <option value="5">5 Players</option>
-      <option value="6">6 Players</option>
-      <option value="7">7 Players</option>
-      <option value="8">8 Players</option>
+    <h2>Choose Your Table</h2>
+    <p class="muted">Total players, including you</p>
+    <select id="count">
+      <option>4</option><option>5</option>
+      <option>6</option><option>7</option><option>8</option>
     </select>
-    <p><button class="action green" onclick="createRoom()">Create Table</button></p>
-    <p id="roomResult" class="muted"></p>
-    <p class="muted">Online multiplayer needs a server connection and is not active yet.</p>
+  </div>
+
+  <div class="grid">
+    <button class="menu primary" onclick="quickPlay()">
+      <span style="font-size:28px">🃏</span>
+      <b>QUICK PLAY</b><small>Play against AI bots</small>
+    </button>
+    <button class="menu" onclick="showScreen('rules')">
+      <span style="font-size:28px">📜</span>
+      <b>RULES</b><small>How to play</small>
+    </button>
+  </div>
+
+  <div class="panel center">
+    <h2>🪙 Free Coins</h2>
+    <button class="btn" onclick="coins+=5;updateCoins();alert('5 coins added!')">
+      Claim +5 Coins
+    </button>
   </div>
 </section>
 
-<section id="private" class="screen">
-  <button class="action dark back" onclick="goHome()">← Back</button>
-  <div class="panel center">
-    <h2>🔐 Private Table</h2>
-    <p class="muted">Create a demo invitation code or enter a code.</p>
-    <p><input id="privateName" placeholder="Your player name" maxlength="20"></p>
-    <p><button class="action green" onclick="createPrivate()">Create Private Table</button></p>
-    <h3 id="privateCode" style="color:var(--gold)"></h3>
-    <hr style="border-color:#354d3a">
-    <p><input id="joinCode" placeholder="Enter room code"></p>
-    <button class="action dark" onclick="joinPrivate()">Join Table</button>
-    <p id="privateMessage" class="muted"></p>
-    <p class="muted">Codes are demo-only; other players cannot join until online multiplayer is connected.</p>
+<section id="rules" class="screen">
+  <button class="btn dark" onclick="showScreen('lobby')">← Back</button>
+  <div class="panel">
+    <h2>How to Play</h2>
+    <ol class="muted">
+      <li>The player holding A♠ starts.</li>
+      <li>You must follow the suit played first if you have it.</li>
+      <li>If you cannot follow suit, playing another suit causes a Thulla.</li>
+      <li>The highest card of the starting suit wins the trick.</li>
+      <li>Card order: 2, 3, 4, 5, 6, 7, 8, 9, 10, J, Q, K, A.</li>
+    </ol>
+    <p class="note">Practice version. Local rules can differ.</p>
   </div>
 </section>
 
 <section id="game" class="screen">
-  <button class="action dark back" onclick="goHome()">← Exit Table</button>
-  <div class="panel center" style="padding:12px">
-    <h2 style="margin:6px">🃏 THULLA TABLE</h2>
-    <div class="muted">Practice match vs computer</div>
+  <div style="display:flex;justify-content:space-between;flex-wrap:wrap">
+    <button class="btn dark" onclick="showScreen('lobby')">← Lobby</button>
+    <button class="btn" onclick="quickPlay()">New Game</button>
   </div>
 
-  <div class="table-wrap">
-    <div class="table">
-      <div class="seat top">
-        <span class="avatar">🤖</span>Computer
-        <span class="count"><span id="cpuCount">7</span> cards</span>
-      </div>
-      <div class="seat left">
-        <span class="avatar">🧑</span>Guest
-        <span class="count">Waiting</span>
-      </div>
-      <div class="seat right">
-        <span class="avatar">🧑</span>Guest
-        <span class="count">Waiting</span>
-      </div>
-      <div class="seat bottom">
-        <span class="avatar">🙂</span>You
-        <span class="count"><span id="yourCount">7</span> cards</span>
-      </div>
+  <div class="panel center">
+    <h2>BHABHI THULLA TABLE</h2>
+    <p id="roundInfo" class="muted"></p>
+  </div>
 
-      <div class="table-center">
-        <h3>TABLE CARDS</h3>
-        <div class="pile">
-          <div>
-            <div class="playing-card deck-card">🂠</div>
-            <small id="deckCount">Deck</small>
-          </div>
-          <div>
-            <div id="tableCard" class="playing-card">🂡</div>
-            <small>Top Card</small>
-          </div>
-        </div>
-      </div>
+  <div class="table" id="table">
+    <div id="seats"></div>
+    <div id="thullaFlash">THULLA!<br>AA GAYA!</div>
+    <div class="middle">
+      <h3 id="trickTitle">CURRENT TRICK</h3>
+      <div id="pile" class="pile"></div>
+      <p id="tableInfo" class="note">Cards played in this trick</p>
     </div>
   </div>
 
   <div class="panel center">
-    <p id="status">Your turn!</p>
-    <div class="muted">Tap a card to select it, then press Play Card.</div>
+    <b style="color:#f6d98e">YOUR CARDS</b>
+    <p id="status" class="status">Starting game...</p>
     <div id="hand" class="hand"></div>
-    <button class="action green" onclick="playCard()">Play Card</button>
-    <button class="action dark" onclick="drawCard()">Draw Card</button>
-    <button class="action" onclick="startGame()">New Game</button>
-    <p id="message" style="color:var(--gold);font-weight:bold"></p>
+    <p class="note">Funny audio plays when a Thulla happens.</p>
   </div>
 </section>
 </main>
 
+<div id="overlay" class="overlay">
+  <div class="modal">
+    <div class="thulla">ROUND OVER!</div>
+    <h2 id="resultTitle"></h2>
+    <p id="resultText" class="muted"></p>
+    <div id="scores" class="muted"></div>
+    <button class="btn green" onclick="quickPlay()">New Game</button>
+    <button class="btn dark" onclick="closeResult();showScreen('lobby')">Lobby</button>
+  </div>
+</div>
+
+<!-- Funny sound file must be in the same folder as index.html -->
+<audio id="thullaSound" src="thulla-funny-voice.mp3" preload="auto"></audio>
+
 <script>
 "use strict";
 
-const suits = ["♠","♥","♦","♣"];
-const ranks = ["A","2","3","4","5","6","7","8","9","10","J","Q","K"];
+const suits = [
+  {symbol:"♠",red:false},{symbol:"♥",red:true},
+  {symbol:"♦",red:true},{symbol:"♣",red:false}
+];
+const ranks = [
+  ["2",2],["3",3],["4",4],["5",5],["6",6],["7",7],
+  ["8",8],["9",9],["10",10],["J",11],["Q",12],["K",13],["A",14]
+];
+const avatars = ["🙂","🤖","🦊","🐼","🐯","🐸","🐵","🐨"];
 
-let deck = [];
-let hand = [];
-let cpu = [];
-let currentCard = null;
-let selected = -1;
+let players = [];
+let turn = 0;
+let trick = [];
+let lead = null;
+let cardId = 0;
+let trickNo = 1;
+let timer = null;
 let coins = 100;
-let finished = false;
-let turn = "you";
-let cpuTimer = null;
+let gameOver = false;
+let soundEnabled = false;
 
-function screen(id) {
-  document.querySelectorAll(".screen").forEach(function(el) {
-    el.classList.remove("active");
-  });
+function showScreen(id) {
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
   document.getElementById(id).classList.add("active");
-}
-
-function goHome() {
-  if (cpuTimer !== null) {
-    clearTimeout(cpuTimer);
-    cpuTimer = null;
-  }
-  screen("home");
-}
-
-function openRooms() {
-  screen("rooms");
-}
-
-function openPrivate() {
-  screen("private");
+  if (timer) clearTimeout(timer);
+  timer = null;
 }
 
 function updateCoins() {
   document.getElementById("coins").textContent = coins;
 }
 
-function claimCoins() {
-  coins += 5;
-  updateCoins();
-  alert("5 demo coins added!");
+function enableSound() {
+  soundEnabled = true;
 }
 
-function createRoom() {
-  const code = Math.random().toString(36).slice(2,8).toUpperCase();
-  document.getElementById("roomResult").textContent =
-    "Demo table code: " + code + " • " +
-    document.getElementById("roomPlayers").value +
-    " player seats selected.";
-}
+function playThullaSound() {
+  if (!soundEnabled) return;
+  const sound = document.getElementById("thullaSound");
+  if (!sound) return;
 
-function createPrivate() {
-  const code = Math.random().toString(36).slice(2,8).toUpperCase();
-  document.getElementById("privateCode").textContent = "CODE: " + code;
-  document.getElementById("privateMessage").textContent =
-    "Share this demo code with your friends. Online joining is not active yet.";
-}
-
-function joinPrivate() {
-  const code = document.getElementById("joinCode").value.trim().toUpperCase();
-  document.getElementById("privateMessage").textContent = code
-    ? "Code " + code + " entered. Online room connection is not active yet."
-    : "Please enter a room code.";
+  sound.pause();
+  sound.currentTime = 0;
+  const promise = sound.play();
+  if (promise) {
+    promise.catch(error => console.log("Sound playback blocked:", error));
+  }
 }
 
 function makeDeck() {
-  const cards = [];
-  suits.forEach(function(s) {
-    ranks.forEach(function(r) {
-      cards.push({s:s,r:r});
+  const deck = [];
+  suits.forEach(s => {
+    ranks.forEach(r => {
+      deck.push({
+        id:++cardId,
+        suit:s.symbol,
+        red:s.red,
+        rank:r[0],
+        value:r[1]
+      });
     });
   });
-  for (let i=cards.length-1;i>0;i--) {
+
+  for (let i=deck.length-1;i>0;i--) {
     const j=Math.floor(Math.random()*(i+1));
-    [cards[i],cards[j]]=[cards[j],cards[i]];
+    [deck[i],deck[j]]=[deck[j],deck[i]];
   }
-  return cards;
+  return deck;
 }
 
-function startGame() {
-  if (cpuTimer !== null) {
-    clearTimeout(cpuTimer);
-    cpuTimer = null;
-  }
+function quickPlay() {
+  enableSound();
+  if (timer) clearTimeout(timer);
+  timer = null;
 
-  screen("game");
-  deck = makeDeck();
-  hand = deck.splice(0,7);
-  cpu = deck.splice(0,7);
-  currentCard = deck.pop();
-  selected = -1;
-  finished = false;
-  turn = "you";
+  document.getElementById("overlay").classList.remove("show");
+  document.getElementById("thullaFlash").classList.remove("show");
 
-  document.getElementById("message").textContent = "";
-  document.getElementById("status").textContent =
-    "Your turn! Match the suit or rank.";
+  cardId=0;
+  trick=[];
+  lead=null;
+  trickNo=1;
+  gameOver=false;
+
+  const n=Number(document.getElementById("count").value);
+  players=Array.from({length:n},(_,i)=>({
+    id:i,
+    name:i===0?"You":"Bot "+i,
+    avatar:avatars[i],
+    hand:[],
+    thullas:0,
+    tricks:0
+  }));
+
+  const deck=makeDeck();
+  const each=Math.floor(deck.length/n);
+  const dealt=deck.slice(0,each*n);
+
+  dealt.forEach((card,i)=>players[i%n].hand.push(card));
+  players.forEach(p=>p.hand.sort((a,b)=>a.value-b.value));
+
+  const starter=players.find(p =>
+    p.hand.some(c=>c.suit==="♠" && c.value===14)
+  );
+  turn=starter ? starter.id : 0;
+
+  document.getElementById("roundInfo").textContent =
+    n+" players • "+each+" cards each • Offline AI";
+
+  showScreen("game");
   render();
+
+  if (turn===0) {
+    document.getElementById("status").textContent="You have A♠. Play it to start!";
+  } else {
+    document.getElementById("status").textContent=players[turn].name+" starts with A♠.";
+    scheduleBot();
+  }
 }
 
-function canPlay(card) {
-  return card.s === currentCard.s || card.r === currentCard.r;
+function allowed(card,player) {
+  if (!trick.length) {
+    if (trickNo===1) {
+      const aceHolder=players.find(p =>
+        p.hand.some(c=>c.suit==="♠" && c.value===14)
+      );
+      if (aceHolder && player.id===aceHolder.id) {
+        return card.suit==="♠" && card.value===14;
+      }
+    }
+    return true;
+  }
+
+  const hasSuit=player.hand.some(c=>c.suit===lead);
+  return !hasSuit || card.suit===lead;
 }
 
-function cardMarkup(card) {
-  const red = (card.s === "♥" || card.s === "♦") ? "red" : "";
-  return '<span class="playing-card '+red+'">'+card.r+card.s+'</span>';
+function legalCards(player) {
+  return player.hand.filter(c=>allowed(c,player));
+}
+
+function cardHTML(card,owner) {
+  return '<div class="card '+(card.red?'red':'')+'">'+
+    '<span>'+card.rank+'</span>'+
+    '<span class="suit">'+card.suit+'</span>'+
+    '<span>'+card.rank+'</span>'+
+    (owner?'<span style="font-size:9px">'+owner+'</span>':'')+
+    '</div>';
+}
+
+function positions() {
+  return {
+    4:["bottom","top","right","left"],
+    5:["bottom","br","tr","tl","left"],
+    6:["bottom","br","right","top","left","bl"],
+    7:["bottom","br","right","tr","tl","left","bl"],
+    8:["bottom","br","right","tr","top","tl","left","bl"]
+  }[players.length];
 }
 
 function render() {
-  document.getElementById("tableCard").outerHTML =
-    cardMarkup(currentCard).replace(
-      '<span class="playing-card',
-      '<span id="tableCard" class="playing-card'
-    );
+  const pos=positions();
 
-  document.getElementById("yourCount").textContent = hand.length;
-  document.getElementById("cpuCount").textContent = cpu.length;
-  document.getElementById("deckCount").textContent = deck.length + " left";
+  document.getElementById("seats").innerHTML=players.map((p,i)=>
+    '<div class="seat '+pos[i]+(i===turn&&!gameOver?' active':'')+'">'+
+    '<span class="avatar">'+p.avatar+'</span>'+
+    '<b>'+p.name+'</b>'+
+    '<span class="meta">'+p.hand.length+' cards</span>'+
+    '</div>'
+  ).join("");
 
-  document.getElementById("hand").innerHTML = hand.map(function(card,i) {
-    const red = (card.s === "♥" || card.s === "♦") ? "red" : "";
-    const chosen = selected === i ? " selected" : "";
-    const disabled = finished || turn !== "you" ? "disabled" : "";
-    return '<button class="playing-card '+red+chosen+'" '+disabled+
-      ' onclick="selectCard('+i+')">'+card.r+card.s+'</button>';
-  }).join("");
+  document.getElementById("pile").innerHTML=trick.map(x=>
+    cardHTML(x.card,x.name)
+  ).join("");
+
+  document.getElementById("trickTitle").textContent="TRICK "+trickNo;
+  document.getElementById("tableInfo").textContent=
+    trick.length ? trick.length+" cards • Lead suit "+lead : "No cards played yet";
+
+  const me=players[0];
+  document.getElementById("hand").innerHTML=me ? me.hand.map(c=>
+    '<button class="card '+(c.red?'red':'')+'" '+
+    ((!gameOver && turn===0 && allowed(c,me))?'':'disabled')+
+    ' onclick="playCard(0,'+c.id+')">'+
+    '<span>'+c.rank+'</span><span class="suit">'+c.suit+'</span>'+
+    '<span>'+c.rank+'</span></button>'
+  ).join("") : "";
 }
 
-function selectCard(i) {
-  if (finished || turn !== "you") return;
-  selected = i;
+function playCard(playerIndex,id) {
+  enableSound();
+  if (gameOver || playerIndex!==turn) return;
+
+  const player=players[playerIndex];
+  const index=player.hand.findIndex(c=>c.id===id);
+  if (index<0) return;
+
+  const card=player.hand[index];
+  if (!allowed(card,player)) {
+    document.getElementById("status").textContent=
+      "You must follow "+lead+" if you have that suit.";
+    return;
+  }
+
+  player.hand.splice(index,1);
+  if (!trick.length) lead=card.suit;
+
+  trick.push({id:player.id,name:player.name,card});
   render();
-}
 
-function playCard() {
-  if (finished || turn !== "you") return;
-  if (selected < 0) {
-    document.getElementById("status").textContent = "Please select a card first.";
+  const isThulla=trick.length>1 && card.suit!==lead;
+
+  if (isThulla) {
+    player.thullas++;
+    document.getElementById("status").textContent=
+      "🚨 THULLA AA GAYA! "+player.name+" could not follow "+lead+"!";
+
+    const flash=document.getElementById("thullaFlash");
+    flash.classList.remove("show");
+    void flash.offsetWidth;
+    flash.classList.add("show");
+
+    playThullaSound();
+
+    timer=setTimeout(()=>resolveTrick(),1500);
     return;
   }
 
-  const card = hand[selected];
-  if (!canPlay(card)) {
-    document.getElementById("status").textContent =
-      "Wrong card! Match the suit or rank, or draw.";
+  if (trick.length===players.length) {
+    timer=setTimeout(()=>resolveTrick(),800);
     return;
   }
 
-  hand.splice(selected,1);
-  currentCard = card;
-  selected = -1;
-
-  if (hand.length === 0) {
-    finishGame(true);
-    return;
-  }
-
-  turn = "cpu";
+  turn=(turn+1)%players.length;
   render();
-  document.getElementById("status").textContent = "Computer is playing...";
-  cpuTimer = setTimeout(cpuTurn,700);
-}
 
-function drawCard() {
-  if (finished || turn !== "you") return;
-  if (deck.length === 0) {
-    document.getElementById("status").textContent = "Deck is empty. Start a new game.";
-    return;
+  if (turn===0) {
+    document.getElementById("status").textContent="Your turn! Follow "+lead+" if possible.";
+  } else {
+    scheduleBot();
   }
-
-  hand.push(deck.pop());
-  selected = -1;
-  turn = "cpu";
-  render();
-  document.getElementById("status").textContent = "You drew a card. Computer's turn...";
-  cpuTimer = setTimeout(cpuTurn,700);
 }
 
-function cpuTurn() {
-  cpuTimer = null;
-  if (finished) return;
+function scheduleBot() {
+  if (timer) clearTimeout(timer);
 
-  const index = cpu.findIndex(canPlay);
-  if (index >= 0) {
-    currentCard = cpu.splice(index,1)[0];
-    if (cpu.length === 0) {
-      finishGame(false);
+  timer=setTimeout(()=>{
+    timer=null;
+    if (gameOver || turn===0) return;
+
+    const player=players[turn];
+    if (!player || !player.hand.length) {
+      resolveTrick();
       return;
     }
-  } else if (deck.length > 0) {
-    cpu.push(deck.pop());
-  }
 
-  turn = "you";
-  selected = -1;
-  render();
-  document.getElementById("status").textContent = "Your turn! Choose a matching card.";
+    let options=legalCards(player);
+
+    if (!trick.length && trickNo===1) {
+      const ace=player.hand.find(c=>c.suit==="♠" && c.value===14);
+      if (ace) options=[ace];
+    }
+
+    if (!options.length) options=player.hand;
+    const chosen=options[Math.floor(Math.random()*options.length)];
+    playCard(turn,chosen.id);
+  },700+Math.random()*400);
 }
 
-function finishGame(won) {
-  finished = true;
-  turn = "none";
-  selected = -1;
+function resolveTrick() {
+  timer=null;
+  if (!trick.length) return;
 
-  if (won) {
-    coins += 10;
-    updateCoins();
-    document.getElementById("message").textContent = "🎉 You won! +10 demo coins.";
-    document.getElementById("status").textContent = "You finished your cards first!";
-  } else {
-    document.getElementById("message").textContent = "Try again! Start a new game.";
-    document.getElementById("status").textContent = "Computer won this round.";
+  const leadCards=trick.filter(x=>x.card.suit===lead);
+  const winner=leadCards.reduce((best,x)=>
+    x.card.value>best.card.value ? x : best
+  ,leadCards[0]);
+
+  players[winner.id].tricks++;
+
+  const hadThulla=trick.some(x=>x.card.suit!==lead);
+  document.getElementById("status").textContent=
+    (hadThulla?"Thulla! ":"")+winner.name+" wins the trick.";
+
+  trick=[];
+  lead=null;
+  trickNo++;
+  turn=winner.id;
+
+  if (players.every(p=>p.hand.length===0)) {
+    finishGame();
+    return;
   }
+
   render();
+
+  if (turn!==0) scheduleBot();
+  else document.getElementById("status").textContent="Your turn! Lead a card.";
+}
+
+function finishGame() {
+  gameOver=true;
+  render();
+
+  const ranking=[...players].sort((a,b)=>a.thullas-b.thullas);
+  document.getElementById("resultTitle").textContent=
+    ranking[0].name+" wins!";
+  document.getElementById("resultText").textContent=
+    "Lowest number of Thullas wins this practice round.";
+
+  document.getElementById("scores").innerHTML=ranking.map((p,i)=>
+    "<p>"+(i+1)+". "+p.name+" — "+p.thullas+" Thulla(s)</p>"
+  ).join("");
+
+  document.getElementById("overlay").classList.add("show");
+  coins+=ranking[0].id===0?10:2;
+  updateCoins();
+}
+
+function closeResult() {
+  document.getElementById("overlay").classList.remove("show");
 }
 
 updateCoins();
 </script>
 </body>
 </html>
-
