@@ -2,198 +2,268 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GameGola - Bhabhi Thulla</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GameGola | Bhabhi Thulla</title>
 <style>
+:root{--gold:#ffd45b;--green:#075638;--dark:#032b20}
 *{box-sizing:border-box}
 body{
- margin:0;font-family:Arial,sans-serif;text-align:center;
- background:linear-gradient(135deg,#092e20,#126447);
- color:white;min-height:100vh;padding:18px
+ margin:0;font-family:Arial,sans-serif;color:#fff;text-align:center;
+ background:radial-gradient(ellipse at top,#16865a,var(--dark) 75%);
+ min-height:100vh;padding:15px
 }
-h1{color:#ffd54a;margin-bottom:5px}
-.subtitle{color:#d8f5df}
+header{padding:10px}
+h1{color:var(--gold);margin:4px;font-size:clamp(28px,6vw,42px)}
+header p{margin:5px;color:#d9f8e5}
 .panel{
- max-width:600px;margin:15px auto;background:#ffffff14;
- border:1px solid #ffffff30;border-radius:18px;padding:18px
+ max-width:900px;margin:14px auto;padding:16px;
+ background:#ffffff10;border:1px solid #ffffff35;
+ border-radius:18px;box-shadow:0 10px 30px #0003
 }
-button{
- border:0;border-radius:10px;padding:12px 18px;
- font-weight:bold;cursor:pointer;margin:5px
+.stats{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
+.stat{background:#0003;border-radius:12px;padding:10px 16px}
+.stat strong{color:var(--gold)}
+button{font:inherit;cursor:pointer}
+.mainbtn{
+ background:var(--gold);color:#173b27;font-weight:bold;
+ border:0;border-radius:11px;padding:12px 18px;margin:5px
 }
-.start{background:#ffd54a;color:#173d2a}
+.mainbtn:disabled{opacity:.5;cursor:not-allowed}
+#table{
+ display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+ gap:10px;margin:18px auto;max-width:600px
+}
+.player{
+ padding:12px 5px;background:#0002;border:1px solid #ffffff20;
+ border-radius:12px;min-height:75px
+}
+.player.active{border:2px solid var(--gold);background:#ffd45b18}
+.player.out{opacity:.45}
+.count{color:#c9f5d7;font-size:13px;margin-top:6px}
+#message{color:var(--gold);min-height:42px;line-height:1.5}
+#hand{display:flex;justify-content:center;flex-wrap:wrap;gap:5px}
 .card{
- background:#fff;color:#171717;font-size:25px;
- width:62px;height:88px;border-radius:9px;
- margin:5px;padding:8px 0;box-shadow:0 3px 7px #0005
+ width:clamp(43px,8vw,58px);height:80px;background:#fff;color:#171717;
+ border:0;border-radius:9px;box-shadow:0 3px 7px #0005;
+ font-weight:bold;font-size:20px;display:flex;
+ align-items:center;justify-content:center;flex-direction:column
 }
-.red{color:#dc2222}
-#hand{display:flex;justify-content:center;flex-wrap:wrap}
-#message{font-size:18px;min-height:45px;color:#ffe477}
-.small{font-size:13px;color:#c9e6d6}
+.card.red{color:#d52232}
+.card:disabled{opacity:.4;cursor:not-allowed}
+.card:not(:disabled):hover{transform:translateY(-7px)}
+#handNote{font-size:13px;color:#d6f1df}
+footer{font-size:12px;color:#b9d7c5;margin:20px}
 </style>
 </head>
 <body>
-
-<h1>🎴 GameGola</h1>
-<div class="subtitle">Bhabhi Thulla Card Game</div>
+<header>
+ <h1>🎴 GameGola</h1>
+ <p>Bhabhi Thulla Card Game</p>
+</header>
 
 <div class="panel">
- <h2 id="status">Game shuru karein!</h2>
- <p id="message">Cards khelein aur Thulla se bachein 😂</p>
- <div>🪙 Coins: <b id="coins">100</b></div>
- <button class="start" onclick="startGame()">New Game</button>
- <hr>
- <h3>🤖 Computer Players</h3>
- <p id="bots">4 players tayyar hain</p>
+ <div class="stats">
+  <div class="stat">🪙 Coins: <strong id="coins">100</strong></div>
+  <div class="stat">🎮 Mode: <strong>Offline</strong></div>
+ </div>
+ <p id="message">New Game dabayein aur khel shuru karein!</p>
+ <button class="mainbtn" onclick="newGame()">▶ New Game</button>
+ <button class="mainbtn" onclick="toggleSound()" id="soundBtn">🔊 Funny Voice: ON</button>
+ <div id="table">
+  <div class="player" id="p1">🤖 Bot 1<div class="count">—</div></div>
+  <div class="player" id="p2">🤖 Bot 2<div class="count">—</div></div>
+  <div class="player" id="p0">🧑 Aap<div class="count">—</div></div>
+  <div class="player" id="p3">🤖 Bot 3<div class="count">—</div></div>
+ </div>
  <h3>🃏 Aapke Cards</h3>
  <div id="hand"></div>
- <p class="small">Apna card select karein. Rules ke mutabiq same suit ka card khelein.</p>
- <button onclick="drawCard()">Card Uthao</button>
+ <p id="handNote">Game shuru karne ke liye New Game dabayein.</p>
 </div>
-
-<!-- Thulla ki funny voice file isi folder mein upload karein -->
-<audio id="thullaSound" src="thulla-funny-voice.mp3" preload="auto"></audio>
+<footer>GameGola • Play anytime, anywhere</footer>
 
 <script>
 const suits=["♠","♥","♦","♣"];
 const ranks=["2","3","4","5","6","7","8","9","10","J","Q","K","A"];
-
-let deck=[],hand=[],players=[],currentSuit="";
-let coins=100,playing=false,turn=0;
+const names=["Aap","Bot 1","Bot 2","Bot 3"];
+let players=[],hand=[],turnOrder=[],trick=[],leadSuit="";
+let turnPos=0,leader=0,coins=100,playing=false,busy=false;
+let voiceOn=true,timer=null;
 
 function makeDeck(){
- let d=[];
- for(let s of suits)
-  for(let r of ranks)d.push({suit:s,rank:r});
- return d.sort(()=>Math.random()-0.5);
+ const d=[];
+ for(const suit of suits)for(let i=0;i<ranks.length;i++)
+  d.push({suit,rank:ranks[i],value:i});
+ for(let i=d.length-1;i>0;i--){
+  const j=Math.floor(Math.random()*(i+1));
+  [d[i],d[j]]=[d[j],d[i]];
+ }
+ return d;
 }
+function label(c){return c.rank+c.suit}
+function red(c){return c.suit==="♥"||c.suit==="♦"}
 
-function cardText(c){return c.rank+c.suit}
-function isRed(c){return c.suit==="♥"||c.suit==="♦"}
-
-function startGame(){
- deck=makeDeck();
- hand=deck.splice(0,13);
- players=[
-  {name:"Aap",cards:hand},
-  {name:"Bot 1",cards:deck.splice(0,13)},
-  {name:"Bot 2",cards:deck.splice(0,13)},
-  {name:"Bot 3",cards:deck.splice(0,13)}
- ];
- currentSuit="";
- playing=true;
- turn=0;
- document.getElementById("status").textContent="Aapki baari!";
- document.getElementById("message").textContent="Koi bhi card khel kar shuru karein.";
+function newGame(){
+ clearTimeout(timer);
+ const deck=makeDeck();
+ players=names.map((name,i)=>({
+  name,cards:deck.slice(i*13,(i+1)*13),out:false
+ }));
+ hand=players[0].cards;
+ trick=[];turnOrder=[];leadSuit="";
+ leader=0;turnPos=0;playing=true;busy=false;
+ say("Game shuru! Aap pehla card khelein.");
  render();
 }
 
+function say(text){
+ document.getElementById("message").textContent=text;
+}
 function render(){
+ document.getElementById("coins").textContent=coins;
+ players.forEach((p,i)=>{
+  const el=document.getElementById("p"+i);
+  el.classList.toggle("active",playing&&!busy&&turnOrder[turnPos]===i);
+  el.classList.toggle("out",p.out);
+  el.innerHTML=(i===0?"🧑 ":"🤖 ")+p.name+
+   '<div class="count">'+(p.out?"Safe!":p.cards.length+" cards")+'</div>';
+ });
  const area=document.getElementById("hand");
  area.innerHTML="";
  hand.forEach((c,i)=>{
   const b=document.createElement("button");
-  b.className="card"+(isRed(c)?" red":"");
-  b.textContent=cardText(c);
-  b.onclick=()=>playCard(i);
+  b.className="card"+(red(c)?" red":"");
+  b.innerHTML="<span>"+c.rank+"</span><span>"+c.suit+"</span>";
+  b.disabled=!playing||busy||turnOrder[turnPos]!==0||
+   (leadSuit!==""&&c.suit!==leadSuit&&hand.some(x=>x.suit===leadSuit));
+  b.title="Play "+label(c);
+  b.onclick=()=>playHuman(i);
   area.appendChild(b);
  });
- document.getElementById("coins").textContent=coins;
- document.getElementById("bots").textContent=
- players.slice(1).map(p=>p.name+": "+p.cards.length+" cards").join(" | ");
+ document.getElementById("handNote").textContent=playing?
+  (turnOrder[turnPos]===0&&!busy?"Apni baari — card select karein.":"Computer ki baari..."):
+  "New Game dabakar dobara kheleiye.";
+ document.getElementById("soundBtn").textContent=
+  voiceOn?"🔊 Funny Voice: ON":"🔇 Funny Voice: OFF";
 }
 
-function playCard(i){
- if(!playing||turn!==0)return;
- const c=hand[i];
-
- if(currentSuit && c.suit!==currentSuit &&
-    hand.some(x=>x.suit===currentSuit)){
-  document.getElementById("message").textContent=
-   "Pehle isi suit ka card khelein!";
+function playHuman(index){
+ if(!playing||busy||turnOrder[turnPos]!==0)return;
+ const c=hand[index];
+ if(!c)return;
+ if(leadSuit&&c.suit!==leadSuit&&hand.some(x=>x.suit===leadSuit)){
+  say("Pehle "+leadSuit+" suit ka card khelein!");
   return;
  }
+ playCard(0,index);
+}
 
- hand.splice(i,1);
- currentSuit=c.suit;
- players[0].cards=hand;
+function playCard(playerIndex,cardIndex){
+ const p=players[playerIndex];
+ const c=p.cards.splice(cardIndex,1)[0];
+ if(!c)return;
+ if(trick.length===0)leadSuit=c.suit;
+ trick.push({player:playerIndex,card:c});
+ if(p.cards.length===0)p.out=true;
 
- document.getElementById("message").textContent=
-  "Aap ne "+cardText(c)+" khela.";
-
- if(hand.length===0){
-  playing=false;
-  coins+=20;
-  document.getElementById("status").textContent="🎉 Aap jeet gaye!";
-  document.getElementById("message").textContent="Mubarak ho! +20 coins";
-  render();
-  return;
- }
-
- turn=1;
+ say(p.name+" ne "+label(c)+" khela.");
+ turnPos++;
  render();
- setTimeout(botTurn,800);
-}
 
-function botTurn(){
- if(!playing)return;
- const p=players[turn];
- if(!p || p.cards.length===0){
-  turn=(turn+1)%4;
-  setTimeout(botTurn,500);
-  return;
- }
-
- let idx=p.cards.findIndex(c=>c.suit===currentSuit);
- if(idx<0)idx=Math.floor(Math.random()*p.cards.length);
-
- const c=p.cards.splice(idx,1)[0];
-
- if(p.cards.length===0){
-  document.getElementById("message").textContent=
-   p.name+" ke saare cards khatam!";
- }
-
- currentSuit=c.suit;
-
- if(p.cards.length===0 && p.name!=="Aap"){
-  thullaPara(p.name+" se bach gaye!");
- }
-
- turn=(turn+1)%4;
- if(turn===0){
-  document.getElementById("status").textContent="Aapki baari!";
-  document.getElementById("message").textContent=
-   "Computer ne "+cardText(c)+" khela. Ab aap card khelein.";
-  render();
+ if(turnPos>=turnOrder.length){
+  busy=true;render();
+  timer=setTimeout(finishTrick,900);
  }else{
-  render();
-  setTimeout(botTurn,700);
+  const next=turnOrder[turnPos];
+  if(next===0){
+   busy=false;
+   say("Aapki baari! Apna card select karein.");
+   render();
+  }else{
+   busy=true;render();
+   timer=setTimeout(botPlay,850);
+  }
  }
 }
 
-function drawCard(){
- if(!playing||turn!==0)return;
- if(deck.length===0){
-  document.getElementById("message").textContent="Deck mein cards nahi hain.";
-  return;
+function botPlay(){
+ if(!playing)return;
+ const i=turnOrder[turnPos],p=players[i];
+ let choices=p.cards.map((c,n)=>({c,n}));
+ if(leadSuit&&choices.some(x=>x.c.suit===leadSuit))
+  choices=choices.filter(x=>x.c.suit===leadSuit);
+ choices.sort((a,b)=>a.c.value-b.c.value);
+ const pick=choices[Math.floor(Math.random()*Math.min(3,choices.length))];
+ playCard(i,pick.n);
+}
+
+function finishTrick(){
+ if(!playing)return;
+ let eligible=trick.filter(x=>x.card.suit===leadSuit);
+ eligible.sort((a,b)=>b.card.value-a.card.value);
+ const winner=eligible.length?eligible[0].player:leader;
+ const last=players.filter(p=>!p.out);
+
+ if(last.length<=1){
+  playing=false;
+  if(last.length===1&&last[0].name==="Aap"){
+   say("😂 THULLA! Aap aakhri player reh gaye! Funny voice suno!");
+   coins=Math.max(0,coins-10);
+   funnyVoice();
+  }else{
+   coins+=20;
+   say("🎉 Mubarak! Aap Thulla se bach gaye. +20 coins!");
+   funnyVoice("Wah bhai wah! Jeet gaye!");
+  }
+  render();return;
  }
- hand.push(deck.pop());
- players[0].cards=hand;
- document.getElementById("message").textContent="Aap ne naya card uthaya.";
+
+ leader=players[winner].out?nextActive(winner):winner;
+ trick=[];leadSuit="";turnOrder=[];
+ for(let n=0;n<4;n++){
+  const i=(leader+n)%4;
+  if(!players[i].out)turnOrder.push(i);
+ }
+ turnPos=0;busy=false;
+ say(players[winner].name+" ne trick jeeti. Agli baari: "+players[leader].name);
+ render();
+ if(turnOrder[0]!==0){
+  busy=true;render();timer=setTimeout(botPlay,850);
+ }
+}
+
+function nextActive(from){
+ for(let step=1;step<=4;step++){
+  const i=(from+step)%4;
+  if(!players[i].out)return i;
+ }
+ return 0;
+}
+
+function funnyVoice(customText){
+ if(!voiceOn||!("speechSynthesis"in window))return;
+ window.speechSynthesis.cancel();
+ const lines=[
+  "Oye hoye! Thulla pakra gaya!",
+  "Haye Allah! Yeh kya ho gaya!",
+  "Bhai jaan, aaj to game palat gaya!",
+  "Thulla! Thulla! Bach ke rehna!"
+ ];
+ const utter=new SpeechSynthesisUtterance(customText||lines[Math.floor(Math.random()*lines.length)]);
+ utter.lang="ur-PK";
+ utter.pitch=0.75;
+ utter.rate=0.88;
+ const voices=window.speechSynthesis.getVoices();
+ const v=voices.find(x=>x.lang.toLowerCase().startsWith("ur"))||
+  voices.find(x=>x.lang.toLowerCase().startsWith("hi"));
+ if(v)utter.voice=v;
+ window.speechSynthesis.speak(utter);
+}
+function toggleSound(){
+ voiceOn=!voiceOn;
+ if(!voiceOn&&"speechSynthesis"in window)window.speechSynthesis.cancel();
  render();
 }
-
-function thullaPara(message){
- document.getElementById("message").textContent="😂 THULLA! "+message;
- const sound=document.getElementById("thullaSound");
- sound.currentTime=0;
- sound.play().catch(()=> {
-  document.getElementById("message").textContent=
-   "😂 THULLA! Audio file check karein.";
- });
-}
+newGame();
 </script>
 </body>
 </html>
