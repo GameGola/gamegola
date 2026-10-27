@@ -41,17 +41,17 @@ button:disabled{opacity:.5;cursor:default}
 footer{text-align:center;padding:25px;color:#98a8c8;border-top:1px solid #293655}
 [hidden]{display:none!important}
 
-/* --- THULLA GAME CASINO BOARD STYLING --- */
+/* --- THULLA GAME FULL CASINO BOARD & MENU STYLING --- */
 :root {
-  --thulla-card-w: 52px;
-  --thulla-card-h: 75px;
+  --thulla-card-w: 54px;
+  --thulla-card-h: 78px;
   --gold: #f39c12;
 }
 
 #thulla-game-wrapper {
   width: 100%;
   max-width: 900px;
-  height: 520px;
+  height: 560px;
   background: radial-gradient(circle at center, #1b2a38 0%, #080d13 100%);
   border-radius: 16px;
   border: 2px solid #293655;
@@ -62,6 +62,82 @@ footer{text-align:center;padding:25px;color:#98a8c8;border-top:1px solid #293655
   flex-direction: column;
 }
 
+.t-screen { display: none; width: 100%; height: 100%; position: absolute; top:0; left:0; }
+.t-screen.active { display: flex; flex-direction: column; }
+
+/* MENU & COINS SELECTOR SCREEN */
+#t-menu-screen {
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(circle, #1a3c27 0%, #06120b 100%);
+  text-align: center;
+  z-index: 30;
+}
+.t-logo-title {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: var(--gold);
+  text-shadow: 0 4px 15px rgba(243, 156, 18, 0.5);
+  margin-bottom: 5px;
+}
+.t-subtitle { font-size: 1rem; color: #a0c4ab; margin-bottom: 15px; }
+
+.t-coins-bar {
+  background: rgba(0,0,0,0.6);
+  border: 1px solid var(--gold);
+  border-radius: 20px;
+  padding: 6px 16px;
+  font-weight: bold;
+  color: #ffd700;
+  margin-bottom: 20px;
+  font-size: 1.1rem;
+}
+
+.t-bet-selector {
+  margin-bottom: 20px;
+}
+.t-bet-title { font-size: 0.9rem; color: #ccc; margin-bottom: 8px; }
+.t-bet-buttons { display: flex; gap: 10px; justify-content: center; }
+.t-bet-btn {
+  background: #112217;
+  border: 1px solid var(--gold);
+  color: #fff;
+  padding: 6px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+.t-bet-btn.selected {
+  background: var(--gold);
+  color: #000;
+}
+
+.t-menu-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 150px);
+  gap: 15px;
+}
+.t-menu-btn {
+  background: linear-gradient(145deg, #1e4d30, #0c2b19);
+  border: 2px solid var(--gold);
+  border-radius: 14px;
+  padding: 15px 10px;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.t-menu-btn:hover {
+  transform: translateY(-4px) scale(1.03);
+  background: linear-gradient(145deg, #27633e, #123d24);
+}
+.t-menu-icon { font-size: 1.8rem; }
+.t-menu-label { font-weight: bold; font-size: 0.85rem; color: #fff; }
+
+/* PLAYING TABLE SCREEN */
 .t-top-bar {
   height: 40px;
   background: rgba(0,0,0,0.6);
@@ -229,7 +305,7 @@ footer{text-align:center;padding:25px;color:#98a8c8;border-top:1px solid #293655
 .t-card:hover { transform: translateY(-8px); }
 
 .t-human-hand-container {
-  height: 95px;
+  height: 100px;
   padding: 4px 15px;
   display: flex;
   justify-content: center;
@@ -251,8 +327,8 @@ footer{text-align:center;padding:25px;color:#98a8c8;border-top:1px solid #293655
 
 .t-human-hand .t-card:first-child { margin-left: 0; }
 .t-human-hand .t-card.disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
+  opacity: 0.35;
+  cursor: not-allowed !important;
   transform: none !important;
 }
 
@@ -305,7 +381,6 @@ footer{text-align:center;padding:25px;color:#98a8c8;border-top:1px solid #293655
 <h2>🔥 All Games</h2>
 <div class="games" id="cards">
 
-<!-- NEW GAME CARD: BHABHI THULLA -->
 <article class="card" data-name="bhabhi thulla card game strategy">
 <div class="emoji">♠️</div><h3>Bhabhi / Thulla</h3>
 <p>Classic South Asian getaway card game.</p>
@@ -414,7 +489,7 @@ controls.innerHTML='';
 }
 
 /* =========================================================
-   7. BHABHI THULLA CARD GAME INTEGRATION CODE
+   BHABHI THULLA CARD GAME CODE WITH COINS & STRICT CARD RULES
    ========================================================= */
 const tAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
@@ -456,63 +531,136 @@ let tActiveTurn = -1;
 let tLeadSuit = null;
 let tCurrentTrick = [];
 let tIsAnimating = false;
+let userCoins = 5000;
+let selectedBet = 500;
 
 function thullaSetup() {
   setup('♠️ Bhabhi / Thulla Card Game', 'Get rid of all your cards! High spade player leads.');
-  message.textContent = 'Casino Table Ready!';
+  message.textContent = 'Welcome to Thulla Room';
 
   const wrapper = document.createElement('div');
   wrapper.id = 'thulla-game-wrapper';
   wrapper.innerHTML = `
-    <div class="t-top-bar">
-      <div style="font-weight: bold; color: var(--gold);" id="t-status">Dealing Cards...</div>
-      <button class="t-btn" onclick="tSortHand()">Sort Cards</button>
+    <!-- MAIN ROOM MENU SCREEN -->
+    <div id="t-menu-screen" class="t-screen active">
+      <div class="t-logo-title">BHABHI THULLA</div>
+      <div class="t-subtitle">Classic South Asian Getaway Card Game</div>
+      
+      <div class="t-coins-bar">🪙 Balance: <span id="t-user-coins">${userCoins}</span></div>
+
+      <div class="t-bet-selector">
+        <div class="t-bet-title">Select Match Bet Coins:</div>
+        <div class="t-bet-buttons">
+          <div class="t-bet-btn" onclick="tSetBet(100, this)">100</div>
+          <div class="t-bet-btn selected" onclick="tSetBet(500, this)">500</div>
+          <div class="t-bet-btn" onclick="tSetBet(1000, this)">1,000</div>
+          <div class="t-bet-btn" onclick="tSetBet(5000, this)">5,000</div>
+        </div>
+      </div>
+
+      <div class="t-menu-grid">
+        <div class="t-menu-btn" onclick="tStartGame('classic')">
+          <div class="t-menu-icon">♠️</div>
+          <div class="t-menu-label">PLAY NOW</div>
+        </div>
+        <div class="t-menu-btn" onclick="tStartGame('multi')">
+          <div class="t-menu-icon">👥</div>
+          <div class="t-menu-label">MULTIPLAYER</div>
+        </div>
+        <div class="t-menu-btn" onclick="tStartGame('private')">
+          <div class="t-menu-icon">🔒</div>
+          <div class="t-menu-label">PRIVATE TABLE</div>
+        </div>
+        <div class="t-menu-btn" onclick="tAddCoins()">
+          <div class="t-menu-icon">🪙</div>
+          <div class="t-menu-label">FREE COINS</div>
+        </div>
+      </div>
     </div>
-    <div class="t-table-container">
-      <div class="t-table-logo">GAMEGOLA VIP</div>
-      <div class="t-deck-stack">
-        <div class="t-deck-card-back" style="top:0; left:0;"></div>
-        <div class="t-deck-card-back" style="top:-2px; left:-2px;"></div>
+
+    <!-- PLAYING TABLE SCREEN -->
+    <div id="t-play-screen" class="t-screen">
+      <div class="t-top-bar">
+        <button class="t-btn" onclick="tBackToThullaMenu()">← Room Menu</button>
+        <div style="font-weight: bold; color: var(--gold);" id="t-status">Dealing Cards...</div>
+        <button class="t-btn" onclick="tSortHand()">Sort Cards</button>
       </div>
-      <div class="t-player-pod" id="t-pod-0">
-        <div class="t-pod-avatar">👤<div class="t-pod-card-count" id="t-count-0">0</div></div>
-        <div class="t-pod-name">YOU</div>
+      <div class="t-table-container">
+        <div class="t-table-logo">GAMEGOLA VIP</div>
+        <div class="t-deck-stack">
+          <div class="t-deck-card-back" style="top:0; left:0;"></div>
+          <div class="t-deck-card-back" style="top:-2px; left:-2px;"></div>
+        </div>
+        <div class="t-player-pod" id="t-pod-0">
+          <div class="t-pod-avatar">👤<div class="t-pod-card-count" id="t-count-0">0</div></div>
+          <div class="t-pod-name">YOU</div>
+        </div>
+        <div class="t-player-pod" id="t-pod-1">
+          <div class="t-pod-avatar">🤖<div class="t-pod-card-count" id="t-count-1">0</div></div>
+          <div class="t-pod-name">Bot 1</div>
+        </div>
+        <div class="t-player-pod" id="t-pod-2">
+          <div class="t-pod-avatar">🤖<div class="t-pod-card-count" id="t-count-2">0</div></div>
+          <div class="t-pod-name">Bot 2</div>
+        </div>
+        <div class="t-player-pod" id="t-pod-3">
+          <div class="t-pod-avatar">🤖<div class="t-pod-card-count" id="t-count-3">0</div></div>
+          <div class="t-pod-name">Bot 3</div>
+        </div>
+        <div class="t-center-played-area">
+          <div class="t-played-card-slot t-slot-0" id="t-slot-0"></div>
+          <div class="t-played-card-slot t-slot-1" id="t-slot-1"></div>
+          <div class="t-played-card-slot t-slot-2" id="t-slot-2"></div>
+          <div class="t-played-card-slot t-slot-3" id="t-slot-3"></div>
+        </div>
+        <div class="t-thulla-overlay" id="t-banner">
+          <div class="t-thulla-text">THULLA!</div>
+          <div class="t-thulla-sub" id="t-banner-desc">Penalty hit!</div>
+        </div>
       </div>
-      <div class="t-player-pod" id="t-pod-1">
-        <div class="t-pod-avatar">🤖<div class="t-pod-card-count" id="t-count-1">0</div></div>
-        <div class="t-pod-name">Bot 1</div>
+      <div class="t-human-hand-container">
+        <div class="t-human-hand" id="t-human-hand"></div>
       </div>
-      <div class="t-player-pod" id="t-pod-2">
-        <div class="t-pod-avatar">🤖<div class="t-pod-card-count" id="t-count-2">0</div></div>
-        <div class="t-pod-name">Bot 2</div>
-      </div>
-      <div class="t-player-pod" id="t-pod-3">
-        <div class="t-pod-avatar">🤖<div class="t-pod-card-count" id="t-count-3">0</div></div>
-        <div class="t-pod-name">Bot 3</div>
-      </div>
-      <div class="t-center-played-area">
-        <div class="t-played-card-slot t-slot-0" id="t-slot-0"></div>
-        <div class="t-played-card-slot t-slot-1" id="t-slot-1"></div>
-        <div class="t-played-card-slot t-slot-2" id="t-slot-2"></div>
-        <div class="t-played-card-slot t-slot-3" id="t-slot-3"></div>
-      </div>
-      <div class="t-thulla-overlay" id="t-banner">
-        <div class="t-thulla-text">THULLA!</div>
-        <div class="t-thulla-sub" id="t-banner-desc">Penalty hit!</div>
-      </div>
-    </div>
-    <div class="t-human-hand-container">
-      <div class="t-human-hand" id="t-human-hand"></div>
     </div>
   `;
   controls.appendChild(wrapper);
+}
+
+function tSetBet(amount, btnEl) {
+  selectedBet = amount;
+  document.querySelectorAll('.t-bet-btn').forEach(b => b.classList.remove('selected'));
+  if(btnEl) btnEl.classList.add('selected');
+}
+
+function tAddCoins() {
+  userCoins += 1000;
+  document.getElementById('t-user-coins').innerText = userCoins;
+  alert("Added 1,000 Free Coins!");
+}
+
+function tStartGame(mode) {
+  if(userCoins < selectedBet) {
+    alert("Insufficient Coins! Please select a lower bet or claim Free Coins.");
+    return;
+  }
+  userCoins -= selectedBet;
+  document.getElementById('t-user-coins').innerText = userCoins;
+
+  document.getElementById('t-menu-screen').classList.remove('active');
+  document.getElementById('t-play-screen').classList.add('active');
   tInitDeal();
+}
+
+function tBackToThullaMenu() {
+  document.getElementById('t-play-screen').classList.remove('active');
+  document.getElementById('t-menu-screen').classList.add('active');
 }
 
 function tInitDeal() {
   tPlayersHand = [[], [], [], []];
   tCurrentTrick = [];
   tLeadSuit = null;
+  tIsAnimating = false;
   document.getElementById('t-human-hand').innerHTML = '';
   for(let i=0; i<4; i++) document.getElementById(`t-slot-${i}`).innerHTML = '';
 
@@ -541,7 +689,7 @@ function tInitDeal() {
       tRenderHumanHand();
       tDetermineSeniorLead();
     }
-  }, 50);
+  }, 40);
 }
 
 function tDetermineSeniorLead() {
@@ -561,9 +709,10 @@ function tDetermineSeniorLead() {
   let pName = tActiveTurn === 0 ? 'YOU' : `Bot ${tActiveTurn}`;
   tUpdateStatus(`${pName} has highest Spade! Senior Lead starts.`);
   tHighlightActivePod();
+  tRenderHumanHand();
 
   if(tActiveTurn !== 0) {
-    setTimeout(tBotPlayTurn, 1000);
+    setTimeout(tBotPlayTurn, 800);
   }
 }
 
@@ -589,12 +738,14 @@ function tUpdateStatus(msg) {
   if(st) st.innerText = msg;
 }
 
+/* STRICT SUIT ENFORCEMENT ON HUMAN HAND RENDER */
 function tRenderHumanHand() {
   const container = document.getElementById('t-human-hand');
   if(!container) return;
   container.innerHTML = '';
 
-  const hasLeadSuit = tLeadSuit ? tPlayersHand[0].some(c => c.suit === tLeadSuit) : true;
+  // Check if player owns any card of lead suit
+  const hasLeadSuitCard = tLeadSuit ? tPlayersHand[0].some(c => c.suit === tLeadSuit) : false;
 
   tPlayersHand[0].forEach((card, index) => {
     const cardEl = document.createElement('div');
@@ -602,10 +753,20 @@ function tRenderHumanHand() {
     cardEl.className = `t-card ${isRed ? 'red' : 'black'}`;
     
     let playable = true;
-    if(tActiveTurn !== 0 || tIsAnimating) playable = false;
-    else if(tLeadSuit && hasLeadSuit && card.suit !== tLeadSuit) playable = false;
 
-    if(!playable && tActiveTurn === 0) cardEl.classList.add('disabled');
+    if(tActiveTurn !== 0 || tIsAnimating) {
+      playable = false;
+    } else if(tLeadSuit && hasLeadSuitCard) {
+      // If player has lead suit in hand, ONLY lead suit cards are allowed!
+      if(card.suit !== tLeadSuit) playable = false;
+    }
+
+    if(!playable) {
+      cardEl.classList.add('disabled');
+      cardEl.onclick = null; // Strictly block click
+    } else {
+      cardEl.onclick = () => tPlayCard(0, card, index);
+    }
 
     cardEl.innerHTML = `
       <div class="t-card-corner">${card.rank}<br>${T_SUIT_ICONS[card.suit]}</div>
@@ -613,9 +774,6 @@ function tRenderHumanHand() {
       <div class="t-card-corner" style="transform: rotate(180deg);">${card.rank}<br>${T_SUIT_ICONS[card.suit]}</div>
     `;
 
-    if(playable) {
-      cardEl.onclick = () => tPlayCard(0, card, index);
-    }
     container.appendChild(cardEl);
   });
 }
@@ -630,6 +788,13 @@ function tSortHand() {
 
 function tPlayCard(playerIndex, card, cardIndexInHand) {
   if(tIsAnimating) return;
+
+  // Final validation check to prevent glitch
+  if(playerIndex === 0 && tLeadSuit) {
+    const hasLead = tPlayersHand[0].some(c => c.suit === tLeadSuit);
+    if(hasLead && card.suit !== tLeadSuit) return; // Block illegal turn
+  }
+
   tIsAnimating = true;
 
   tPlayersHand[playerIndex].splice(cardIndexInHand, 1);
@@ -642,8 +807,7 @@ function tPlayCard(playerIndex, card, cardIndexInHand) {
 
   tCurrentTrick.push({ player: playerIndex, card: card });
   tRenderSlotCard(playerIndex, card);
-
-  if(playerIndex === 0) tRenderHumanHand();
+  tRenderHumanHand();
 
   if(card.suit !== tLeadSuit) {
     setTimeout(() => tHandleThullaEvent(playerIndex), 600);
@@ -659,6 +823,7 @@ function tPlayCard(playerIndex, card, cardIndexInHand) {
       tHighlightActivePod();
       let pName = tActiveTurn === 0 ? 'YOUR TURN' : `Bot ${tActiveTurn}'s turn`;
       tUpdateStatus(pName);
+      tRenderHumanHand();
 
       if(tActiveTurn !== 0) {
         setTimeout(tBotPlayTurn, 800);
@@ -705,14 +870,14 @@ function tHandleThullaEvent(thullaThrower) {
     tCurrentTrick = [];
     tLeadSuit = null;
     tUpdatePodCounts();
-    if(victimPlayer === 0) tRenderHumanHand();
-
+    
     tActiveTurn = victimPlayer;
     tHighlightActivePod();
     tIsAnimating = false;
 
     let vName = victimPlayer === 0 ? 'YOUR TURN' : `Bot ${victimPlayer}'s turn`;
     tUpdateStatus(`Thulla Handled! ${vName} leads next turn.`);
+    tRenderHumanHand();
 
     if(tActiveTurn !== 0) {
       setTimeout(tBotPlayTurn, 800);
@@ -748,6 +913,7 @@ function tHandleTrickComplete() {
 
     let wName = winnerPlayer === 0 ? 'YOU' : `Bot ${winnerPlayer}`;
     tUpdateStatus(`${wName} won the trick and leads next!`);
+    tRenderHumanHand();
 
     if(tActiveTurn !== 0) {
       setTimeout(tBotPlayTurn, 800);
