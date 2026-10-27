@@ -4,254 +4,423 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>GameGola - Bhabhi Thulla</title>
+<title>GameGola - Free Online Games</title>
+<meta name="description" content="Play free online games at GameGola. Enjoy arcade, puzzle and reaction games on any device.">
 <style>
-:root{--gold:#ffd978;--green:#0a8755;--dark:#06130d;--panel:#10271a}
 *{box-sizing:border-box}
-body{margin:0;background:radial-gradient(ellipse at 50% -12%,#286646 0%,#102b1c 38%,#050d08 78%);color:#fff;font:16px Arial,sans-serif;letter-spacing:.1px}
-header{position:sticky;top:0;z-index:15;display:flex;justify-content:space-between;align-items:center;padding:13px 5%;background:rgba(4,14,8,.9);border-bottom:1px solid #d6b35a44}
-.brand{font-size:25px;font-weight:900;color:var(--gold)}
-.coins{color:var(--gold);border:1px solid #86692c;padding:9px 14px;border-radius:25px}
-main{max-width:1180px;margin:auto;padding:18px}
-.screen{display:none}.screen.active{display:block}
-.hero{text-align:center;padding:35px 8px}
-h1{font-size:clamp(38px,8vw,70px);color:var(--gold);margin:12px 0}
-h2{color:var(--gold)}.muted{color:#bfd0c1;line-height:1.6}.center{text-align:center}
-.panel{background:linear-gradient(145deg,#183624,#08180f);border:1px solid #385642;border-radius:18px;padding:20px;margin:14px 0}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;max-width:700px;margin:20px auto}
-button,select,input{font:inherit}button{cursor:pointer}
-.menu{min-height:115px;border:1px solid #496449;border-radius:15px;background:linear-gradient(145deg,#203d2a,#102117);color:white;padding:15px;text-align:left}
-.menu.primary{background:linear-gradient(135deg,#ffe69c,#d69b30);color:#241a07}
-.menu b,.menu small{display:block;margin-top:7px}.emoji{font-size:30px}
-.btn{padding:11px 15px;border:0;border-radius:9px;background:var(--gold);color:#241a07;font-weight:bold;margin:4px}
-.btn.green{background:#64eab1}.btn.dark{background:#263e2d;color:white;border:1px solid #526b55}
-select,input{padding:11px;border-radius:8px;background:#08150c;color:white;border:1px solid #506b54;margin:5px}
-.note{font-size:13px;color:#a9bcae;line-height:1.5}
-.table{position:relative;min-height:410px;margin:18px auto;border:10px solid #75451f;border-radius:48%/39%;background:radial-gradient(ellipse,#15915e,#087044 58%,#06442c);box-shadow:inset 0 0 0 3px #cfa365,inset 0 0 40px #00321c,0 12px 25px #0008;max-width:1000px;overflow:hidden}
-.seat{position:absolute;display:flex;flex-direction:column;align-items:center;gap:3px;min-width:75px;max-width:115px;text-align:center;padding:7px;background:#0b2018ef;border:1px solid #63816a;border-radius:12px;font-size:12px;transform:translate(-50%,-50%);z-index:2}
-.seat.active{border:2px solid var(--gold);box-shadow:0 0 14px #f5cd7077}
-.avatar{font-size:24px}.meta{font-size:10px;color:#d2dfd3}
-.bottom{left:50%;top:91%}.top{left:50%;top:9%}.left{left:8%;top:50%}.right{left:92%;top:50%}
-.br{left:78%;top:77%}.bl{left:22%;top:77%}.tr{left:78%;top:23%}.tl{left:22%;top:23%}
-.middle{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:62%;text-align:center;z-index:1}
-.pile{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:4px;min-height:90px}
-.card{position:relative;width:53px;height:76px;background:#fffdf6;color:#111;border:1px solid #d4d4d4;border-radius:7px;box-shadow:0 3px 7px #0005;display:inline-flex;flex-direction:column;justify-content:space-between;align-items:center;padding:5px 2px;font-size:15px;font-weight:bold;flex-shrink:0}
-.card .suit{font-size:24px;line-height:1}.red{color:#d92743}
-.card .by{font-size:9px;color:#333;max-width:50px;overflow:hidden}
-.hand{display:flex;justify-content:center;flex-wrap:wrap;gap:5px;margin:15px 0}
-.hand .card{cursor:pointer;transition:transform .12s}
-.hand .card:hover{transform:translateY(-6px)}
-.hand .card:disabled{cursor:not-allowed;opacity:.5}
-.status{min-height:24px;color:var(--gold);font-weight:bold}
-.overlay{display:none;position:fixed;inset:0;background:#000c;z-index:20;align-items:center;justify-content:center;padding:18px}
-.overlay.show{display:flex}.modal{max-width:520px;width:100%;text-align:center;background:#10251a;border:2px solid var(--gold);border-radius:20px;padding:25px}
-.thulla{font-size:clamp(40px,10vw,72px);font-weight:1000;color:#ffdc60;text-shadow:0 0 16px #f80}
-#dealBanner{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) scale(.8);z-index:5;text-align:center;font-weight:1000;font-size:clamp(20px,5vw,38px);color:#ffe69c;opacity:0;pointer-events:none;white-space:nowrap}
-#dealBanner.show{animation:bannerPop 1.2s ease forwards}
-@keyframes bannerPop{0%{opacity:0;transform:translate(-50%,-50%) scale(.5)}20%,70%{opacity:1;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.1)}}
-#shuffleDeck{position:absolute;left:50%;top:50%;width:48px;height:68px;transform:translate(-50%,-50%);z-index:4;display:none;pointer-events:none}
-#shuffleDeck.show{display:block}
-.mini-back{position:absolute;width:42px;height:61px;border:2px solid #f4d38b;border-radius:6px;background:repeating-linear-gradient(45deg,#153c2b,#153c2b 4px,#1e6747 4px,#1e6747 8px)}
-.thulla-flash{position:absolute;inset:0;z-index:6;display:flex;align-items:center;justify-content:center;pointer-events:none;opacity:0}
-.thulla-flash.show{animation:thullaFlash 1.7s ease-out forwards}
-.thulla-words{font-weight:1000;font-size:clamp(28px,7vw,65px);text-align:center;color:#fff18a;line-height:1.05;text-shadow:0 0 7px #ff3b1d,0 0 20px #ff3b1d,0 4px 5px #300;transform:scale(.4);padding:10px}
-@keyframes thullaFlash{0%{opacity:0}12%,75%{opacity:1}100%{opacity:0}}
-.thulla-flash.show .thulla-words{animation:thullaWords 1.5s ease forwards}
-@keyframes thullaWords{0%{transform:scale(.3) rotate(-8deg)}20%{transform:scale(1.12) rotate(2deg)}35%,75%{transform:scale(1) rotate(0)}100%{transform:scale(.9)}}
-@media(max-width:600px){
- main{padding:9px}.table{min-height:365px;border-width:7px}
- .seat{min-width:55px;max-width:76px;padding:4px;font-size:10px}
- .avatar{font-size:19px}.meta{font-size:9px}
- .left{left:7%}.right{left:93%}
- .tl{left:20%;top:24%}.tr{left:80%;top:24%}
- .bl{left:20%;top:76%}.br{left:80%;top:76%}
- .card{width:43px;height:65px;font-size:13px}
- .card .suit{font-size:20px}.middle{width:68%}
- .grid{gap:8px}.menu{padding:10px}
-}
+body{margin:0;background:#090d1b;color:#fff;font-family:Arial,sans-serif}
+header{padding:20px 6%;background:#11182c;border-bottom:1px solid #293655;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.logo{font-size:29px;font-weight:900;color:#00f5d4;text-decoration:none}
+header a:last-child{color:white;text-decoration:none}
+.hero{text-align:center;padding:55px 16px;background:radial-gradient(ellipse at top,#203765,#090d1b 72%)}
+.hero h1{font-size:clamp(34px,6vw,56px);margin:0 0 12px}
+.hero h1 span{color:#00f5d4}
+.hero p{color:#bac7e1;line-height:1.6}
+input{font-size:16px}
+#search{width:min(100%,420px);padding:14px;border:1px solid #354568;border-radius:12px;background:#11182c;color:white;margin-top:12px}
+main{max-width:1100px;margin:auto;padding:25px 18px 55px}
+h2{margin-top:20px}
+.games{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
+.card,.panel{background:#121a30;border:1px solid #293655;border-radius:17px;padding:22px}
+.card{transition:.2s}
+.card:hover{transform:translateY(-4px);border-color:#00f5d4}
+.emoji{font-size:43px}
+.card p{color:#bac7e1;line-height:1.5;min-height:42px}
+button{border:0;border-radius:9px;padding:12px 16px;background:#00f5d4;color:#07121b;font-weight:bold;font-size:15px;cursor:pointer;margin:4px}
+button:hover{background:#7bffeb}
+button:disabled{opacity:.5;cursor:default}
+.panel{margin-top:28px;text-align:center}
+#message{font-size:21px;color:#00f5d4;font-weight:bold;margin:20px 0}
+#controls{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:8px}
+#controls input{width:160px;padding:12px;border:1px solid #354568;border-radius:9px;background:#090d1b;color:white}
+#controls button{min-width:45px}
+.board{display:grid;grid-template-columns:repeat(3,80px);gap:7px;justify-content:center}
+.board button{height:75px;font-size:28px;margin:0;background:#24314e;color:white}
+.memory{display:grid;grid-template-columns:repeat(4,minmax(48px,65px));gap:7px;justify-content:center}
+.memory button{height:60px;font-size:25px;padding:5px;margin:0;background:#263451;color:white}
+.status{color:#bac7e1;min-height:24px}
+footer{text-align:center;padding:25px;color:#98a8c8;border-top:1px solid #293655}
+[hidden]{display:none!important}
 </style>
 </head>
 <body>
 <header>
- <div class="brand">🎮 GameGola</div>
- <div class="coins">🪙 <span id="coins">100</span> coins</div>
+<a class="logo" href="#">🎮 GameGola</a>
+<a href="#games">Explore Games ↓</a>
 </header>
-<main>
-<section id="lobby" class="screen active">
- <div class="hero"><div style="letter-spacing:4px;color:#64eab1">PLAY • COMPETE • HAVE FUN</div><h1>BHABHI THULLA</h1><p class="muted">Gather around the table. Play your cards. Avoid the Thulla!</p></div>
- <div class="panel center"><h2>Choose Your Table</h2><p class="muted">Total players, including you</p><select id="count"><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option></select></div>
- <div class="grid">
-  <button class="menu primary" onclick="quickPlay()"><span class="emoji">🃏</span><b>QUICK PLAY</b><small>Offline AI bots</small></button>
-  <button class="menu" onclick="screen('rooms')"><span class="emoji">🌐</span><b>CREATE ROOM</b><small>Demo room code</small></button>
-  <button class="menu" onclick="screen('join')"><span class="emoji">🔑</span><b>JOIN ROOM</b><small>Enter a room code</small></button>
-  <button class="menu" onclick="screen('rules')"><span class="emoji">📜</span><b>RULES</b><small>How to play</small></button>
- </div>
- <div class="panel center"><h2>🪙 Free Coins</h2><p class="muted">Practice coins only; they have no cash value.</p><button class="btn" onclick="coins+=5;updateCoins();alert('5 practice coins added!')">Claim +5 Coins</button></div>
- <p class="note center">Offline game works without a server. Online rooms are demo screens until multiplayer is connected.</p>
+
+<section class="hero">
+<h1>Play More. <span>Have Fun!</span></h1>
+<p>Free browser games, no downloads needed.<br>Choose your game and beat your best score!</p>
+<input id="search" type="search" placeholder="🔎 Search games..." aria-label="Search games">
 </section>
-<section id="rooms" class="screen"><button class="btn dark" onclick="screen('lobby')">← Back</button><div class="panel center"><h2>Create Demo Room</h2><p class="muted">Generate a local demo room code.</p><select id="roomCount"><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option></select><p><button class="btn green" onclick="createRoom()">Create Room</button></p><h2 id="roomCode"></h2><p class="note">Demo only: other devices cannot join this code yet.</p></div></section>
-<section id="join" class="screen"><button class="btn dark" onclick="screen('lobby')">← Back</button><div class="panel center"><h2>Join Room</h2><input id="joinCode" placeholder="ROOM CODE"><p><button class="btn green" onclick="joinRoom()">Join Room</button></p><p id="joinMsg" class="muted"></p><p class="note">Live online room lookup is not connected yet.</p></div></section>
-<section id="rules" class="screen"><button class="btn dark" onclick="screen('lobby')">← Back</button><div class="panel"><h2>How to Play Bhabhi Thulla</h2><ol class="muted"><li>The player holding A♠ starts the first trick with that card.</li><li>Players must follow the suit led if they have a card of that suit.</li><li>If you have no card of the led suit, you can play another suit. This is a THULLA!</li><li>A Thulla stops the trick immediately. The highest card of the led suit takes the table cards and leads next.</li><li>If everybody follows suit, the highest card of the led suit wins. Those cards are discarded, and the winner leads next.</li><li>Card order: 2, 3, 4, 5, 6, 7, 8, 9, 10, J, Q, K, A.</li></ol><p class="note">This is an offline practice version. Local Bhabhi rules can differ.</p></div></section>
-<section id="game" class="screen">
- <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px"><button class="btn dark" onclick="screen('lobby')">← Lobby</button><button class="btn dark" onclick="screen('rules')">Rules</button><button class="btn" onclick="quickPlay()">New Game</button></div>
- <div class="panel center"><h2>BHABHI THULLA TABLE</h2><p id="roundInfo" class="muted">Offline match</p></div>
- <div id="table" class="table">
-  <div id="seats"></div><div id="shuffleDeck"><span class="mini-back"></span><span class="mini-back"></span><span class="mini-back"></span></div>
-  <div id="dealBanner">SHUFFLING CARDS…</div>
-  <div id="thullaFlash" class="thulla-flash"><div class="thulla-words">THULLA<br>AA GAYA!</div></div>
-  <div class="middle"><h3 id="trickTitle">CURRENT TRICK</h3><div id="pile" class="pile"></div><p id="tableInfo" class="note">Cards played in this trick</p></div>
- </div>
- <div class="panel center"><b style="color:#f6d98e">YOUR HAND — CLICK A CARD TO PLAY</b><p id="status" class="status">Dealing cards…</p><div id="hand" class="hand"></div><button class="btn dark" onclick="screen('rules')">Rules</button><button class="btn" onclick="quickPlay()">New Game</button><p class="note">Cards play when you click them. Sound starts after your first interaction.</p></div>
+
+<main id="games">
+<h2>🔥 All Games</h2>
+<div class="games" id="cards">
+<article class="card" data-name="tap challenge arcade">
+<div class="emoji">⚡</div><h3>Tap Challenge</h3>
+<p>Tap as fast as possible in 10 seconds.</p>
+<button onclick="openGame('tap')">Play Now ▶</button>
+</article>
+
+<article class="card" data-name="number guess puzzle">
+<div class="emoji">🎯</div><h3>Number Guess</h3>
+<p>Find the secret number from 1 to 100.</p>
+<button onclick="openGame('guess')">Play Now ▶</button>
+</article>
+
+<article class="card" data-name="rock paper scissors">
+<div class="emoji">✊</div><h3>Rock Paper Scissors</h3>
+<p>Choose your move and beat the computer.</p>
+<button onclick="openGame('rps')">Play Now ▶</button>
+</article>
+
+<article class="card" data-name="tic tac toe strategy">
+<div class="emoji">❌</div><h3>Tic-Tac-Toe</h3>
+<p>Get three marks in a row to win.</p>
+<button onclick="openGame('tic')">Play Now ▶</button>
+</article>
+
+<article class="card" data-name="memory match cards">
+<div class="emoji">🧠</div><h3>Memory Match</h3>
+<p>Flip cards and find all matching pairs.</p>
+<button onclick="openGame('memory')">Play Now ▶</button>
+</article>
+
+<article class="card" data-name="reaction test speed">
+<div class="emoji">🚀</div><h3>Reaction Test</h3>
+<p>Test how fast you react to a signal.</p>
+<button onclick="openGame('reaction')">Play Now ▶</button>
+</article>
+</div>
+
+<section class="panel" id="panel" hidden>
+<h2 id="title">Game</h2>
+<p id="instructions" class="status"></p>
+<div id="message" aria-live="polite">Let's play!</div>
+<div id="info" class="status"></div>
+<div id="controls"></div>
+<button onclick="closeGame()" style="margin-top:22px;background:#293655;color:white">← All Games</button>
 </section>
 </main>
-<div id="overlay" class="overlay"><div class="modal"><div class="thulla">THULLA!</div><h2 id="resultTitle">Round complete</h2><p id="resultText" class="muted"></p><div id="scores" class="muted"></div><p><button class="btn green" onclick="quickPlay()">New Game</button><button class="btn dark" onclick="closeResult();screen('lobby')">Lobby</button></p></div></div>
-<script>
-"use strict";
-const suits=[{symbol:"♠",name:"Spades",red:false},{symbol:"♥",name:"Hearts",red:true},{symbol:"♦",name:"Diamonds",red:true},{symbol:"♣",name:"Clubs",red:false}];
-const ranks=[["2",2],["3",3],["4",4],["5",5],["6",6],["7",7],["8",8],["9",9],["10",10],["J",11],["Q",12],["K",13],["A",14]];
-const avatars=["🙂","🤖","🦊","🐼","🐯","🐸","🐵","🐨"];
-let players=[],turn=0,trick=[],lead=null,cardId=0,trickNo=1;
-let gameOver=false,timer=null,coins=100,thullaHappened=false,dealTimer=null,gameToken=0;
-let audioCtx=null,soundEnabled=false;
 
-function initAudio(){
- try{const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;if(!audioCtx)audioCtx=new AC();if(audioCtx.state==="suspended")audioCtx.resume();soundEnabled=true}catch(e){soundEnabled=false}
+<footer>© 2026 GameGola · Play fair, have fun ❤️</footer>
+
+<script>
+const panel=document.getElementById('panel');
+const title=document.getElementById('title');
+const instructions=document.getElementById('instructions');
+const message=document.getElementById('message');
+const info=document.getElementById('info');
+const controls=document.getElementById('controls');
+let timer=null,timeout=null,active=false;
+
+function clearTimers(){
+clearInterval(timer);
+clearTimeout(timeout);
+timer=null;
+timeout=null;
 }
-function tone(freq,duration,type="sine",volume=.05,delay=0){
- if(!soundEnabled||!audioCtx)return;
- const start=audioCtx.currentTime+delay,osc=audioCtx.createOscillator(),gain=audioCtx.createGain();
- osc.type=type;osc.frequency.setValueAtTime(freq,start);gain.gain.setValueAtTime(.0001,start);
- gain.gain.exponentialRampToValueAtTime(volume,start+.012);gain.gain.exponentialRampToValueAtTime(.0001,start+duration);
- osc.connect(gain);gain.connect(audioCtx.destination);osc.start(start);osc.stop(start+duration+.03);
+
+function setup(name,desc){
+clearTimers();
+panel.hidden=false;
+controls.innerHTML='';
+title.textContent=name;
+instructions.textContent=desc;
+message.textContent='Ready?';
+info.textContent='';
+panel.scrollIntoView({behavior:'smooth',block:'start'});
 }
-function noiseTick(delay=0,duration=.07,volume=.035){
- if(!soundEnabled||!audioCtx)return;
- const length=Math.floor(audioCtx.sampleRate*duration),buffer=audioCtx.createBuffer(1,length,audioCtx.sampleRate),data=buffer.getChannelData(0);
- for(let i=0;i<length;i++)data[i]=(Math.random()*2-1)*(1-i/length);
- const source=audioCtx.createBufferSource(),gain=audioCtx.createGain();source.buffer=buffer;
- gain.gain.setValueAtTime(volume,audioCtx.currentTime+delay);gain.gain.exponentialRampToValueAtTime(.0001,audioCtx.currentTime+delay+duration);
- source.connect(gain);gain.connect(audioCtx.destination);source.start(audioCtx.currentTime+delay);
+
+function btn(text,fn){
+const b=document.createElement('button');
+b.textContent=text;
+b.onclick=fn;
+controls.appendChild(b);
+return b;
 }
-function shuffleSound(){if(!soundEnabled)return;for(let i=0;i<9;i++)noiseTick(i*.105,.065,.025);tone(380,.12,"triangle",.025,.05);tone(520,.1,"triangle",.02,.35)}
-function dealSound(){noiseTick(0,.045,.025);tone(740,.045,"triangle",.018,.01)}
-function cardSound(){tone(500,.055,"triangle",.035);noiseTick(0,.035,.018)}
-function thullaPara(){
- if(!soundEnabled)return;
- try{if(!("speechSynthesis" in window)||!("SpeechSynthesisUtterance" in window))return;
- window.speechSynthesis.cancel();const line=new SpeechSynthesisUtterance("Thullaaaa! Pakray gaye! O ho ho ho!");
- line.lang="en-US";line.rate=1.08;line.pitch=1.55;line.volume=1;window.speechSynthesis.speak(line)}catch(e){}
+
+function openGame(g){
+if(g==='tap')tapSetup();
+if(g==='guess')guessSetup();
+if(g==='rps')rpsSetup();
+if(g==='tic')ticSetup();
+if(g==='memory')memorySetup();
+if(g==='reaction')reactionSetup();
 }
-function screen(id){
- document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
- document.getElementById(id).classList.add("active");
- if(id!=="game"&&timer){clearTimeout(timer);timer=null}
- if(id!=="game"&&dealTimer){clearTimeout(dealTimer);dealTimer=null}
+
+function closeGame(){
+clearTimers();
+active=false;
+panel.hidden=true;
+controls.innerHTML='';
 }
-function updateCoins(){document.getElementById("coins").textContent=coins}
-function createDeck(){
- let deck=[];suits.forEach(s=>ranks.forEach(r=>deck.push({id:++cardId,suit:s.symbol,suitName:s.name,red:s.red,rank:r[0],value:r[1]})));
- for(let i=deck.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[deck[i],deck[j]]=[deck[j],deck[i]]}
- return deck;
+
+// 1. TAP CHALLENGE
+function tapSetup(){
+setup('⚡ Tap Challenge','Tap the button as many times as possible in 10 seconds.');
+message.textContent='Ready to tap?';
+btn('Start Game',tapStart);
 }
-function quickPlay(){
- initAudio();if(timer)clearTimeout(timer);if(dealTimer)clearTimeout(dealTimer);timer=null;dealTimer=null;gameToken++;
- const myToken=gameToken;document.getElementById("overlay").classList.remove("show");
- document.getElementById("thullaFlash").classList.remove("show");document.getElementById("shuffleDeck").classList.add("show");
- const banner=document.getElementById("dealBanner");banner.textContent="SHUFFLING CARDS…";banner.classList.remove("show");void banner.offsetWidth;banner.classList.add("show");
- shuffleSound();cardId=0;trick=[];lead=null;trickNo=1;gameOver=false;thullaHappened=false;
- const n=Number(document.getElementById("count").value);
- players=Array.from({length:n},(_,i)=>({id:i,name:i===0?"You":"Bot "+i,avatar:avatars[i],hand:[],tricks:0,thullas:0}));
- const deck=createDeck(),each=Math.floor(deck.length/n),dealOrder=deck.slice(0,each*n);
- turn=0;players.forEach(p=>p.hand=[]);screen("game");
- document.getElementById("roundInfo").textContent=n+" players • "+each+" cards each • Offline AI";
- document.getElementById("status").textContent="Shuffling and dealing cards…";
- document.getElementById("hand").innerHTML="";document.getElementById("pile").innerHTML="";
- document.getElementById("trickTitle").textContent="SHUFFLING";document.getElementById("tableInfo").textContent="Cards are being shuffled and dealt";
- renderSeatsOnly();let i=0;
- function dealNext(){
-  if(myToken!==gameToken||!document.getElementById("game").classList.contains("active"))return;
-  if(i<dealOrder.length){
-   players[i%n].hand.push(dealOrder[i]);dealSound();
-   document.getElementById("status").textContent="Dealing cards… "+(i+1)+" / "+dealOrder.length;
-   renderSeatsOnly();i++;dealTimer=setTimeout(dealNext,55);
-  }else{
-   dealTimer=null;players.forEach(p=>p.hand.sort((a,b)=>a.value-b.value));
-   document.getElementById("shuffleDeck").classList.remove("show");banner.classList.remove("show");
-   const ace=players.find(p=>p.hand.some(c=>c.suit==="♠"&&c.value===14));turn=ace?ace.id:0;
-   render();if(turn===0)document.getElementById("status").textContent="You have A♠. Click it to start!";
-   else{document.getElementById("status").textContent=players[turn].name+" has A♠ and will start.";scheduleBot()}
-  }
- }
- dealTimer=setTimeout(dealNext,650);
+
+function tapStart(){
+clearTimers();
+let score=0,left=10;
+active=true;
+controls.innerHTML='';
+const b=btn('TAP! ⚡',()=>{
+if(active){
+score++;
+info.textContent='Score: '+score+' | Time: '+left+'s';
 }
-function legal(p){if(!trick.length)return p.hand;const suited=p.hand.filter(c=>c.suit===lead);return suited.length?suited:p.hand}
-function allowed(c,p){if(!trick.length)return true;const hasSuit=p.hand.some(x=>x.suit===lead);return !hasSuit||c.suit===lead}
-function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
-function cardFace(c,owner){return '<div class="card '+(c.red?'red':'')+'"><span>'+c.rank+'</span><span class="suit">'+c.suit+'</span><span>'+c.rank+'</span>'+(owner?'<span class="by">'+esc(owner)+'</span>':'')+'</div>'}
-function positionsForPlayers(){return {4:["bottom","top","right","left"],5:["bottom","br","tr","tl","left"],6:["bottom","br","right","top","left","bl"],7:["bottom","br","right","tr","tl","left","bl"],8:["bottom","br","right","tr","top","tl","left","bl"]}[players.length]||[]}
-function renderSeatsOnly(){
- const positions=positionsForPlayers();
- document.getElementById("seats").innerHTML=players.map((p,i)=>'<div class="seat '+positions[i]+(i===turn&&!gameOver?' active':'')+'"><span class="avatar">'+p.avatar+'</span><b>'+esc(p.name)+'</b><span class="meta">'+p.hand.length+' cards</span></div>').join("");
+});
+message.textContent='GO!';
+info.textContent='Score: 0 | Time: 10s';
+
+timer=setInterval(()=>{
+left--;
+info.textContent='Score: '+score+' | Time: '+left+'s';
+if(left<=0){
+clearTimers();
+active=false;
+b.disabled=true;
+message.textContent='Time is up! 🎉';
+info.textContent='Final score: '+score;
+btn('Play Again',tapSetup);
 }
-function render(){
- renderSeatsOnly();document.getElementById("pile").innerHTML=trick.map(x=>cardFace(x.card,x.name)).join("");
- document.getElementById("trickTitle").textContent="TRICK "+trickNo;
- document.getElementById("tableInfo").textContent=trick.length?trick.length+" cards • Lead suit "+lead:"No cards played yet";
- const me=players[0];
- document.getElementById("hand").innerHTML=me?me.hand.map(c=>'<button class="card '+(c.red?'red ':'')+'" '+((gameOver||turn!==0||!allowed(c,me))?'disabled':'')+' title="'+c.rank+c.suit+'" onclick="playCard(0,'+c.id+')"><span>'+c.rank+'</span><span class="suit">'+c.suit+'</span><span>'+c.rank+'</span></button>').join(""):"";
+},1000);
 }
-function showThulla(){
- const flash=document.getElementById("thullaFlash");flash.classList.remove("show");void flash.offsetWidth;flash.classList.add("show");thullaPara();
+
+// 2. NUMBER GUESS
+function guessSetup(){
+setup('🎯 Number Guess','Guess a whole number from 1 to 100.');
+const input=document.createElement('input');
+input.type='number';
+input.min=1;
+input.max=100;
+input.placeholder='1 to 100';
+input.setAttribute('aria-label','Your number guess');
+
+const secret=Math.floor(Math.random()*100)+1;
+let tries=0;
+const b=btn('Guess!',check);
+controls.prepend(input);
+input.addEventListener('keydown',e=>{
+if(e.key==='Enter')check();
+});
+
+function check(){
+const n=Number(input.value);
+if(!input.value||n<1||n>100||!Number.isInteger(n)){
+message.textContent='Enter a number from 1 to 100.';
+return;
 }
-function playCard(pi,id){
- initAudio();if(gameOver||pi!==turn)return;
- const p=players[pi],idx=p.hand.findIndex(c=>c.id===id);if(idx<0)return;
- const c=p.hand[idx];if(!allowed(c,p)){if(pi===0)document.getElementById("status").textContent="You must follow "+lead+" if you have that suit.";return}
- p.hand.splice(idx,1);if(!trick.length)lead=c.suit;trick.push({id:p.id,name:p.name,card:c});cardSound();
- document.getElementById("status").textContent=p.name+" played "+c.rank+c.suit+".";render();
- const thulla=trick.length>1&&c.suit!==lead;
- if(thulla){thullaHappened=true;p.thullas++;document.getElementById("status").textContent="🚨 THULLA AA GAYA! "+p.name+" could not follow "+lead+".";showThulla();render();timer=setTimeout(()=>resolveTrick(true),1650);return}
- if(trick.length===players.length){timer=setTimeout(()=>resolveTrick(false),900);return}
- turn=(turn+1)%players.length;render();
- if(turn!==0)scheduleBot();else document.getElementById("status").textContent="Your turn: follow "+lead+" if possible.";
+tries++;
+info.textContent='Attempts: '+tries;
+
+if(n===secret){
+message.textContent='Correct! You win! 🏆';
+b.disabled=true;
+input.disabled=true;
+btn('Play Again',guessSetup);
+}else{
+message.textContent=n<secret?'Try a higher number ↑':'Try a lower number ↓';
 }
-function scheduleBot(){
- if(timer)clearTimeout(timer);
- timer=setTimeout(()=>{timer=null;if(gameOver||turn===0)return;
-  const p=players[turn],options=legal(p);let chosen;
-  if(trickNo===1&&!trick.length)chosen=p.hand.find(c=>c.suit==="♠"&&c.value===14)||options[0];
-  else if(options.length)chosen=options.slice().sort((a,b)=>a.value-b.value)[0];
-  if(chosen)playCard(turn,chosen.id);
- },550+Math.random()*450);
 }
-function resolveTrick(isThulla){
- if(timer){clearTimeout(timer);timer=null}if(gameOver||!trick.length)return;
- const winning=trick.filter(x=>x.card.suit===lead).sort((a,b)=>b.card.value-a.card.value)[0];if(!winning)return;
- const winner=players[winning.id];winner.tricks++;
- if(isThulla){trick.forEach(x=>winner.hand.push(x.card));winner.hand.sort((a,b)=>a.value-b.value);document.getElementById("status").textContent="THULLA! "+winner.name+" takes the table cards and leads next."}
- else document.getElementById("status").textContent=winner.name+" wins with "+winning.card.rank+lead+". Cards are discarded.";
- render();const thisToken=gameToken;
- timer=setTimeout(()=>{
-  timer=null;if(thisToken!==gameToken)return;trick=[];lead=null;trickNo++;
-  if(players.filter(p=>p.hand.length>0).length<=1){finish();return}
-  turn=winner.id;
-  if(!players[turn].hand.length){let steps=0;while(!players[turn].hand.length&&steps<players.length){turn=(turn+1)%players.length;steps++}}
-  render();if(turn===0)document.getElementById("status").textContent="Your turn: lead any card.";else scheduleBot();
- },1100);
 }
-function finish(){
- gameOver=true;if(timer){clearTimeout(timer);timer=null}
- const active=players.filter(p=>p.hand.length>0),bhabhi=active.length?active[0]:players.slice().sort((a,b)=>b.hand.length-a.hand.length)[0];
- document.getElementById("resultTitle").textContent=bhabhi.id===0?"You got the Thulla!":"You escaped the Thulla!";
- document.getElementById("resultText").textContent=bhabhi.name+" is the last player holding cards ("+bhabhi.hand.length+").";
- if(bhabhi.id!==0){coins+=10;updateCoins();document.getElementById("resultText").textContent+=" You earned 10 practice coins."}
- document.getElementById("scores").innerHTML="<hr><b>Cards remaining</b><br>"+players.slice().sort((a,b)=>b.hand.length-a.hand.length).map(p=>esc(p.name)+": "+p.hand.length+" cards").join("<br>");
- render();document.getElementById("overlay").classList.add("show");
+
+// 3. ROCK PAPER SCISSORS
+function rpsSetup(){
+setup('✊ Rock Paper Scissors','Choose rock, paper, or scissors.');
+let player=0,computer=0;
+info.textContent='You: 0 | Computer: 0';
+
+function play(move){
+const choices=['Rock','Paper','Scissors'];
+const cpu=choices[Math.floor(Math.random()*3)];
+
+let result=move===cpu?'It is a draw!':(
+(move==='Rock'&&cpu==='Scissors')||
+(move==='Paper'&&cpu==='Rock')||
+(move==='Scissors'&&cpu==='Paper')
+?'You win this round! 🎉':'Computer wins this round!');
+
+if(result.startsWith('You win'))player++;
+if(result.startsWith('Computer wins'))computer++;
+
+message.textContent=move+' vs '+cpu+' — '+result;
+info.textContent='You: '+player+' | Computer: '+computer;
 }
-function closeResult(){document.getElementById("overlay").classList.remove("show")}
-function createRoom(){const code=Math.random().toString(36).slice(2,8).toUpperCase();document.getElementById("roomCode").textContent="ROOM CODE: "+code+" ("+document.getElementById("roomCount").value+" players)"}
-function joinRoom(){const c=document.getElementById("joinCode").value.trim().toUpperCase();document.getElementById("joinMsg").textContent=c?"Code "+c+" entered. Online room lookup is not connected yet.":"Please enter a room code."}
-updateCoins();
+
+btn('✊ Rock',()=>play('Rock'));
+btn('✋ Paper',()=>play('Paper'));
+btn('✌️ Scissors',()=>play('Scissors'));
+btn('Reset',rpsSetup);
+}
+
+// 4. TIC TAC TOE
+function ticSetup(){
+setup('❌ Tic-Tac-Toe','Two players on the same device. X goes first.');
+let cells=Array(9).fill('');
+let turn='X',done=false;
+
+const board=document.createElement('div');
+board.className='board';
+controls.appendChild(board);
+
+const wins=[
+[0,1,2],[3,4,5],[6,7,8],
+[0,3,6],[1,4,7],[2,5,8],
+[0,4,8],[2,4,6]
+];
+
+cells.forEach((_,i)=>{
+const b=document.createElement('button');
+b.textContent='';
+b.setAttribute('aria-label','Cell '+(i+1));
+
+b.onclick=()=>{
+if(done||cells[i])return;
+cells[i]=turn;
+b.textContent=turn;
+
+const win=wins.some(line=>line.every(n=>cells[n]===turn));
+
+if(win){
+message.textContent=turn+' wins! 🏆';
+done=true;
+}else if(cells.every(Boolean)){
+message.textContent="It's a draw!";
+done=true;
+}else{
+turn=turn==='X'?'O':'X';
+message.textContent=turn+"'s turn";
+}
+};
+
+board.appendChild(b);
+});
+
+btn('Restart',ticSetup);
+}
+
+// 5. MEMORY MATCH
+function memorySetup(){
+setup('🧠 Memory Match','Find all matching pairs with as few moves as possible.');
+
+const icons=['🐸','🚀','🍕','🐼','⚽','🎲','🍉','👾'];
+const deck=[...icons,...icons].sort(()=>Math.random()-.5);
+
+let first=null,lock=false,moves=0,matches=0;
+const board=document.createElement('div');
+board.className='memory';
+controls.appendChild(board);
+
+deck.forEach((emoji)=>{
+const b=document.createElement('button');
+b.textContent='?';
+b.setAttribute('aria-label','Hidden card');
+
+b.onclick=()=>{
+if(lock||b===first||b.dataset.matched==='yes'||b.textContent!=='?')return;
+
+b.textContent=emoji;
+
+if(!first){
+first=b;
+return;
+}
+
+moves++;
+info.textContent='Moves: '+moves;
+lock=true;
+
+if(first.textContent===b.textContent){
+first.dataset.matched='yes';
+b.dataset.matched='yes';
+first=null;
+lock=false;
+matches++;
+
+if(matches===icons.length){
+message.textContent='You matched every pair! 🏆';
+}
+}else{
+const previous=first;
+first=null;
+timeout=setTimeout(()=>{
+previous.textContent='?';
+b.textContent='?';
+lock=false;
+timeout=null;
+},700);
+}
+};
+
+board.appendChild(b);
+});
+
+message.textContent='Find the pairs!';
+btn('Restart',memorySetup);
+}
+
+// 6. REACTION TEST
+function reactionSetup(){
+setup('🚀 Reaction Test','Press Start, wait for green, then click as fast as you can.');
+
+let state='idle',start=0;
+const b=btn('Start Test',startTest);
+
+function startTest(){
+clearTimers();
+state='waiting';
+b.disabled=true;
+b.textContent='Wait for green...';
+message.textContent='Wait... do not click yet!';
+panel.style.background='#121a30';
+
+timeout=setTimeout(()=>{
+state='go';
+start=performance.now();
+panel.style.background='#075b42';
+message.textContent='CLICK NOW! 🟢';
+b.disabled=false;
+b.textContent='CLICK!';
+},1200+Math.random()*3000);
+}
+
+b.onclick=()=>{
+if(state==='waiting'){
+clearTimers();
+state='idle';
+b.disabled=false;
+b.textContent='Try Again';
+message.textContent='Too early! Wait for green.';
+panel.style.background='#121a30';
+}else if(state==='go'){
+const ms=Math.round(performance.now()-start);
+state='done';
+clearTimers();
+b.disabled=false;
+b.textContent='Play Again';
+message.textContent=ms+' ms! 🎉';
+info.textContent=ms<250?'Excellent reflexes!':'Try to beat your time!';
+panel.style.background='#121a30';
+}else if(state==='done'||state==='idle'){
+startTest();
+}
+};
+}
+
+// SEARCH GAMES
+document.getElementById('search').addEventListener('input',e=>{
+const q=e.target.value.toLowerCase().trim();
+document.querySelectorAll('.card').forEach(card=>{
+card.hidden=!card.dataset.name.includes(q);
+});
+});
 </script>
 </body>
 </html>
