@@ -1,11 +1,10 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>GameGola - Free Online Games</title>
-<meta name="description" content="Play free online games at GameGola. Enjoy arcade, puzzle and reaction games on any device.">
+<meta name="description" content="Play free online games at GameGola. Enjoy arcade, puzzle, card and reaction games on any device.">
 <style>
 *{box-sizing:border-box}
 body{margin:0;background:#090d1b;color:#fff;font-family:Arial,sans-serif}
@@ -41,6 +40,253 @@ button:disabled{opacity:.5;cursor:default}
 .status{color:#bac7e1;min-height:24px}
 footer{text-align:center;padding:25px;color:#98a8c8;border-top:1px solid #293655}
 [hidden]{display:none!important}
+
+/* --- THULLA GAME CASINO BOARD STYLING --- */
+:root {
+  --thulla-card-w: 52px;
+  --thulla-card-h: 75px;
+  --gold: #f39c12;
+}
+
+#thulla-game-wrapper {
+  width: 100%;
+  max-width: 900px;
+  height: 520px;
+  background: radial-gradient(circle at center, #1b2a38 0%, #080d13 100%);
+  border-radius: 16px;
+  border: 2px solid #293655;
+  position: relative;
+  overflow: hidden;
+  margin: 10px auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.t-top-bar {
+  height: 40px;
+  background: rgba(0,0,0,0.6);
+  border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 15px;
+  z-index: 20;
+}
+
+.t-btn {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid var(--gold);
+  color: #fff;
+  padding: 4px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.t-table-container {
+  flex: 1;
+  position: relative;
+  margin: 10px 15px;
+  background: radial-gradient(ellipse at center, #157343 0%, #094023 70%, #052413 100%);
+  border: 8px solid #5a3a1a;
+  outline: 2px solid var(--gold);
+  border-radius: 120px;
+  box-shadow: inset 0 0 40px rgba(0,0,0,0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.t-table-logo {
+  position: absolute;
+  font-size: 1.4rem;
+  font-weight: 900;
+  color: rgba(255,255,255,0.06);
+  letter-spacing: 4px;
+  pointer-events: none;
+}
+
+.t-deck-stack {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: var(--thulla-card-w);
+  height: var(--thulla-card-h);
+  z-index: 5;
+}
+
+.t-deck-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(45deg, #900, #900 6px, #b00 6px, #b00 12px);
+  border: 1px solid #fff;
+  border-radius: 4px;
+}
+
+.t-player-pod {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 10;
+}
+
+.t-pod-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #2c3e50;
+  border: 2px solid #7f8c8d;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
+  position: relative;
+  transition: all 0.3s;
+}
+
+.t-player-pod.active .t-pod-avatar {
+  border-color: var(--gold);
+  box-shadow: 0 0 15px var(--gold);
+  transform: scale(1.1);
+}
+
+.t-pod-name {
+  font-size: 0.7rem;
+  font-weight: bold;
+  margin-top: 2px;
+  background: rgba(0,0,0,0.7);
+  padding: 1px 6px;
+  border-radius: 8px;
+}
+
+.t-pod-card-count {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: var(--gold);
+  color: #000;
+  font-weight: bold;
+  font-size: 0.7rem;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#t-pod-0 { bottom: 8px; left: 50%; transform: translateX(-50%); }
+#t-pod-1 { left: 15px; top: 50%; transform: translateY(-50%); }
+#t-pod-2 { top: 8px; left: 50%; transform: translateX(-50%); }
+#t-pod-3 { right: 15px; top: 50%; transform: translateY(-50%); }
+
+.t-center-played-area {
+  position: absolute;
+  width: 180px;
+  height: 180px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.t-played-card-slot {
+  position: absolute;
+  width: var(--thulla-card-w);
+  height: var(--thulla-card-h);
+  transition: all 0.3s ease;
+}
+
+.t-slot-0 { bottom: 5px; }
+.t-slot-1 { left: 5px; }
+.t-slot-2 { top: 5px; }
+.t-slot-3 { right: 5px; }
+
+.t-card {
+  width: var(--thulla-card-w);
+  height: var(--thulla-card-h);
+  background: #fff;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.4);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 3px;
+  font-weight: bold;
+  font-size: 0.75rem;
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.2s;
+}
+
+.t-card.red { color: #e74c3c; }
+.t-card.black { color: #2c3e50; }
+.t-card-corner { line-height: 1; font-size: 0.7rem; }
+.t-card-suit-center { position: absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-size: 1.2rem; }
+.t-card:hover { transform: translateY(-8px); }
+
+.t-human-hand-container {
+  height: 95px;
+  padding: 4px 15px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  background: rgba(0,0,0,0.5);
+  position: relative;
+}
+
+.t-human-hand {
+  display: flex;
+  justify-content: center;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.t-human-hand .t-card {
+  margin-left: -15px;
+}
+
+.t-human-hand .t-card:first-child { margin-left: 0; }
+.t-human-hand .t-card.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.t-thulla-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  z-index: 100;
+  pointer-events: none;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  text-align: center;
+}
+
+.t-thulla-overlay.show {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.t-thulla-text {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: #ff2a2a;
+  text-shadow: 0 0 15px #000, 0 0 30px #ff0000;
+  letter-spacing: 3px;
+}
+
+.t-thulla-sub {
+  font-size: 0.9rem;
+  color: #fff;
+  background: rgba(0,0,0,0.8);
+  padding: 3px 12px;
+  border-radius: 15px;
+  border: 1px solid #ff2a2a;
+}
 </style>
 </head>
 <body>
@@ -58,6 +304,14 @@ footer{text-align:center;padding:25px;color:#98a8c8;border-top:1px solid #293655
 <main id="games">
 <h2>🔥 All Games</h2>
 <div class="games" id="cards">
+
+<!-- NEW GAME CARD: BHABHI THULLA -->
+<article class="card" data-name="bhabhi thulla card game strategy">
+<div class="emoji">♠️</div><h3>Bhabhi / Thulla</h3>
+<p>Classic South Asian getaway card game.</p>
+<button onclick="openGame('thulla')">Play Now ▶</button>
+</article>
+
 <article class="card" data-name="tap challenge arcade">
 <div class="emoji">⚡</div><h3>Tap Challenge</h3>
 <p>Tap as fast as possible in 10 seconds.</p>
@@ -143,6 +397,7 @@ return b;
 }
 
 function openGame(g){
+if(g==='thulla')thullaSetup();
 if(g==='tap')tapSetup();
 if(g==='guess')guessSetup();
 if(g==='rps')rpsSetup();
@@ -156,6 +411,382 @@ clearTimers();
 active=false;
 panel.hidden=true;
 controls.innerHTML='';
+}
+
+/* =========================================================
+   7. BHABHI THULLA CARD GAME INTEGRATION CODE
+   ========================================================= */
+const tAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+function tPlayTone(freq, duration, type='sine') {
+  try {
+    const osc = tAudioCtx.createOscillator();
+    const gain = tAudioCtx.createGain();
+    osc.type = type;
+    osc.frequency.value = freq;
+    osc.connect(gain);
+    gain.connect(tAudioCtx.destination);
+    osc.start();
+    gain.gain.exponentialRampToValueAtTime(0.00001, tAudioCtx.currentTime + duration);
+    osc.stop(tAudioCtx.currentTime + duration);
+  } catch(e){}
+}
+
+function tPlayCardSound() { tPlayTone(400, 0.08, 'triangle'); }
+function tPlayDealSound() { tPlayTone(600, 0.05, 'sine'); }
+function tPlayThullaSound() {
+  tPlayTone(150, 0.4, 'sawtooth');
+  setTimeout(() => tPlayTone(100, 0.5, 'sawtooth'), 150);
+  if ('speechSynthesis' in window) {
+    const msg = new SpeechSynthesisUtterance("Uh Oh... Thulla!");
+    msg.pitch = 0.8;
+    msg.rate = 1;
+    window.speechSynthesis.speak(msg);
+  }
+}
+function tPlaySweepSound() { tPlayTone(800, 0.15, 'sine'); }
+
+const T_SUITS = ['S', 'H', 'C', 'D'];
+const T_SUIT_ICONS = { 'S': '♠', 'H': '♥', 'C': '♣', 'D': '♦' };
+const T_RANKS = ['2','3','4','5','6','7','8','9','10','J','Q','K','A'];
+const T_RANK_VALUES = {'2':2,'3':3,'4':4,'5':5,'6':6,'7':7,'8':8,'9':9,'10':10,'J':11,'Q':12,'K':13,'A':14};
+
+let tPlayersHand = [[], [], [], []];
+let tActiveTurn = -1;
+let tLeadSuit = null;
+let tCurrentTrick = [];
+let tIsAnimating = false;
+
+function thullaSetup() {
+  setup('♠️ Bhabhi / Thulla Card Game', 'Get rid of all your cards! High spade player leads.');
+  message.textContent = 'Casino Table Ready!';
+
+  const wrapper = document.createElement('div');
+  wrapper.id = 'thulla-game-wrapper';
+  wrapper.innerHTML = `
+    <div class="t-top-bar">
+      <div style="font-weight: bold; color: var(--gold);" id="t-status">Dealing Cards...</div>
+      <button class="t-btn" onclick="tSortHand()">Sort Cards</button>
+    </div>
+    <div class="t-table-container">
+      <div class="t-table-logo">GAMEGOLA VIP</div>
+      <div class="t-deck-stack">
+        <div class="t-deck-card-back" style="top:0; left:0;"></div>
+        <div class="t-deck-card-back" style="top:-2px; left:-2px;"></div>
+      </div>
+      <div class="t-player-pod" id="t-pod-0">
+        <div class="t-pod-avatar">👤<div class="t-pod-card-count" id="t-count-0">0</div></div>
+        <div class="t-pod-name">YOU</div>
+      </div>
+      <div class="t-player-pod" id="t-pod-1">
+        <div class="t-pod-avatar">🤖<div class="t-pod-card-count" id="t-count-1">0</div></div>
+        <div class="t-pod-name">Bot 1</div>
+      </div>
+      <div class="t-player-pod" id="t-pod-2">
+        <div class="t-pod-avatar">🤖<div class="t-pod-card-count" id="t-count-2">0</div></div>
+        <div class="t-pod-name">Bot 2</div>
+      </div>
+      <div class="t-player-pod" id="t-pod-3">
+        <div class="t-pod-avatar">🤖<div class="t-pod-card-count" id="t-count-3">0</div></div>
+        <div class="t-pod-name">Bot 3</div>
+      </div>
+      <div class="t-center-played-area">
+        <div class="t-played-card-slot t-slot-0" id="t-slot-0"></div>
+        <div class="t-played-card-slot t-slot-1" id="t-slot-1"></div>
+        <div class="t-played-card-slot t-slot-2" id="t-slot-2"></div>
+        <div class="t-played-card-slot t-slot-3" id="t-slot-3"></div>
+      </div>
+      <div class="t-thulla-overlay" id="t-banner">
+        <div class="t-thulla-text">THULLA!</div>
+        <div class="t-thulla-sub" id="t-banner-desc">Penalty hit!</div>
+      </div>
+    </div>
+    <div class="t-human-hand-container">
+      <div class="t-human-hand" id="t-human-hand"></div>
+    </div>
+  `;
+  controls.appendChild(wrapper);
+  tInitDeal();
+}
+
+function tInitDeal() {
+  tPlayersHand = [[], [], [], []];
+  tCurrentTrick = [];
+  tLeadSuit = null;
+  document.getElementById('t-human-hand').innerHTML = '';
+  for(let i=0; i<4; i++) document.getElementById(`t-slot-${i}`).innerHTML = '';
+
+  let deck = [];
+  T_SUITS.forEach(s => {
+    T_RANKS.forEach(r => {
+      deck.push({ rank: r, suit: s, val: T_RANK_VALUES[r] });
+    });
+  });
+  deck.sort(() => Math.random() - 0.5);
+
+  let p = 0;
+  while(deck.length > 0) {
+    tPlayersHand[p].push(deck.pop());
+    p = (p + 1) % 4;
+  }
+
+  tUpdatePodCounts();
+
+  let dealCount = 0;
+  let interval = setInterval(() => {
+    tPlayDealSound();
+    dealCount++;
+    if(dealCount >= 10) {
+      clearInterval(interval);
+      tRenderHumanHand();
+      tDetermineSeniorLead();
+    }
+  }, 50);
+}
+
+function tDetermineSeniorLead() {
+  let leader = -1;
+  let highestVal = -1;
+
+  for(let p=0; p<4; p++) {
+    tPlayersHand[p].forEach(c => {
+      if(c.suit === 'S' && c.val > highestVal) {
+        highestVal = c.val;
+        leader = p;
+      }
+    });
+  }
+
+  tActiveTurn = leader;
+  let pName = tActiveTurn === 0 ? 'YOU' : `Bot ${tActiveTurn}`;
+  tUpdateStatus(`${pName} has highest Spade! Senior Lead starts.`);
+  tHighlightActivePod();
+
+  if(tActiveTurn !== 0) {
+    setTimeout(tBotPlayTurn, 1000);
+  }
+}
+
+function tHighlightActivePod() {
+  for(let i=0; i<4; i++) {
+    const pod = document.getElementById(`t-pod-${i}`);
+    if(pod) {
+      if(i === tActiveTurn) pod.classList.add('active');
+      else pod.classList.remove('active');
+    }
+  }
+}
+
+function tUpdatePodCounts() {
+  for(let i=0; i<4; i++) {
+    const cnt = document.getElementById(`t-count-${i}`);
+    if(cnt) cnt.innerText = tPlayersHand[i].length;
+  }
+}
+
+function tUpdateStatus(msg) {
+  const st = document.getElementById('t-status');
+  if(st) st.innerText = msg;
+}
+
+function tRenderHumanHand() {
+  const container = document.getElementById('t-human-hand');
+  if(!container) return;
+  container.innerHTML = '';
+
+  const hasLeadSuit = tLeadSuit ? tPlayersHand[0].some(c => c.suit === tLeadSuit) : true;
+
+  tPlayersHand[0].forEach((card, index) => {
+    const cardEl = document.createElement('div');
+    const isRed = (card.suit === 'H' || card.suit === 'D');
+    cardEl.className = `t-card ${isRed ? 'red' : 'black'}`;
+    
+    let playable = true;
+    if(tActiveTurn !== 0 || tIsAnimating) playable = false;
+    else if(tLeadSuit && hasLeadSuit && card.suit !== tLeadSuit) playable = false;
+
+    if(!playable && tActiveTurn === 0) cardEl.classList.add('disabled');
+
+    cardEl.innerHTML = `
+      <div class="t-card-corner">${card.rank}<br>${T_SUIT_ICONS[card.suit]}</div>
+      <div class="t-card-suit-center">${T_SUIT_ICONS[card.suit]}</div>
+      <div class="t-card-corner" style="transform: rotate(180deg);">${card.rank}<br>${T_SUIT_ICONS[card.suit]}</div>
+    `;
+
+    if(playable) {
+      cardEl.onclick = () => tPlayCard(0, card, index);
+    }
+    container.appendChild(cardEl);
+  });
+}
+
+function tSortHand() {
+  tPlayersHand[0].sort((a,b) => {
+    if(a.suit !== b.suit) return a.suit.localeCompare(b.suit);
+    return b.val - a.val;
+  });
+  tRenderHumanHand();
+}
+
+function tPlayCard(playerIndex, card, cardIndexInHand) {
+  if(tIsAnimating) return;
+  tIsAnimating = true;
+
+  tPlayersHand[playerIndex].splice(cardIndexInHand, 1);
+  tUpdatePodCounts();
+  tPlayCardSound();
+
+  if(tCurrentTrick.length === 0) {
+    tLeadSuit = card.suit;
+  }
+
+  tCurrentTrick.push({ player: playerIndex, card: card });
+  tRenderSlotCard(playerIndex, card);
+
+  if(playerIndex === 0) tRenderHumanHand();
+
+  if(card.suit !== tLeadSuit) {
+    setTimeout(() => tHandleThullaEvent(playerIndex), 600);
+    return;
+  }
+
+  setTimeout(() => {
+    tIsAnimating = false;
+    if(tCurrentTrick.length === 4) {
+      tHandleTrickComplete();
+    } else {
+      tActiveTurn = (tActiveTurn + 1) % 4;
+      tHighlightActivePod();
+      let pName = tActiveTurn === 0 ? 'YOUR TURN' : `Bot ${tActiveTurn}'s turn`;
+      tUpdateStatus(pName);
+
+      if(tActiveTurn !== 0) {
+        setTimeout(tBotPlayTurn, 800);
+      }
+    }
+  }, 500);
+}
+
+function tRenderSlotCard(playerIndex, card) {
+  const slot = document.getElementById(`t-slot-${playerIndex}`);
+  if(!slot) return;
+  const isRed = (card.suit === 'H' || card.suit === 'D');
+  slot.innerHTML = `
+    <div class="t-card ${isRed ? 'red' : 'black'}" style="cursor:default;">
+      <div class="t-card-corner">${card.rank}<br>${T_SUIT_ICONS[card.suit]}</div>
+      <div class="t-card-suit-center">${T_SUIT_ICONS[card.suit]}</div>
+      <div class="t-card-corner" style="transform: rotate(180deg);">${card.rank}<br>${T_SUIT_ICONS[card.suit]}</div>
+    </div>
+  `;
+}
+
+function tHandleThullaEvent(thullaThrower) {
+  tPlayThullaSound();
+  const banner = document.getElementById('t-banner');
+  const desc = document.getElementById('t-banner-desc');
+  const throwerName = thullaThrower === 0 ? 'YOU' : `Bot ${thullaThrower}`;
+  if(desc) desc.innerText = `${throwerName} played Thulla! Penalized 2 Cards!`;
+  if(banner) banner.classList.add('show');
+
+  const leadPlay = tCurrentTrick[0];
+  const victimPlayer = leadPlay.player;
+  const thullaHitPlay = tCurrentTrick[tCurrentTrick.length - 1];
+
+  tPlayersHand[victimPlayer].push(leadPlay.card);
+  tPlayersHand[victimPlayer].push(thullaHitPlay.card);
+
+  setTimeout(() => {
+    if(banner) banner.classList.remove('show');
+    for(let i=0; i<4; i++) {
+      const s = document.getElementById(`t-slot-${i}`);
+      if(s) s.innerHTML = '';
+    }
+
+    tCurrentTrick = [];
+    tLeadSuit = null;
+    tUpdatePodCounts();
+    if(victimPlayer === 0) tRenderHumanHand();
+
+    tActiveTurn = victimPlayer;
+    tHighlightActivePod();
+    tIsAnimating = false;
+
+    let vName = victimPlayer === 0 ? 'YOUR TURN' : `Bot ${victimPlayer}'s turn`;
+    tUpdateStatus(`Thulla Handled! ${vName} leads next turn.`);
+
+    if(tActiveTurn !== 0) {
+      setTimeout(tBotPlayTurn, 800);
+    }
+  }, 1600);
+}
+
+function tHandleTrickComplete() {
+  tPlaySweepSound();
+  tUpdateStatus("Trick Completed! Sweeping table...");
+
+  let highestVal = -1;
+  let winnerPlayer = -1;
+
+  tCurrentTrick.forEach(play => {
+    if(play.card.suit === tLeadSuit && play.card.val > highestVal) {
+      highestVal = play.card.val;
+      winnerPlayer = play.player;
+    }
+  });
+
+  setTimeout(() => {
+    for(let i=0; i<4; i++) {
+      const s = document.getElementById(`t-slot-${i}`);
+      if(s) s.innerHTML = '';
+    }
+    tCurrentTrick = [];
+    tLeadSuit = null;
+
+    tActiveTurn = winnerPlayer;
+    tHighlightActivePod();
+    tIsAnimating = false;
+
+    let wName = winnerPlayer === 0 ? 'YOU' : `Bot ${winnerPlayer}`;
+    tUpdateStatus(`${wName} won the trick and leads next!`);
+
+    if(tActiveTurn !== 0) {
+      setTimeout(tBotPlayTurn, 800);
+    }
+  }, 1000);
+}
+
+function tBotPlayTurn() {
+  if(tActiveTurn === 0 || tIsAnimating) return;
+
+  const hand = tPlayersHand[tActiveTurn];
+  if(!hand || hand.length === 0) return;
+
+  let chosenIndex = -1;
+
+  if(!tLeadSuit) {
+    chosenIndex = 0;
+    let maxV = -1;
+    hand.forEach((c, idx) => {
+      if(c.val > maxV) { maxV = c.val; chosenIndex = idx; }
+    });
+  } else {
+    const sameSuitIndices = [];
+    hand.forEach((c, idx) => {
+      if(c.suit === tLeadSuit) sameSuitIndices.push(idx);
+    });
+
+    if(sameSuitIndices.length > 0) {
+      chosenIndex = sameSuitIndices[Math.floor(Math.random() * sameSuitIndices.length)];
+    } else {
+      chosenIndex = 0;
+      let maxV = -1;
+      hand.forEach((c, idx) => {
+        if(c.val > maxV) { maxV = c.val; chosenIndex = idx; }
+      });
+    }
+  }
+
+  tPlayCard(tActiveTurn, hand[chosenIndex], chosenIndex);
 }
 
 // 1. TAP CHALLENGE
