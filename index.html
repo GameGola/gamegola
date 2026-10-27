@@ -41,7 +41,7 @@ button:disabled{opacity:.5;cursor:default}
 footer{text-align:center;padding:25px;color:#98a8c8;border-top:1px solid #293655}
 [hidden]{display:none!important}
 
-/* --- THULLA GAME FULL CASINO BOARD & MENU STYLING --- */
+/* --- THULLA GAME STYLING --- */
 :root {
   --thulla-card-w: 54px;
   --thulla-card-h: 78px;
@@ -51,7 +51,7 @@ footer{text-align:center;padding:25px;color:#98a8c8;border-top:1px solid #293655
 #thulla-game-wrapper {
   width: 100%;
   max-width: 900px;
-  height: 560px;
+  height: 570px;
   background: radial-gradient(circle at center, #1b2a38 0%, #080d13 100%);
   border-radius: 16px;
   border: 2px solid #293655;
@@ -79,7 +79,7 @@ footer{text-align:center;padding:25px;color:#98a8c8;border-top:1px solid #293655
   text-shadow: 0 4px 15px rgba(243, 156, 18, 0.5);
   margin-bottom: 5px;
 }
-.t-subtitle { font-size: 1rem; color: #a0c4ab; margin-bottom: 15px; }
+.t-subtitle { font-size: 0.95rem; color: #a0c4ab; margin-bottom: 12px; }
 
 .t-coins-bar {
   background: rgba(0,0,0,0.6);
@@ -88,48 +88,49 @@ footer{text-align:center;padding:25px;color:#98a8c8;border-top:1px solid #293655
   padding: 6px 16px;
   font-weight: bold;
   color: #ffd700;
-  margin-bottom: 20px;
-  font-size: 1.1rem;
+  margin-bottom: 15px;
+  font-size: 1rem;
 }
 
-.t-bet-selector { margin-bottom: 20px; }
-.t-bet-title { font-size: 0.9rem; color: #ccc; margin-bottom: 8px; }
-.t-bet-buttons { display: flex; gap: 10px; justify-content: center; }
+.t-bet-selector { margin-bottom: 15px; }
+.t-bet-title { font-size: 0.85rem; color: #ccc; margin-bottom: 6px; }
+.t-bet-buttons { display: flex; gap: 8px; justify-content: center; }
 .t-bet-btn {
   background: #112217;
   border: 1px solid var(--gold);
   color: #fff;
-  padding: 6px 14px;
+  padding: 5px 12px;
   border-radius: 8px;
   cursor: pointer;
   font-weight: bold;
+  font-size: 0.85rem;
 }
 .t-bet-btn.selected { background: var(--gold); color: #000; }
 
 .t-menu-grid {
   display: grid;
-  grid-template-columns: repeat(2, 150px);
-  gap: 15px;
+  grid-template-columns: repeat(2, 145px);
+  gap: 12px;
 }
 .t-menu-btn {
   background: linear-gradient(145deg, #1e4d30, #0c2b19);
   border: 2px solid var(--gold);
-  border-radius: 14px;
-  padding: 15px 10px;
+  border-radius: 12px;
+  padding: 12px 8px;
   cursor: pointer;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.5);
   transition: all 0.2s;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
 }
 .t-menu-btn:hover {
-  transform: translateY(-4px) scale(1.03);
+  transform: translateY(-3px) scale(1.03);
   background: linear-gradient(145deg, #27633e, #123d24);
 }
-.t-menu-icon { font-size: 1.8rem; }
-.t-menu-label { font-weight: bold; font-size: 0.85rem; color: #fff; }
+.t-menu-icon { font-size: 1.6rem; }
+.t-menu-label { font-weight: bold; font-size: 0.8rem; color: #fff; }
 
 .t-top-bar {
   height: 40px;
@@ -475,7 +476,7 @@ controls.innerHTML='';
 }
 
 /* =========================================================
-   BHABHI THULLA CARD GAME CODE (SAFE TURN SKIP FOR EMPTY HANDS)
+   BHABHI THULLA CARD GAME CODE WITH CREATE ROOM & 4 BUTTON MENU
    ========================================================= */
 const tAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
@@ -527,6 +528,7 @@ function thullaSetup() {
   const wrapper = document.createElement('div');
   wrapper.id = 'thulla-game-wrapper';
   wrapper.innerHTML = `
+    <!-- MAIN ROOM MENU SCREEN (4 BUTTONS LAYOUT) -->
     <div id="t-menu-screen" class="t-screen active">
       <div class="t-logo-title">BHABHI THULLA</div>
       <div class="t-subtitle">Classic South Asian Getaway Card Game</div>
@@ -544,9 +546,17 @@ function thullaSetup() {
       </div>
 
       <div class="t-menu-grid">
-        <div class="t-menu-btn" onclick="tStartGame()">
+        <div class="t-menu-btn" onclick="tStartGame('classic')">
           <div class="t-menu-icon">♠️</div>
           <div class="t-menu-label">PLAY NOW</div>
+        </div>
+        <div class="t-menu-btn" onclick="tCreatePrivateRoom()">
+          <div class="t-menu-icon">🔒</div>
+          <div class="t-menu-label">CREATE ROOM</div>
+        </div>
+        <div class="t-menu-btn" onclick="tMultiplayerMatch()">
+          <div class="t-menu-icon">👥</div>
+          <div class="t-menu-label">MULTIPLAYER</div>
         </div>
         <div class="t-menu-btn" onclick="tAddCoins()">
           <div class="t-menu-icon">🪙</div>
@@ -555,6 +565,7 @@ function thullaSetup() {
       </div>
     </div>
 
+    <!-- PLAYING TABLE SCREEN -->
     <div id="t-play-screen" class="t-screen">
       <div class="t-top-bar">
         <button class="t-btn" onclick="tBackToThullaMenu()">← Room Menu</button>
@@ -614,7 +625,18 @@ function tAddCoins() {
   alert("Added 1,000 Free Coins!");
 }
 
-function tStartGame() {
+function tCreatePrivateRoom() {
+  const roomCode = Math.floor(100000 + Math.random() * 900000);
+  alert(`Private Room Created! 🎉\n\nRoom Code: ${roomCode}\nShare this code with your friends to play!`);
+  tStartGame('private');
+}
+
+function tMultiplayerMatch() {
+  alert("Searching for online players... Entering Room!");
+  tStartGame('multi');
+}
+
+function tStartGame(mode) {
   if(userCoins < selectedBet) {
     alert("Insufficient Coins!");
     return;
@@ -685,9 +707,7 @@ function tDetermineSeniorLead() {
   tAdvanceToValidTurn();
 }
 
-/* HELPER TO SKIP PLAYERS WITH 0 CARDS */
 function tAdvanceToValidTurn() {
-  // Loop to find next player who still has cards
   let checks = 0;
   while(tPlayersHand[tActiveTurn].length === 0 && checks < 4) {
     tActiveTurn = (tActiveTurn + 1) % 4;
@@ -793,11 +813,10 @@ function tPlayCard(playerIndex, card, cardIndexInHand) {
   tRenderSlotCard(playerIndex, card);
   tRenderHumanHand();
 
-  // Check Win Condition for User
   if(playerIndex === 0 && tPlayersHand[0].length === 0) {
     userCoins += selectedBet * 2;
     document.getElementById('t-user-coins').innerText = userCoins;
-    alert("🎉 Congratulations! You won the match and doubled your coins!");
+    alert("🎉 Congratulations! You won the match!");
     tBackToThullaMenu();
     return;
   }
@@ -929,136 +948,15 @@ function tBotPlayTurn() {
   tPlayCard(tActiveTurn, hand[chosenIndex], chosenIndex);
 }
 
-// Other Game Gola functions unchanged...
-function tapSetup(){
-setup('⚡ Tap Challenge','Tap the button as many times as possible in 10 seconds.');
-message.textContent='Ready to tap?';
-btn('Start Game',tapStart);
-}
-function tapStart(){
-clearTimers();
-let score=0,left=10;
-active=true;
-controls.innerHTML='';
-const b=btn('TAP! ⚡',()=>{
-if(active){
-score++;
-info.textContent='Score: '+score+' | Time: '+left+'s';
-}
-});
-message.textContent='GO!';
-info.textContent='Score: 0 | Time: 10s';
-timer=setInterval(()=>{
-left--;
-info.textContent='Score: '+score+' | Time: '+left+'s';
-if(left<=0){
-clearTimers();
-active=false;
-b.disabled=true;
-message.textContent='Time is up! 🎉';
-info.textContent='Final score: '+score;
-btn('Play Again',tapSetup);
-}
-},1000);
-}
-function guessSetup(){
-setup('🎯 Number Guess','Guess a whole number from 1 to 100.');
-const input=document.createElement('input');
-input.type='number'; input.min=1; input.max=100; input.placeholder='1 to 100';
-const secret=Math.floor(Math.random()*100)+1;
-let tries=0;
-const b=btn('Guess!',check);
-controls.prepend(input);
-function check(){
-const n=Number(input.value);
-if(!input.value||n<1||n>100){ message.textContent='Enter 1 to 100.'; return; }
-tries++;
-info.textContent='Attempts: '+tries;
-if(n===secret){ message.textContent='Correct! You win! 🏆'; b.disabled=true; btn('Play Again',guessSetup); }
-else { message.textContent=n<secret?'Try higher ↑':'Try lower ↓'; }
-}
-}
-function rpsSetup(){
-setup('✊ Rock Paper Scissors','Choose rock, paper, or scissors.');
-let player=0,computer=0;
-info.textContent='You: 0 | Computer: 0';
-function play(move){
-const choices=['Rock','Paper','Scissors'];
-const cpu=choices[Math.floor(Math.random()*3)];
-let result=move===cpu?'Draw':((move==='Rock'&&cpu==='Scissors')||(move==='Paper'&&cpu==='Rock')||(move==='Scissors'&&cpu==='Paper')?'You win! 🎉':'Computer wins!');
-if(result.startsWith('You'))player++;
-if(result.startsWith('Computer'))computer++;
-message.textContent=move+' vs '+cpu+' — '+result;
-info.textContent='You: '+player+' | Computer: '+computer;
-}
-btn('✊ Rock',()=>play('Rock'));
-btn('✋ Paper',()=>play('Paper'));
-btn('✌️ Scissors',()=>play('Scissors'));
-btn('Reset',rpsSetup);
-}
-function ticSetup(){
-setup('❌ Tic-Tac-Toe','Two players on device.');
-let cells=Array(9).fill(''),turn='X',done=false;
-const board=document.createElement('div');
-board.className='board';
-controls.appendChild(board);
-const wins=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
-cells.forEach((_,i)=>{
-const b=document.createElement('button');
-b.onclick=()=>{
-if(done||cells[i])return;
-cells[i]=turn; b.textContent=turn;
-if(wins.some(l=>l.every(n=>cells[n]===turn))){ message.textContent=turn+' wins! 🏆'; done=true; }
-else if(cells.every(Boolean)){ message.textContent="Draw!"; done=true; }
-else { turn=turn==='X'?'O':'X'; message.textContent=turn+"'s turn"; }
-};
-board.appendChild(b);
-});
-btn('Restart',ticSetup);
-}
-function memorySetup(){
-setup('🧠 Memory Match','Find matching pairs.');
-const icons=['🐸','🚀','🍕','🐼','⚽','🎲','🍉','👾'];
-const deck=[...icons,...icons].sort(()=>Math.random()-.5);
-let first=null,lock=false,moves=0,matches=0;
-const board=document.createElement('div');
-board.className='memory';
-controls.appendChild(board);
-deck.forEach(emoji=>{
-const b=document.createElement('button');
-b.textContent='?';
-b.onclick=()=>{
-if(lock||b===first||b.dataset.matched==='yes'||b.textContent!=='?')return;
-b.textContent=emoji;
-if(!first){ first=b; return; }
-moves++; info.textContent='Moves: '+moves; lock=true;
-if(first.textContent===b.textContent){ first.dataset.matched='yes'; b.dataset.matched='yes'; first=null; lock=false; matches++; if(matches===icons.length)message.textContent='You win! 🏆'; }
-else { const prev=first; first=null; timeout=setTimeout(()=>{ prev.textContent='?'; b.textContent='?'; lock=false; },700); }
-};
-board.appendChild(b);
-});
-btn('Restart',memorySetup);
-}
-function reactionSetup(){
-setup('🚀 Reaction Test','Click when green.');
-let state='idle',start=0;
-const b=btn('Start Test',startTest);
-function startTest(){
-clearTimers(); state='waiting'; b.disabled=true; b.textContent='Wait...'; message.textContent='Wait for green!';
-timeout=setTimeout(()=>{ state='go'; start=performance.now(); panel.style.background='#075b42'; message.textContent='CLICK NOW! 🟢'; b.disabled=false; b.textContent='CLICK!'; },1200+Math.random()*3000);
-}
-b.onclick=()=>{
-if(state==='waiting'){ clearTimers(); state='idle'; b.disabled=false; b.textContent='Try Again'; message.textContent='Too early!'; panel.style.background='#121a30'; }
-else if(state==='go'){ const ms=Math.round(performance.now()-start); state='done'; clearTimers(); b.disabled=false; b.textContent='Play Again'; message.textContent=ms+' ms! 🎉'; panel.style.background='#121a30'; }
-else { startTest(); }
-};
-}
-document.getElementById('search').addEventListener('input',e=>{
-const q=e.target.value.toLowerCase().trim();
-document.querySelectorAll('.card').forEach(card=>{
-card.hidden=!card.dataset.name.includes(q);
-});
-});
+// Other GameGola games...
+function tapSetup(){ setup('⚡ Tap Challenge','Tap as fast as possible in 10s.'); message.textContent='Ready?'; btn('Start Game',tapStart); }
+function tapStart(){ clearTimers(); let score=0,left=10; active=true; controls.innerHTML=''; const b=btn('TAP! ⚡',()=>{ if(active){ score++; info.textContent='Score: '+score+' | Time: '+left+'s'; } }); message.textContent='GO!'; info.textContent='Score: 0 | Time: 10s'; timer=setInterval(()=>{ left--; info.textContent='Score: '+score+' | Time: '+left+'s'; if(left<=0){ clearTimers(); active=false; b.disabled=true; message.textContent='Time up! 🎉'; info.textContent='Final score: '+score; btn('Play Again',tapSetup); } },1000); }
+function guessSetup(){ setup('🎯 Number Guess','Guess 1 to 100.'); const input=document.createElement('input'); input.type='number'; input.min=1; input.max=100; input.placeholder='1 to 100'; const secret=Math.floor(Math.random()*100)+1; let tries=0; const b=btn('Guess!',check); controls.prepend(input); function check(){ const n=Number(input.value); if(!input.value||n<1||n>100)return; tries++; info.textContent='Attempts: '+tries; if(n===secret){ message.textContent='You win! 🏆'; b.disabled=true; btn('Play Again',guessSetup); } else message.textContent=n<secret?'Higher ↑':'Lower ↓'; } }
+function rpsSetup(){ setup('✊ Rock Paper Scissors','Beat CPU.'); let p=0,c=0; info.textContent='You: 0 | CPU: 0'; function play(m){ const choices=['Rock','Paper','Scissors']; const cpu=choices[Math.floor(Math.random()*3)]; let r=m===cpu?'Draw':((m==='Rock'&&cpu==='Scissors')||(m==='Paper'&&cpu==='Rock')||(m==='Scissors'&&cpu==='Paper')?'You win! 🎉':'CPU wins!'); if(r.startsWith('You'))p++; if(r.startsWith('CPU'))c++; message.textContent=m+' vs '+cpu+' — '+r; info.textContent='You: '+p+' | CPU: '+c; } btn('✊ Rock',()=>play('Rock')); btn('✋ Paper',()=>play('Paper')); btn('✌️ Scissors',()=>play('Scissors')); btn('Reset',rpsSetup); }
+function ticSetup(){ setup('❌ Tic-Tac-Toe','2 Players.'); let cells=Array(9).fill(''),turn='X',done=false; const board=document.createElement('div'); board.className='board'; controls.appendChild(board); const wins=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]]; cells.forEach((_,i)=>{ const b=document.createElement('button'); b.onclick=()=>{ if(done||cells[i])return; cells[i]=turn; b.textContent=turn; if(wins.some(l=>l.every(n=>cells[n]===turn))){ message.textContent=turn+' wins! 🏆'; done=true; } else if(cells.every(Boolean)){ message.textContent="Draw!"; done=true; } else { turn=turn==='X'?'O':'X'; message.textContent=turn+"'s turn"; } }; board.appendChild(b); }); btn('Restart',ticSetup); }
+function memorySetup(){ setup('🧠 Memory Match','Find pairs.'); const icons=['🐸','🚀','🍕','🐼','⚽','🎲','🍉','👾']; const deck=[...icons,...icons].sort(()=>Math.random()-.5); let first=null,lock=false,moves=0,matches=0; const board=document.createElement('div'); board.className='memory'; controls.appendChild(board); deck.forEach(emoji=>{ const b=document.createElement('button'); b.textContent='?'; b.onclick=()=>{ if(lock||b===first||b.dataset.matched==='yes'||b.textContent!=='?')return; b.textContent=emoji; if(!first){ first=b; return; } moves++; info.textContent='Moves: '+moves; lock=true; if(first.textContent===b.textContent){ first.dataset.matched='yes'; b.dataset.matched='yes'; first=null; lock=false; matches++; if(matches===icons.length)message.textContent='You win! 🏆'; } else { const prev=first; first=null; timeout=setTimeout(()=>{ prev.textContent='?'; b.textContent='?'; lock=false; },700); } }; board.appendChild(b); }); btn('Restart',memorySetup); }
+function reactionSetup(){ setup('🚀 Reaction Test','Click on green.'); let state='idle',start=0; const b=btn('Start Test',startTest); function startTest(){ clearTimers(); state='waiting'; b.disabled=true; b.textContent='Wait...'; message.textContent='Wait for green!'; timeout=setTimeout(()=>{ state='go'; start=performance.now(); panel.style.background='#075b42'; message.textContent='CLICK NOW! 🟢'; b.disabled=false; b.textContent='CLICK!'; },1200+Math.random()*3000); } b.onclick=()=>{ if(state==='waiting'){ clearTimers(); state='idle'; b.disabled=false; b.textContent='Try Again'; message.textContent='Too early!'; panel.style.background='#121a30'; } else if(state==='go'){ const ms=Math.round(performance.now()-start); state='done'; clearTimers(); b.disabled=false; b.textContent='Play Again'; message.textContent=ms+' ms! 🎉'; panel.style.background='#121a30'; } else startTest(); }; }
+document.getElementById('search').addEventListener('input',e=>{ const q=e.target.value.toLowerCase().trim(); document.querySelectorAll('.card').forEach(card=>{ card.hidden=!card.dataset.name.includes(q); }); });
 </script>
 </body>
 </html>
